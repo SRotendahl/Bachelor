@@ -1,12 +1,3 @@
-{-
-{-# LANGUAGE DeriveFoldable #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE DeriveGeneric #-}
-import Data.Serialize
--}
---import Data.Hashable
---import GHC.Generics
 import Data.Tree
 import Data.Tree.Pretty
 tree :: Tree String
