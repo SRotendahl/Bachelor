@@ -1,10 +1,41 @@
+import System.Environment
+import Data.Array
+import Text.Regex
 import System.Process
-import Text.Regex.Posix
-pat = "(foo[a-z]*bar|quux)"
-ting = "foodiequux,foodiebar" =~ pat :: String
---main = "foodiebar, fooquuxbar" =~ pat :: String
+import Text.Regex.Base
+import Data.List.Split
+import Data.Tree
+import Data.Tree.Pretty
 
-print_sizes = do
-  sizes <- readProcess "./LocVolCalib" ["--print-sizes"] ""
-  let arr = lines sizes
-  return arr
+getTresh :: [String] -> [[[Char]]]
+getTresh matches =
+  let mkPattern   = mkRegex "threshold"
+      f = filter (\x -> matchTest mkPattern x) matches
+      split = map (\x -> splitOn " " x) f
+      f1 = map (\xx -> filter (\x -> not $ matchTest mkPattern x) xx) split
+  in reverse . map(\z -> reverse z) . sort $ map (\x -> sort x) f1
+
+getName :: String -> String
+getName name =
+  head $ splitOn "." name
+
+main = do
+  args <- getArgs
+  putStrLn $ "futhark " ++ args !! 0 ++ " " ++ args !! 1
+  callCommand $ "futhark " ++ args !! 0 ++ " " ++ args !! 1
+  let name1 = getName $ args !! 1
+  let name = "./" ++ name1
+  sizes <- readProcess name ["--print-sizes"] ""
+  let thresh = getTresh sizes
+  mapM_ print thresh
+
+{-
+tree :: Tree String
+tree = Node "hello" [ Node "foo" []
+                     , Node "bars" [ Node "oi!" []
+                                   , Node "baz" [ Node "a" [ Node "b" []
+                                                           , Node "c" []]
+                                                , Node "d" [ Node "e" []]]]
+                     , Node "foobar" []]
+
+-}
