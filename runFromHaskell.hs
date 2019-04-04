@@ -3,14 +3,17 @@ import Data.Array
 import Text.Regex
 import System.Process
 import Text.Regex.Base
+import Data.List
 import Data.List.Split
 import Data.Tree
 import Data.Tree.Pretty
+import Data.Typeable
 
-getTresh :: [String] -> [[[Char]]]
+getTresh :: String -> [[String]]
 getTresh matches =
   let mkPattern   = mkRegex "threshold"
-      f = filter (\x -> matchTest mkPattern x) matches
+      matchesList = lines matches
+      f = filter (\x -> matchTest mkPattern x) matchesList
       split = map (\x -> splitOn " " x) f
       f1 = map (\xx -> filter (\x -> not $ matchTest mkPattern x) xx) split
   in reverse . map(\z -> reverse z) . sort $ map (\x -> sort x) f1
@@ -28,7 +31,6 @@ main = do
   sizes <- readProcess name ["--print-sizes"] ""
   let thresh = getTresh sizes
   mapM_ print thresh
-
 {-
 tree :: Tree String
 tree = Node "hello" [ Node "foo" []
