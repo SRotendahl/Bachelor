@@ -13,9 +13,3 @@ getTresh matches =
       f = filter (\x -> matchTest mkPattern x) matches
       split = map (\x -> splitOn " " x) f
   in map (\xx -> filter (\x -> not $ matchTest mkPattern x) xx) split
-
-{-
-sortList :: [[[Char]]] -> [[[Char]]]
-sortList l =
-  groupBy ((==) `on` length) $ sortBy (compare `on` length) l
--}
