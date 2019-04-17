@@ -6,7 +6,6 @@ import Text.Regex.Base
 import Data.List
 import Data.List.Split
 import Data.Tree
-import Data.Tree.Pretty
 import Data.Typeable
 
 getTresh :: String -> [[String]]
