@@ -14,7 +14,7 @@ import Data.Maybe
 {- NOTES
  - Alias (String,[String]) to a better name
  -
-- }
+-}
 
 ------------ regex --------------
 cleanGroups :: [String] -> (String,[String])
@@ -28,21 +28,20 @@ getTresh :: String -> [(String,[String])]
 getTresh sizeOutput = -- Prob needs to be split up a bit
   let regex = mkRegex "main\\.(.*)\\ \\(threshold\\ \\((.*)\\)\\)"       
       outputLines = lines sizeOutput
-      matches = map (matchRegexAll regex) outputLines
+      matches = catMaybes $ map (matchRegexAll regex) outputLines
       getGroups = cleanGroups . removeAll ' ' . (\(_,_,_,x) -> x)
-  in  catMaybes $ map (liftM getGroups) matches -- name
+  in  map getGroups matches 
 
 ------------------
 ------ tree ------
 {-
-buildTree :: [(String,[String])] -> Tree 
-buildTree treshs =
-    ps = all elements where snd is []
-    newTresh = tresh / ps
-    map over ps with as p: --Will be empty if non are found.
-        remove p from snd in newTresh
-        subtree = buildTree newTresh
-        set p as parent of subtree
+  Use function in Data.Tree.unfoldTree
+  Needs access to the result of getTresh. Just assume it has right now.
+toTree :: [String] -> (String, [[String]])
+toTree prevTreshs = 
+    a = head prevTreshs
+    b = filter (\xs -> xs == prevTreshs) getTreshResult 
+    (a,b)
 -}
 
 ------------------
