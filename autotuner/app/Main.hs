@@ -11,6 +11,12 @@ import Data.Typeable
 import Control.Monad
 import Data.Maybe
 
+{- NOTES
+ - Alias (String,[String]) to a better name
+ -
+- }
+
+------------ regex --------------
 cleanGroups :: [String] -> (String,[String])
 cleanGroups (grp1:grp2:[]) =
   (grp1 ,tail (splitOn "!main." grp2))
@@ -19,19 +25,27 @@ removeAll :: (Eq a) => a -> [[a]] -> [[a]]
 removeAll = map . filter . (/=)
 
 getTresh :: String -> [(String,[String])]
-getTresh sizeOutput = -- Needs to be split up a bit
+getTresh sizeOutput = -- Prob needs to be split up a bit
   let regex = mkRegex "main\\.(.*)\\ \\(threshold\\ \\((.*)\\)\\)"       
       outputLines = lines sizeOutput
       matches = map (matchRegexAll regex) outputLines
       getGroups = cleanGroups . removeAll ' ' . (\(_,_,_,x) -> x)
   in  catMaybes $ map (liftM getGroups) matches -- name
-    
 
-  {-
-      split = map (\x -> splitOn " " x) f
-      f1 = map (\xx -> filter (\x -> not $ matchTest mkPattern x) xx) split
-  in reverse . map(\z -> reverse z) . sort $ map (\x -> sort x) f1
-  -}
+------------------
+------ tree ------
+{-
+buildTree :: [(String,[String])] -> Tree 
+buildTree treshs =
+    ps = all elements where snd is []
+    newTresh = tresh / ps
+    map over ps with as p: --Will be empty if non are found.
+        remove p from snd in newTresh
+        subtree = buildTree newTresh
+        set p as parent of subtree
+-}
+
+------------------
 
 getName :: String -> String
 getName name =
