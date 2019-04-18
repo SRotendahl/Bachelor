@@ -1,3 +1,4 @@
+*.sizes
 dist
 dist-*
 cabal-dev

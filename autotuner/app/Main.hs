@@ -34,15 +34,17 @@ getTresh sizeOutput = -- Prob needs to be split up a bit
 
 ------------------
 ------ tree ------
-{-
-  Use function in Data.Tree.unfoldTree
-  Needs access to the result of getTresh. Just assume it has right now.
-toTree :: [String] -> (String, [[String]])
-toTree prevTreshs = 
-    a = head prevTreshs
-    b = filter (\xs -> xs == prevTreshs) getTreshResult 
-    (a,b)
--}
+
+
+treeLevel :: [(String,[String])] -> [String] -> (String, [[String]])
+treeLevel thress [] = 
+  ("nullRoot", roots)
+  where roots = map ((:[]) . fst) $ filter (null . snd) thress 
+treeLevel thress prevThress =
+  (currThres, nextThress)
+  where currThres  = head prevThress 
+        nextThress = map ((:prevThress) . fst) $ -- Should be it's own function
+                     filter (((==) $ sort prevThress) . sort . snd) thress
 
 ------------------
 
@@ -58,14 +60,5 @@ main = do
   let name = "./" ++ name1
   sizes <- readProcess name ["--print-sizes"] ""
   let thresh = getTresh sizes
-  mapM_ print thresh
-{-
-tree :: Tree String
-tree = Node "hello" [ Node "foo" []
-                     , Node "bars" [ Node "oi!" []
-                                   , Node "baz" [ Node "a" [ Node "b" []
-                                                           , Node "c" []]
-                                                , Node "d" [ Node "e" []]]]
-                     , Node "foobar" []]
-
--}
+  let tree = unfoldTree (treeLevel thresh) []
+  putStrLn $ drawTree tree
