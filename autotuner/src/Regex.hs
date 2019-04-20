@@ -1,4 +1,4 @@
-module Regex (getTresh) where
+module Regex (getTresh,getComparison) where
 
 --import Data.Array
 import Text.Regex
@@ -17,6 +17,17 @@ getTresh :: String -> [(String,[String])]
 getTresh sizeOutput = -- Prob needs to be split up a bit
   let regex = mkRegex "(.*)\\ \\(threshold\\ \\((.*)\\)\\)"       
       outputLines = lines sizeOutput
-      matches = catMaybes $ map (matchRegexAll regex) outputLines
-      getGroups = cleanGroups . removeAll ' ' . (\(_,_,_,x) -> x)
-  in  map getGroups matches 
+      matches = catMaybes $ map (matchRegex regex) outputLines
+      getGroups = cleanGroups . removeAll ' ' 
+  in  map getGroups matches
+
+compToTuple :: [String] -> (String,Int)
+compToTuple (thresh:val:[]) = (thresh, read val) 
+
+getComparison :: String -> [(String,Int)] -- TODO make better alias
+getComparison comp = 
+  let regex = mkRegex "Compared ([^ ]+) <= (-?[0-9]+)"
+      splitLine = splitOn "\\n" comp 
+      matches = catMaybes $ map (matchRegex regex) splitLine
+  in  map compToTuple matches
+      
