@@ -4,6 +4,7 @@ module Regex (getTresh,getComparison) where
 import Text.Regex
 import Text.Regex.Base
 import Data.List.Split
+import Data.List
 import Data.Maybe
 
 cleanGroups :: [String] -> (String,[String])
@@ -29,5 +30,5 @@ getComparison comp =
   let regex = mkRegex "Compared ([^ ]+) <= (-?[0-9]+)"
       splitLine = splitOn "\\n" comp 
       matches = catMaybes $ map (matchRegex regex) splitLine
-  in  map compToTuple matches
+  in  nub $ map compToTuple matches
       

@@ -49,13 +49,12 @@ main = do
   let name = "./" ++ name1
   sizes <- readProcess name ["--print-sizes"] ""
   let thresh = getTresh sizes
+  --TEST
   let compCmd = "futhark bench -r 1 --backend=opencl -p -L --json=tmp " ++ getProgram pArgs
   callCommand compCmd
   compData <- readFile "tmp"
   let comp = getComparison compData
-  putStrLn "test"
-  print . length $ comp
-  print . snd . unzip $ comp
-  putStrLn "test"
+  print comp
+  --TEST
   putStrLn . printTree . buildTree $ thresh
 -----------------------
