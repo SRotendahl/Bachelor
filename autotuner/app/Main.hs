@@ -10,6 +10,7 @@ import System.Process
 import Data.List.Split --used for parsing name
 
 ----- Parse args -------
+-- TODO: move to seperate module
 data Flag = None --extend if we create flags
 type Program = String
 type Backend = String
@@ -29,6 +30,7 @@ parseArgs _ = error "TODO: Add guide to use here"
 
 parseFlags :: [String] -> [Flag]
 parseFlags [] = [None]
+parseFlags _ = error "TODO: Add guide to use here"
 
 getName :: String -> String
 getName name =
