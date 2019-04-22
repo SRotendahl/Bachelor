@@ -6,13 +6,22 @@ import Data.Aeson.Types
 import Data.Traversable
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
+import Control.Monad
+import qualified Data.ByteString.Lazy as BS
+
 import Regex --(getComparion)
+
+newtype DatasetS = DatasetS [Dataset] deriving Show
+instance FromJSON DatasetS where
+  parseJSON = parseVal 
+
 newtype Dataset = Dataset (String, [(String, Int)]) deriving Show
 
-parseVal progName = withObject "program" $ \o -> do
-  name <- o .:  (T.pack progName)
-  dataSets <- name .: "datasets"
-  parseValHelp dataSets
+parseVal = withObject "program" $ \o -> 
+  liftM (DatasetS . head) $
+  for (HM.toList o) $ \(progName, mo) -> do
+    dataSets <- withObject "datasets" (\mobj -> mobj .: "datasets") mo
+    parseValHelp dataSets
 
 parseValHelp :: Value -> Parser [Dataset]
 parseValHelp = withObject "data" $ \o ->
@@ -21,4 +30,5 @@ parseValHelp = withObject "data" $ \o ->
     let regStderr = getComparison stderr
     return $ Dataset (T.unpack name, regStderr)
 
-valVal progName val = parseMaybe (parseVal progName) val --TODO change name
+valVal :: BS.ByteString -> Maybe DatasetS
+valVal = decode  --TODO change name

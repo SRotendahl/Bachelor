@@ -46,7 +46,7 @@ main = do
   let compCmd = "futhark bench -r 1 --backend=opencl -p -L --json=jsonstuff " ++ getProgram pArgs
   callCommand compCmd 
   jsonDump <- BS.readFile "jsonstuff"
-  let test = valVal (getProgram pArgs) jsonDump
+  let test = valVal jsonDump
   print test
    
 {-
