@@ -6,14 +6,19 @@ import Data.Aeson.Types
 import Data.Traversable
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
+import Regex --(getComparion)
+newtype Dataset = Dataset (String, [(String, Int)]) deriving Show
 
-newtype Dataset = Dataset (String, String) deriving Show
+parseVal progName = withObject "program" $ \o -> do
+  name <- o .:  (T.pack progName)
+  dataSets <- name .: "datasets"
+  parseValHelp dataSets
 
-parseVal :: Value -> Parser [Dataset]
-parseVal = withObject "data" $ \o ->
+parseValHelp :: Value -> Parser [Dataset]
+parseValHelp = withObject "data" $ \o ->
   for (HM.toList o) $ \(name, ds) -> do
     stderr <- withObject "stderr" (\dso -> dso .: "stderr") ds
-    --Regex here on stderr
-    return $ Dataset (T.unpack name, stderr)
+    let regStderr = getComparison stderr
+    return $ Dataset (T.unpack name, regStderr)
 
-valVal val = parseMaybe parseVal val --TODO change name
+valVal progName val = parseMaybe (parseVal progName) val --TODO change name

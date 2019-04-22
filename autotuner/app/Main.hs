@@ -9,7 +9,7 @@ import ParsingJson
 import System.Environment
 import System.Process
 import Data.List.Split --used for parsing name
-
+import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
 data Flag = None --extend if we create flags
@@ -41,8 +41,14 @@ getName name =
 -------- Main ----------
 
 main = do
-  print "begin"
-
+  args <- getArgs
+  let pArgs = parseArgs args
+  let compCmd = "futhark bench -r 1 --backend=opencl -p -L --json=jsonstuff " ++ getProgram pArgs
+  callCommand compCmd 
+  jsonDump <- BS.readFile "jsonstuff"
+  let test = valVal (getProgram pArgs) jsonDump
+  print test
+   
 {-
   args <- getArgs
   let pArgs = parseArgs args

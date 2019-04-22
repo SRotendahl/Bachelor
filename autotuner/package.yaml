@@ -30,6 +30,7 @@ dependencies:
 - aeson
 - text
 - unordered-containers
+- bytestring
 
 library:
   source-dirs: src
