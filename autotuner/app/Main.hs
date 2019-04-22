@@ -3,6 +3,7 @@ module Main where
 -- Our libaries --
 import Regex
 import Tree
+import ParsingJson
 
 -- Other libaries --
 import System.Environment
@@ -40,6 +41,9 @@ getName name =
 -------- Main ----------
 
 main = do
+  print "begin"
+
+{-
   args <- getArgs
   let pArgs = parseArgs args
   let command = "futhark " ++ getBackend pArgs ++ " " ++ getProgram pArgs
@@ -57,4 +61,5 @@ main = do
   print comp
   --TEST
   putStrLn . printTree . buildTree $ thresh
+-}
 -----------------------

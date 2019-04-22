@@ -27,6 +27,9 @@ dependencies:
 - regex-compat
 - regex-base
 - split
+- aeson
+- text
+- unordered-containers
 
 library:
   source-dirs: src
