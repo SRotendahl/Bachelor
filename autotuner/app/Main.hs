@@ -43,11 +43,17 @@ getName name =
 main = do
   args <- getArgs
   let pArgs = parseArgs args
+  -- Get vals
   let compCmd = "futhark bench -r 1 --backend=opencl -p -L --json=jsonstuff " ++ getProgram pArgs
   callCommand compCmd 
   jsonDump <- BS.readFile "jsonstuff"
-  let test = valVal jsonDump
-  print test
+  let (Just (DatasetS test)) = valVal jsonDump
+  -- Get structure
+  let name1 = getName $ getProgram pArgs
+  let name = "./" ++ name1
+  sizes <- readProcess name ["--print-sizes"] ""
+  let thresh = getTresh sizes
+  putStrLn . printTree . (fmap show) $ buildTree (head test) thresh
    
 {-
   args <- getArgs

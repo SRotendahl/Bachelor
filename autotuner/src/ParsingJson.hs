@@ -18,7 +18,7 @@ instance FromJSON DatasetS where
 newtype Dataset = Dataset (String, [(String, Int)]) deriving Show
 
 parseVal = withObject "program" $ \o -> 
-  liftM (DatasetS . head) $
+  liftM (DatasetS . head) $       -- Only be one element in the list
   for (HM.toList o) $ \(progName, mo) -> do
     dataSets <- withObject "datasets" (\mobj -> mobj .: "datasets") mo
     parseValHelp dataSets

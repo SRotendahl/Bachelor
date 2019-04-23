@@ -28,7 +28,7 @@ compToTuple (thresh:val:[]) = (thresh, read val)
 getComparison :: String -> [(String,Int)] -- TODO make better alias
 getComparison comp = 
   let regex = mkRegex "Compared ([^ ]+) <= (-?[0-9]+)"
-      splitLine = splitOn "\\n" comp 
+      splitLine = splitOn "\n" comp 
       matches = catMaybes $ map (matchRegex regex) splitLine
-  in  nub $ map compToTuple matches
+  in  map compToTuple matches
       
