@@ -21,15 +21,15 @@ toTree thress prevThress =
         nextThress = map ((:prevThress) . fst) $ -- Should be it's own function
                      filter (((==) $ sort prevThress) . sort . snd) thress
 
-addCompVals :: Dataset -> String -> (String, Int)
-addCompVals (Dataset ds) thres = 
-  let mval = lookup thres . snd $ ds
-  in case mval of 
-      Just val -> (thres, val)
-      Nothing -> (thres, maxBound)
+addCompVals :: [(String,Int)] -> String -> (String, (Maybe Int))
+addCompVals ds thres = (thres, val)
+  where val = lookup thres ds
 
-buildTree :: Dataset -> [(String, [String])] -> (Tree (String, Int))
+buildTree :: [(String,Int)] -> [(String, [String])] -> (Tree (String, (Maybe Int))) --TODO alias stuff
 buildTree dataset threshs = fmap (addCompVals dataset)
                     $ unfoldTree (toTree threshs) []
+                    
+--buildForest :: [(String, [(String,Int)]] -> [(String, [String])]-> [(Tree (String, (Maybe Int)))]
+-- For later
 
 printTree = drawTree

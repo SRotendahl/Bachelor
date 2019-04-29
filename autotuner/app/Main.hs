@@ -9,7 +9,8 @@ import ParsingJson
 import System.Environment
 import System.Process
 import Data.List.Split --used for parsing name
-import qualified Data.ByteString.Lazy as BS (readFile)
+import qualified Data.ByteString.Lazy as BS
+--import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
 data Flag = None --extend if we create flags
@@ -39,21 +40,32 @@ getName name =
 ------------------------
 
 -------- Main ----------
+buildBenchCmd backend progName tmpName =
+  "futhark bench -r 1 --backend=" ++ backend ++
+  " -p -L --json=" ++ tmpName ++ " " ++ progName
+
+getComparisons :: String -> String -> IO [(String, [(String,Int)])]
+getComparisons backend progName = do
+  let jsonName = ".tmpBenchOutput.json"
+  let compCmd = buildBenchCmd backend progName jsonName
+  callCommand compCmd 
+  jsonDump <- BS.readFile jsonName
+  --Delete file
+  return . valVal $ jsonDump
+
+getStructure :: String -> IO [(String,[String])]
+getStructure prog = do
+  let name = "./" ++ (getName prog)
+  sizes <- readProcess name ["--print-sizes"] ""
+  return . getTresh $ sizes
+  
 
 main = do
   args <- getArgs
   let pArgs = parseArgs args
-  -- Get vals
-  let compCmd = "futhark bench -r 1 --backend=opencl -p -L --json=jsonstuff " ++ getProgram pArgs
-  callCommand compCmd 
-  jsonDump <- BS.readFile "jsonstuff"
-  let (Just (DatasetS test)) = valVal jsonDump
-  -- Get structure
-  let name1 = getName $ getProgram pArgs
-  let name = "./" ++ name1
-  sizes <- readProcess name ["--print-sizes"] ""
-  let thresh = getTresh sizes
-  putStrLn . printTree . (fmap show) $ buildTree (head test) thresh
+  comps <- getComparisons (getBackend pArgs) (getProgram pArgs)
+  thresh <- getStructure $ getProgram pArgs
+  putStrLn . printTree . (fmap show) $ buildTree (snd . head $ comps) thresh
    
 {-
   args <- getArgs

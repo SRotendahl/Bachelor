@@ -9,13 +9,14 @@ import qualified Data.Text as T
 import Control.Monad
 import qualified Data.ByteString.Lazy as BS
 
-import Regex --(getComparion)
+import Regex (getComparison)
 
 newtype DatasetS = DatasetS [Dataset] deriving Show
 instance FromJSON DatasetS where
   parseJSON = parseVal 
 
 newtype Dataset = Dataset (String, [(String, Int)]) deriving Show
+-- Should be able to create FromJSON instance here to clean code
 
 parseVal = withObject "program" $ \o -> 
   liftM (DatasetS . head) $       -- Only be one element in the list
@@ -30,5 +31,12 @@ parseValHelp = withObject "data" $ \o ->
     let regStderr = getComparison stderr
     return $ Dataset (T.unpack name, regStderr)
 
-valVal :: BS.ByteString -> Maybe DatasetS
-valVal = decode  --TODO change name
+extractData :: DatasetS -> [(String, [(String,Int)])]
+extractData (DatasetS datas) = 
+  map (\(Dataset x) -> x) datas
+  
+valVal :: BS.ByteString -> [(String, [(String,Int)])]
+--TODO change name 
+valVal = maybeExtract . decode 
+  where maybeExtract (Just datas) = extractData datas
+        maybeExtract Nothing = []
