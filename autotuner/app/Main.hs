@@ -10,6 +10,7 @@ import System.Environment
 import System.Process
 import Data.List.Split --used for parsing name
 import qualified Data.ByteString.Lazy as BS
+import System.Directory
 --import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
@@ -50,7 +51,7 @@ getComparisons backend progName = do
   let compCmd = buildBenchCmd backend progName jsonName
   callCommand compCmd 
   jsonDump <- BS.readFile jsonName
-  --Delete file
+  removeFile jsonName
   return . valVal $ jsonDump
 
 getStructure :: String -> IO [(String,[String])]
