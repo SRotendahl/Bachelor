@@ -52,7 +52,7 @@ getComparisons backend progName = do
   let compCmd = buildBenchCmd backend progName jsonName
   callCommand compCmd 
   jsonDump <- BS.readFile jsonName
-  --Delete file
+  removeFile jsonName
   return . valVal $ jsonDump
 
 getStructure :: String -> IO [(String,[String])]
