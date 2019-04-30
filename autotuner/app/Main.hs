@@ -4,12 +4,14 @@ module Main where
 import Regex
 import Tree
 import ParsingJson
+import Tuning
 
 -- Other libaries --
 import System.Environment
 import System.Process
 import Data.List.Split --used for parsing name
 import qualified Data.ByteString.Lazy as BS
+import System.Directory
 --import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
@@ -65,8 +67,9 @@ main = do
   let pArgs = parseArgs args
   comps <- getComparisons (getBackend pArgs) (getProgram pArgs)
   thresh <- getStructure $ getProgram pArgs
-  putStrLn . printTree . (fmap show) $ buildTree (snd . head $ comps) thresh
-   
+  let tree = buildTree thresh
+  putStrLn . printTree . (fmap show) $ tree
+  print $ getExecutions tree 
 {-
   args <- getArgs
   let pArgs = parseArgs args

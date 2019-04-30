@@ -9,7 +9,7 @@ import Data.Maybe
 
 cleanGroups :: [String] -> (String,[String])
 cleanGroups (grp1:grp2:[]) =
-  (grp1 ,tail (splitOn "!" grp2))
+  (grp1 , tail (splitOn "!" grp2))
 
 removeAll :: (Eq a) => a -> [[a]] -> [[a]]
 removeAll = map . filter . (/=)

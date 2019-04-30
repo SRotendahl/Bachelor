@@ -2,11 +2,9 @@ module Tree (buildTree, printTree) where
 
 import Data.List
 import Data.Tree
-import ParsingJson
 
 {- TODO
  - Alias (String,[String]) to a better name
- - Create a function to make tree with numbers
 -}
 
 toTree :: [(String,[String])] -> [String] -> (String, [[String]])
@@ -25,11 +23,15 @@ addCompVals :: [(String,Int)] -> String -> (String, (Maybe Int))
 addCompVals ds thres = (thres, val)
   where val = lookup thres ds
 
-buildTree :: [(String,Int)] -> [(String, [String])] -> (Tree (String, (Maybe Int))) --TODO alias stuff
-buildTree dataset threshs = fmap (addCompVals dataset)
-                    $ unfoldTree (toTree threshs) []
+hackyAddBools :: String -> (String, Bool)
+hackyAddBools str = (str, False)
+
+buildTree :: [(String, [String])] -> (Tree (String, Bool))
+--TODO alias stuff
+buildTree threshs = fmap hackyAddBools $
+                            unfoldTree (toTree threshs) []
                     
---buildForest :: [(String, [(String,Int)]] -> [(String, [String])]-> [(Tree (String, (Maybe Int)))]
+-- buildForest :: [(String, [(String,Int)]] -> [(String, [String])]-> [(Tree (String, (Maybe Int)))]
 -- For later
 
 printTree = drawTree
