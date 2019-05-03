@@ -101,12 +101,10 @@ splitNameTime str =
 
 tuneProgram :: [(String, Int)] -> [[(String, Bool)]] -> String -> String -> IO Float
 tuneProgram comps exe ext progName = do
-  --exits <- doesFileExist $ getProgram pArgs ++ ext
-  --when exists $ removeFile f
   let tunePara = createTuneFile comps exe
   writeFile (progName ++ ext) tunePara
   benchOut <- getBenchOutput progName ext
-  let nameTime = splitNameTime $ out --lines (fst benchOut)
+  let nameTime = splitNameTime $ lines (fst benchOut)
   return $ snd (head nameTime)
 
 
@@ -121,7 +119,8 @@ main = do
       {- let tunePara = createTuneFile (snd (head comps)) $ head exe
   writeFile (getProgram pArgs ++ "tuning") tunePara
   benchOut <- getBenchOutput (getProgram pArgs) "tuning"
-  let runTimes = splitNameTime $ lines (fst benchOut) -}
+  let runTimes = splitNameTime $ lines (fst benchOut)
+   -}
   let runTimes = map (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
   print "----------------- runing times ---------------------"
   mapM  runTimes
