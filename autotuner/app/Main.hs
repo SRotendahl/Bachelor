@@ -13,6 +13,7 @@ import Data.List.Split --used for parsing name
 import qualified Data.ByteString.Lazy as BS
 import System.Directory
 import Data.Maybe
+import Data.List
 --import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
@@ -50,6 +51,10 @@ buildBenchCmd backend progName tmpName isCompiled =
   else "futhark bench -r 1 --backend=" ++ backend ++  " -p -L --json=" 
     ++ tmpName ++ " " ++ progName
 
+getBenchOutput progName tuneExt =
+  capture $ callCommand "futhark bench --backend=opencl" ++ progName ++ 
+    "--tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune"
+
 getComparisons :: String -> String -> Bool -> IO [(String, [(String,Int)])]
 getComparisons backend progName isCompiled = do
   let jsonName = ".tmpBenchOutput.json"
@@ -76,6 +81,19 @@ createTuneFile comps exes =
   let strList = map (\exe -> (fst exe) ++ "=" ++ show (checkExePath exe comps)++",") exes
   in concat strList
 
+symEq :: Eq a => (a,b) -> (a,b) -> Bool
+symEq (x,_) (u,_) = x == u
+
+removeDup :: Eq a => [(a,b)] -> [(a,b)]
+removeDup = nubBy symEq
+
+splitNameTime :: [String] -> [(String,Float)]
+splitNameTime str =
+  let regex = mkRegex "dataset +([^:]+)\\:\\ +([0-9]+\\.[0-9]+)"
+      list  = catMaybes $ map (matchRegex regex) str
+  in  map (\x -> (x!!0, read $ x!!1)) list
+
+
 main = do
   args <- getArgs
   let pArgs = parseArgs args
@@ -87,12 +105,12 @@ main = do
   let test = createTuneFile (snd (head comps)) $ head exe
   print "----------------- executions -----------------------"
   print $ head exe
-  print "----------------------------------------------------"
-  print $ snd (head comps) 
   print "----------------- comparisions ---------------------"
+  print $ removeDup (snd (head comps)) 
+  print "----------------- tune parameters ------------------"
+  print test
   
   putStrLn . printTree . (fmap show) $ tree
-  --print test
   --print $ getExecutions tree 
 {-
   args <- getArgs
