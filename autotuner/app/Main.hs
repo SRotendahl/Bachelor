@@ -6,14 +6,19 @@ import Tree
 import ParsingJson
 import Tuning
 
+-- Tmp libaries --
+import System.IO.Silently
+import Data.Maybe
+import Data.List
+import Text.Regex
+import Text.Regex.Base
+
 -- Other libaries --
 import System.Environment
 import System.Process
 import Data.List.Split --used for parsing name
 import qualified Data.ByteString.Lazy as BS
 import System.Directory
-import Data.Maybe
-import Data.List
 --import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
@@ -52,8 +57,8 @@ buildBenchCmd backend progName tmpName isCompiled =
     ++ tmpName ++ " " ++ progName
 
 getBenchOutput progName tuneExt =
-  capture $ callCommand "futhark bench --backend=opencl" ++ progName ++ 
-    "--tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune"
+  capture $ callCommand ("futhark bench --backend=opencl" ++ progName ++ 
+    "--tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune")
 
 getComparisons :: String -> String -> Bool -> IO [(String, [(String,Int)])]
 getComparisons backend progName isCompiled = do

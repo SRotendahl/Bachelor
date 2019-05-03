@@ -32,7 +32,7 @@ dependencies:
 - unordered-containers
 - bytestring
 - directory
-- environment
+- silently
 
 library:
   source-dirs: src
