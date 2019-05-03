@@ -12,6 +12,7 @@ import System.Process
 import Data.List.Split --used for parsing name
 import qualified Data.ByteString.Lazy as BS
 import System.Directory
+import Data.Maybe
 --import qualified Data.ByteString.Lazy as BS (readFile)
 ----- Parse args -------
 -- TODO: move to seperate module
@@ -42,14 +43,17 @@ getName name =
 ------------------------
 
 -------- Main ----------
-buildBenchCmd backend progName tmpName =
-  "futhark bench -r 1 --backend=" ++ backend ++
-  " -p -L --json=" ++ tmpName ++ " " ++ progName
+buildBenchCmd backend progName tmpName isCompiled = 
+  if isCompiled then 
+    "futhark bench  --skip-compilation -r 1 --backend=" ++ backend ++ 
+    " -p -L --json=" ++ tmpName ++ " " ++ progName
+  else "futhark bench -r 1 --backend=" ++ backend ++  " -p -L --json=" 
+    ++ tmpName ++ " " ++ progName
 
-getComparisons :: String -> String -> IO [(String, [(String,Int)])]
-getComparisons backend progName = do
+getComparisons :: String -> String -> Bool -> IO [(String, [(String,Int)])]
+getComparisons backend progName isCompiled = do
   let jsonName = ".tmpBenchOutput.json"
-  let compCmd = buildBenchCmd backend progName jsonName
+  let compCmd = buildBenchCmd backend progName jsonName isCompiled
   callCommand compCmd 
   jsonDump <- BS.readFile jsonName
   removeFile jsonName
@@ -60,16 +64,36 @@ getStructure prog = do
   let name = "./" ++ (getName prog)
   sizes <- readProcess name ["--print-sizes"] ""
   return . getTresh $ sizes
-  
+
+checkExePath :: (String, Bool) -> [(String, Int)] -> Int
+checkExePath exe comps = --BeterName
+  let path = lookup (fst exe) comps
+      thres = fromJust path
+  in if snd exe then thres else thres + 1
+
+createTuneFile :: [(String, Int)] -> [(String, Bool)] -> String
+createTuneFile comps exes =
+  let strList = map (\exe -> (fst exe) ++ "=" ++ show (checkExePath exe comps)++",") exes
+  in concat strList
 
 main = do
   args <- getArgs
   let pArgs = parseArgs args
-  comps <- getComparisons (getBackend pArgs) (getProgram pArgs)
+  compiled <- doesFileExist $ head (splitOn "." (getProgram pArgs)) 
+  comps <- getComparisons (getBackend pArgs) (getProgram pArgs) compiled
   thresh <- getStructure $ getProgram pArgs
-  let tree = buildTree thresh
+  let tree = buildTree thresh 
+  let exe = getExecutions tree
+  let test = createTuneFile (snd (head comps)) $ head exe
+  print "----------------- executions -----------------------"
+  print $ head exe
+  print "----------------------------------------------------"
+  print $ snd (head comps) 
+  print "----------------- comparisions ---------------------"
+  
   putStrLn . printTree . (fmap show) $ tree
-  print $ getExecutions tree 
+  --print test
+  --print $ getExecutions tree 
 {-
   args <- getArgs
   let pArgs = parseArgs args
