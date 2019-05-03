@@ -57,8 +57,9 @@ buildBenchCmd backend progName tmpName isCompiled =
     ++ tmpName ++ " " ++ progName
 
 getBenchOutput progName tuneExt =
-  capture $ callCommand ("futhark bench --backend=opencl" ++ progName ++ 
-    "--tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune")
+  let cmd = "futhark bench --backend=opencl " ++ progName ++ 
+            " --tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune"
+  in capture $ callCommand cmd
 
 getComparisons :: String -> String -> Bool -> IO [(String, [(String,Int)])]
 getComparisons backend progName isCompiled = do
@@ -92,11 +93,21 @@ symEq (x,_) (u,_) = x == u
 removeDup :: Eq a => [(a,b)] -> [(a,b)]
 removeDup = nubBy symEq
 
-splitNameTime :: [String] -> [(String,Float)]
+splitNameTime ::[String] -> [(String,Float)]
 splitNameTime str =
   let regex = mkRegex "dataset +([^:]+)\\:\\ +([0-9]+\\.[0-9]+)"
       list  = catMaybes $ map (matchRegex regex) str
   in  map (\x -> (x!!0, read $ x!!1)) list
+
+tuneProgram :: [(String, Int)] -> [[(String, Bool)]] -> String -> String -> IO Float
+tuneProgram comps exe ext progName = do
+  --exits <- doesFileExist $ getProgram pArgs ++ ext
+  --when exists $ removeFile f
+  let tunePara = createTuneFile comps exe
+  writeFile (progName ++ ext) tunePara
+  benchOut <- getBenchOutput progName ext
+  let nameTime = splitNameTime $ out --lines (fst benchOut)
+  return $ snd (head nameTime)
 
 
 main = do
@@ -107,14 +118,21 @@ main = do
   thresh <- getStructure $ getProgram pArgs
   let tree = buildTree thresh 
   let exe = getExecutions tree
-  let test = createTuneFile (snd (head comps)) $ head exe
+      {- let tunePara = createTuneFile (snd (head comps)) $ head exe
+  writeFile (getProgram pArgs ++ "tuning") tunePara
+  benchOut <- getBenchOutput (getProgram pArgs) "tuning"
+  let runTimes = splitNameTime $ lines (fst benchOut) -}
+  let runTimes = map (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
+  print "----------------- runing times ---------------------"
+  mapM  runTimes
   print "----------------- executions -----------------------"
-  print $ head exe
+  --mapM_ print exe
+    {-
   print "----------------- comparisions ---------------------"
   print $ removeDup (snd (head comps)) 
   print "----------------- tune parameters ------------------"
-  print test
-  
+  print tunePara
+  -}
   putStrLn . printTree . (fmap show) $ tree
   --print $ getExecutions tree 
 {-
