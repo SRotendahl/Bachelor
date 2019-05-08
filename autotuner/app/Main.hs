@@ -99,7 +99,7 @@ splitNameTime str =
       list  = catMaybes $ map (matchRegex regex) str
   in  map (\x -> (x!!0, read $ x!!1)) list
 
-tuneProgram :: [(String, Int)] -> [[(String, Bool)]] -> String -> String -> IO Float
+tuneProgram :: [(String, Int)] -> [(String, Bool)] -> String -> String -> IO Float
 tuneProgram comps exe ext progName = do
   let tunePara = createTuneFile comps exe
   writeFile (progName ++ ext) tunePara
@@ -121,11 +121,11 @@ main = do
   benchOut <- getBenchOutput (getProgram pArgs) "tuning"
   let runTimes = splitNameTime $ lines (fst benchOut)
    -}
-  let runTimes = map (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
+  runTimes <- mapM (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
   print "----------------- runing times ---------------------"
-  mapM  runTimes
+  print  runTimes
   print "----------------- executions -----------------------"
-  --mapM_ print exe
+  mapM_ print exe
     {-
   print "----------------- comparisions ---------------------"
   print $ removeDup (snd (head comps)) 
