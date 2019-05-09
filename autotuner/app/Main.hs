@@ -7,11 +7,11 @@ import ParsingJson
 import Tuning
 
 -- Tmp libaries --
-import System.IO.Silently
+--import System.IO.Silently
 import Data.Maybe
 import Data.List
-import Text.Regex
-import Text.Regex.Base
+--import Text.Regex
+--import Text.Regex.Base
 
 -- Other libaries --
 import System.Environment
@@ -56,10 +56,6 @@ buildBenchCmd backend progName tmpName isCompiled =
   else "futhark bench -r 1 --backend=" ++ backend ++  " -p -L --json=" 
     ++ tmpName ++ " " ++ progName
 
-getBenchOutput progName tuneExt =
-  let cmd = "futhark bench --backend=opencl " ++ progName ++ 
-            " --tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune"
-  in capture $ callCommand cmd
 
 getComparisons :: String -> String -> Bool -> IO [(String, [(String,Int)])]
 getComparisons backend progName isCompiled = do
@@ -76,38 +72,6 @@ getStructure prog = do
   sizes <- readProcess name ["--print-sizes"] ""
   return . getTresh $ sizes
 
-checkExePath :: (String, Bool) -> [(String, Int)] -> Int
-checkExePath exe comps = --BeterName
-  let path = lookup (fst exe) comps
-      thres = fromJust path
-  in if snd exe then thres else thres + 1
-
-createTuneFile :: [(String, Int)] -> [(String, Bool)] -> String
-createTuneFile comps exes =
-  let strList = map (\exe -> (fst exe) ++ "=" ++ show (checkExePath exe comps)++",") exes
-  in concat strList
-
-symEq :: Eq a => (a,b) -> (a,b) -> Bool
-symEq (x,_) (u,_) = x == u
-
-removeDup :: Eq a => [(a,b)] -> [(a,b)]
-removeDup = nubBy symEq
-
-splitNameTime ::[String] -> [(String,Float)]
-splitNameTime str =
-  let regex = mkRegex "dataset +([^:]+)\\:\\ +([0-9]+\\.[0-9]+)"
-      list  = catMaybes $ map (matchRegex regex) str
-  in  map (\x -> (x!!0, read $ x!!1)) list
-
-tuneProgram :: [(String, Int)] -> [(String, Bool)] -> String -> String -> IO Float
-tuneProgram comps exe ext progName = do
-  let tunePara = createTuneFile comps exe
-  writeFile (progName ++ ext) tunePara
-  benchOut <- getBenchOutput progName ext
-  let nameTime = splitNameTime $ lines (fst benchOut)
-  return $ snd (head nameTime)
-
-
 main = do
   args <- getArgs
   let pArgs = parseArgs args
@@ -116,11 +80,6 @@ main = do
   thresh <- getStructure $ getProgram pArgs
   let tree = buildTree thresh 
   let exe = getExecutions tree
-      {- let tunePara = createTuneFile (snd (head comps)) $ head exe
-  writeFile (getProgram pArgs ++ "tuning") tunePara
-  benchOut <- getBenchOutput (getProgram pArgs) "tuning"
-  let runTimes = splitNameTime $ lines (fst benchOut)
-   -}
   runTimes <- mapM (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
   print "----------------- runing times ---------------------"
   print  runTimes

@@ -4,6 +4,15 @@ import Tree
 import Data.Tree
 import Data.List
 
+import System.IO.Silently
+import Data.Maybe
+import System.Process
+
+-- Needs to be removed TODO
+import Text.Regex
+import Text.Regex.Base
+
+--------- Get execution paths -----------
 fixSplit :: [String] -> [[(String,Bool)]] -> [[(String,Bool)]]
 fixSplit [] childExecu = childExecu
 fixSplit [c] childExecu = 
@@ -42,7 +51,36 @@ getExecutions (Node{rootLabel=(name,_), subForest=children}) =
       pathsF = addLeaf (name,False) $ (:) <$> [(name,False)] <*> (getAllBPaths False children)
   in  pathsF ++ pathsT
     
-{-
-createParams :: Maybe (String, Maybe Int) -> [(String, Maybe Int)] -> String
-createParams trueTH falseTHs =
- -} 
+-------------- Tuning ---------------- TODO, Better names
+
+checkExePath :: (String, Bool) -> [(String, Int)] -> Int
+checkExePath exe comps = --BeterName
+  let path = lookup (fst exe) comps
+      thres = fromJust path
+  in if snd exe then thres else thres + 1
+
+
+getBenchOutput progName tuneExt =
+  let cmd = "futhark bench --backend=opencl " ++ progName ++ 
+            " --tuning=" ++ tuneExt ++ " --skip-compilation --exclude-case=notune"
+  in capture $ callCommand cmd
+
+createTuneFile :: [(String, Int)] -> [(String, Bool)] -> String
+createTuneFile comps exes =
+  let strList = map (\exe -> (fst exe) ++ "=" ++ show (checkExePath exe comps)++",") exes
+  in concat strList
+
+tuneProgram :: [(String, Int)] -> [(String, Bool)] -> String -> String -> IO Float
+tuneProgram comps exe ext progName = do
+  let tunePara = createTuneFile comps exe
+  writeFile (progName ++ ('.':ext)) tunePara
+  benchOut <- getBenchOutput progName ext
+  let nameTime = splitNameTime $ lines (fst benchOut)
+  return $ snd (head nameTime)
+
+------- TODO needs to be deleted ---------
+splitNameTime ::[String] -> [(String,Float)]
+splitNameTime str =
+  let regex = mkRegex "dataset +([^:]+)\\:\\ +([0-9]+\\.[0-9]+)"
+      list  = catMaybes $ map (matchRegex regex) str
+  in  map (\x -> (x!!0, read $ x!!1)) list
