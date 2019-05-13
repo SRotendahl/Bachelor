@@ -85,12 +85,8 @@ main = do
   print  runTimes
   print "----------------- executions -----------------------"
   mapM_ print exe
-    {-
   print "----------------- comparisions ---------------------"
-  print $ removeDup (snd (head comps)) 
-  print "----------------- tune parameters ------------------"
-  print tunePara
-  -}
+  print $ snd (head comps) 
   putStrLn . printTree . (fmap show) $ tree
   --print $ getExecutions tree 
 {-

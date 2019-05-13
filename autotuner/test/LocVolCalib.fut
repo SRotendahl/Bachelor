@@ -1,6 +1,6 @@
 -- LocVolCalib
 -- ==
--- compiled input @ LocVolCalib-data/train-small.in
+-- compiled input @ LocVolCalib-data/train-medium.in
 
 -- notune compiled input @ LocVolCalib-data/small.in
 -- output @ LocVolCalib-data/small.out

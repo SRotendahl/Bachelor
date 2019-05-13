@@ -1,0 +1,19 @@
+\section{Design}
+\subsection{Threshold parameters}
+To choose the proper code version for the program, based on representative data, we need something to base our choices from. At runtime, Futhark generates some parameters we can use as this basis. These parameters represent a piece of codefi
+
+\subsection{Structure of the threshold parameter}
+% Vi har nok skrevet det med dependencies før, men så kan vi bare lige rykke det/flette sammen
+The aforementioned threshold parameters, can be dependent on each other. Imagine a nested loop where it is determined, for the outer loop, that it should not be executed in parallel, therefore the inner loop should also not be executed in parallel, thereby making the inner dependent on the outer. These dependencies builds a tree, which an example of can be seen in figure \ref{LocVolCalibTree}.
+\begin{figure}[H]
+\centering
+\input{Tree}
+\caption{The dependencies between thresholds, of the test program \texttt{LocVolCalib.fut}. The dependency is based on a comparison of the threshold (T), the edge to the next node is then taken based on that comparison. Each path through the tree, to one, or more, end nodes, is then an execution of the program.}
+\label{LocVolCalibTree}
+\end{figure}
+\noindent To tune a program we need to examine each execution path. It is important not to get an end node confused with an execution path. Two example of paths through the tree in figure \ref{LocVolCalibTree}, that show this, could be;
+\begin{itemize}
+\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, True)\}}
+\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, False), (T8, False), (T9, True), (T16, False), (T17, True)\}}
+\end{itemize} 
+The first path is simple, the code represented by \texttt{T4, T5, T6} is executed in parallel, where everything after it, is executed sequentially. The second path is more interesting, \texttt{T7} has two child nodes, that are reached with a false comparison. Here it is clear that two end nodes is reached, namely \texttt{(E6, E9)}. This is also important to note, because we could have a forest, instead of a single tree, and this would leave multiple end nodes.
