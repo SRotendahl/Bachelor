@@ -7,6 +7,7 @@ import Data.List
 import System.IO.Silently
 import Data.Maybe
 import System.Process
+import System.Directory
 
 -- Needs to be removed TODO
 import Text.Regex
@@ -75,6 +76,7 @@ tuneProgram comps exe ext progName = do
   let tunePara = createTuneFile comps exe
   writeFile (progName ++ ('.':ext)) tunePara
   benchOut <- getBenchOutput progName ext
+  removeFile (progName ++ ('.':ext))
   let nameTime = splitNameTime $ lines (fst benchOut)
   return $ snd (head nameTime)
 
