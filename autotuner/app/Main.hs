@@ -81,8 +81,9 @@ main = do
   let tree = buildTree thresh 
   let exe = getExecutions tree
   runTimes <- mapM (\ex -> tuneProgram (snd (head comps)) ex "tuning" (getProgram pArgs)) exe
+  let strs = map (\ex -> createTuneFile (snd (head comps)) ex) exe
   print "----------------- runing times ---------------------"
-  print  runTimes
+  mapM_ print $ zip runTimes strs
   print "----------------- executions -----------------------"
   mapM_ print exe
   print "----------------- comparisions ---------------------"
