@@ -149,6 +149,31 @@
       \endverb
       \keyw{GPGPU,compilers,functional language,parallel}
     \endentry
+    \entry{prog-guide-cuda}{article}{}
+      \name{author}{1}{}{%
+        {{hash=bb80167a30b8941ffa55b3c3b86bd2ce}{%
+           family={nVidia},
+           familyi={n\bibinitperiod}}}%
+      }
+      \strng{namehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{fullhash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{bibnamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authorbibnamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authornamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authorfullhash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \field{sortinit}{n}
+      \field{sortinithash}{f7242c3ed3dc50029fca1be76c497c7c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{NVIDIA CUDA Compute Unified Device Architecture, Programming Guide}
+      \field{year}{2008}
+      \verb{urlraw}
+      \verb http://developer.download.nvidia.com/compute/cuda/2_0/docs/NVIDIA_CUDA_Programming_Guide_2.0.pdf
+      \endverb
+      \verb{url}
+      \verb http://developer.download.nvidia.com/compute/cuda/2_0/docs/NVIDIA_CUDA_Programming_Guide_2.0.pdf
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
