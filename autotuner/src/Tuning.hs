@@ -71,6 +71,8 @@ createTuneFile comps exes =
   let strList = map (\exe -> (fst exe) ++ "=" ++ show (checkExePath exe comps)++",") exes
   in concat strList
 
+-- Get runtime of a single execution of a single program
+{-
 tuneProgram :: [(String, Int)] -> [(String, Bool)] -> String -> String -> IO Float
 tuneProgram comps exe ext progName = do
   let tunePara = createTuneFile comps exe
@@ -79,6 +81,21 @@ tuneProgram comps exe ext progName = do
   removeFile (progName ++ ('.':ext))
   let nameTime = splitNameTime $ lines (fst benchOut)
   return $ snd (head nameTime)
+-}
+  
+{-
+ - first plan:
+ -- get runtime of path with dataset
+ -- map over all paths
+ -- map over all datasets
+ -- get average of all times
+ -- pick best average
+ -- return path
+ - extentions: 
+ -- create and Eq instance for paths so we can know if they are equal across datasets
+ -- figure out upper/lower bounding of numbers to optimize.
+ -}
+
 
 ------- TODO needs to be deleted ---------
 splitNameTime ::[String] -> [(String,Float)]
