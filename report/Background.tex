@@ -1,10 +1,11 @@
 \section{Background}
 \subsection{Futhark}
-A common way to increase computer performance, is to increase the capacity for parallelism. For practical usage, however, this is difficult to implement, due to low-level GPU-specific languages requiring domain specific knowledge to make full use of. A wast amount of work has gone into transforming high-level hardware-agnostic code into these low-level GPU-specific languages \cite{inc-flat}. 
+A common way to increase computer performance, is to increase the capacity for parallelism. For practical usage, however, this is difficult to implement, due to low-level GPU-specific languages requiring domain specific knowledge to make full use of that capacity. A wast amount of work has gone into transforming high-level hardware-agnostic code into these low-level GPU-specific languages \cite{inc-flat}. 
 
-The programming language \textbf{Futhark} aims to solve this problem. The creator of Futhark writes this nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more specifically, as a \textit{"a statically typed, data-parallel, and purely functional array language"}. Better than a description, is an example:
+The programming language \textbf{Futhark} aims to solve this problem. The creator of Futhark writes the purpose, of the language, nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more precisely, as \textit{"a statically typed, data-parallel, and purely functional array language"}, but better than a description, is an example:
 \begin{figure}[H]
 \centering
+\lstset{language=haskell}
 \begin{lstlisting}
 let dotprod [n] (xs: [n]f32) (ys: [n]f32): f32 =
 	reduce (+) 0f32 (map2 (*) xs ys)
@@ -15,12 +16,20 @@ let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
 \caption{Matrix-matrix multiplication in Futhark \cite{ppopp}}
 \label{matmultFuthark}
 \end{figure}
-\noindent 
-\input{Tree}
+\noindent A Futhark program for matrix-matrix multiplication can be seen in figure \ref{matmultFuthark}, the syntax is similar to languages such as ML, and Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we would have liked to include an example of CUDA, but it was to long, so see \ref{cuda-matmult} for that). It allows the programmer to write efficient parallel code, without all the domain specific knowledge regarding massively parallel systems. 
+
+\subsection{Flattening}
+%It is difficult to exploit nested data-parallelism. A common approach is to add data-parallel operations, such as \texttt{map}, to existing languages, for example High Performance Fortran. However, this approach is not well suited for irregular data structures, such as trees or graphs \cite{nesl}.
+It is difficult to exploit nested data-parallelism. An approach to this problem is flattening \cite{flat}. The aim is to transform nested parallelism, into one-level parallelism. To briefly understand the concept of flattening, we will flatten a nested collection; let \texttt{A = [1, 2, 3, 4, 5, 6]}, this can be flattened into what is called a \textbf{field} \cite{flat}, here represented as a tuple, but it could be a different data-structure. The first element, of the field, is a collection representing the length of the segments, and the second is either a collection, or another field, giving; \texttt{field = (shape, val)}. The collection \texttt{A}, flattened into a field, would be \texttt{(Ashape = [6], Aval = [1, 2, 3, 4, 5, 6])}. This technique can be applied recursively to any depth. A depth of \texttt{n} would give \texttt{n} shape collections, for example let \texttt{B = [[1, 2], [3, 4, 5], [6]]}, this would be flattened to the field \texttt{B = ([3], (Bshape, Bval)) $\to$ B = ([3], ([2, 3, 1], [1, 2, 3, 4, 5, 6]))}. 
+
+With the collection flattened to a field structure, work can now be applied in parallel, by stepping up or down in the field, for example taking the head of each nested collection would step down in \texttt{B} once, to get \texttt{step-down([3], ([3], ([2, 3, 1], [1, 2, 3, 4, 5, 6]))) = ([2, 3, 1], [1, 2, 3, 4, 5, 6])}, and then distributing the head function to each segment in parallel, by giving each segment of \texttt{[1..6]} to a core and performing the function, giving back the field \texttt{([3], [1, 3, 6])}.\\\\
+With the ability to flatten, nested parallelism can be mapped to hardware. However this is not necessarily optimal.   
+%We could possibly expand on this
+
+\subsection{Incremental flattening}
+A principal critical for this code transformation from low-level GPU languages to Futhark, is flattening. 
 
 
-\subsection{Incremental flatting}
- 
 \begin{comment}
 \subsection{Threshold parameters}
 To choose the proper code version for the program, based on representative data, we need something to base our choices from. At runtime, Futhark generates some parameters we can use as this basis. These parameters represent a piece of codefi

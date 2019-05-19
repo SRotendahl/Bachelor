@@ -19,6 +19,54 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{flat}{article}{}
+      \name{author}{2}{}{%
+        {{hash=32a0460996f7163915e892129cadc85b}{%
+           family={Blelloch},
+           familyi={B\bibinitperiod},
+           given={Guy\bibnamedelima E.},
+           giveni={G\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=948b184aeca9f2adfa90c6c83f6e892f}{%
+           family={Sabot},
+           familyi={S\bibinitperiod},
+           given={Gary\bibnamedelima W.},
+           giveni={G\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Orlando, FL, USA}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press, Inc.}%
+      }
+      \strng{namehash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \strng{fullhash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \strng{bibnamehash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \strng{authorbibnamehash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \strng{authornamehash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \strng{authorfullhash}{e1f565d9110b594e3e8ca37e03d6ff69}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0743-7315}
+      \field{journaltitle}{J. Parallel Distrib. Comput.}
+      \field{month}{2}
+      \field{number}{2}
+      \field{title}{Compiling Collection-oriented Languages Onto Massively Parallel Computers}
+      \field{volume}{8}
+      \field{year}{1990}
+      \field{pages}{119\bibrangedash 134}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1016/0743-7315(90)90087-6
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1016/0743-7315(90)90087-6
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1016/0743-7315(90)90087-6
+      \endverb
+    \endentry
     \entry{futhark-home}{online}{}
       \name{author}{1}{}{%
         {{hash=877d0c9dfa523172d9e414d7847d3fea}{%
@@ -148,6 +196,31 @@
       \verb http://doi.acm.org/10.1145/3293883.3295707
       \endverb
       \keyw{GPGPU,compilers,functional language,parallel}
+    \endentry
+    \entry{prog-guide-cuda}{article}{}
+      \name{author}{1}{}{%
+        {{hash=bb80167a30b8941ffa55b3c3b86bd2ce}{%
+           family={nVidia},
+           familyi={n\bibinitperiod}}}%
+      }
+      \strng{namehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{fullhash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{bibnamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authorbibnamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authornamehash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \strng{authorfullhash}{bb80167a30b8941ffa55b3c3b86bd2ce}
+      \field{sortinit}{n}
+      \field{sortinithash}{f7242c3ed3dc50029fca1be76c497c7c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{NVIDIA CUDA Compute Unified Device Architecture, Programming Guide}
+      \field{year}{2008}
+      \verb{urlraw}
+      \verb http://developer.download.nvidia.com/compute/cuda/2_0/docs/NVIDIA_CUDA_Programming_Guide_2.0.pdf
+      \endverb
+      \verb{url}
+      \verb http://developer.download.nvidia.com/compute/cuda/2_0/docs/NVIDIA_CUDA_Programming_Guide_2.0.pdf
+      \endverb
     \endentry
   \enddatalist
 \endrefsection
