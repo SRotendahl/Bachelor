@@ -22,10 +22,10 @@ getTresh sizeOutput = -- Prob needs to be split up a bit
       getGroups = cleanGroups . removeAll ' ' 
   in  map getGroups matches
 
-compToTuple :: [String] -> (String,Int)
+compToTuple :: [String] -> (String,Integer)
 compToTuple (thresh:val:[]) = (thresh, read val) 
 
-getComparison :: String -> [(String,Int)] -- TODO make better alias
+getComparison :: String -> [(String,Integer)] -- TODO make better alias
 getComparison comp = 
   let regex = mkRegex "Compared ([^ ]+) <= (-?[0-9]+)"
       splitLine = splitOn "\n" comp 
