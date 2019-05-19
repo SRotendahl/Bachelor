@@ -1927,7 +1927,8 @@
     <bcf:citekey order="3">futhark-home</bcf:citekey>
     <bcf:citekey order="4">ppopp</bcf:citekey>
     <bcf:citekey order="5">ppopp</bcf:citekey>
-    <bcf:citekey order="6">prog-guide-cuda</bcf:citekey>
+    <bcf:citekey order="6">flat</bcf:citekey>
+    <bcf:citekey order="7">prog-guide-cuda</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.12)  17 MAY 2019 17:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.19)  19 MAY 2019 14:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
 LaTeX2e <2017-04-15>
-Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+Babel <3.18> and hyphenation patterns for 3 language(s) loaded.
 (./preamble.tex (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
@@ -358,6 +358,8 @@ File: babel.def 2018/02/14 3.18 Babel common definitions
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@dirlevel=\count88
 )
+\l@british = a dialect from \language\l@english 
+\l@UKenglish = a dialect from \language\l@english 
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
@@ -2072,19 +2074,42 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Abstract.tex)
 (./Introduction.tex) (./Background.tex
+
+LaTeX Warning: Citation 'inc-flat' on page 1 undefined on input line 3.
+
+
+LaTeX Warning: Citation 'futhark-home' on page 1 undefined on input line 5.
+
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang2.sty
 File: lstlang2.sty 2015/06/04 1.6 listings language file
-)) (./Design.tex) [1
+)
 
-] [2] (./Appendix.tex
+LaTeX Warning: Citation 'ppopp' on page 1 undefined on input line 16.
+
+
+LaTeX Warning: Citation 'ppopp' on page 1 undefined on input line 16.
+
+
+LaTeX Warning: Citation 'flat' on page 1 undefined on input line 23.
+
+) (./Design.tex) [1
+
+]
+
+LaTeX Warning: Empty bibliography on input line 13.
+
+(./Appendix.tex
+
+LaTeX Warning: Citation 'prog-guide-cuda' on page 2 undefined on input line 3.
+
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\cite' on input line 3.
 
-) [3]
+) [2]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 18.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 18.
  (./main.aux)
@@ -2097,33 +2122,40 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 4.98pt have occurred.
 
+
+LaTeX Warning: There were undefined references.
+
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                main
+(biblatex)                and rerun LaTeX afterwards.
+
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 48879 strings out of 492982
- 1020013 string characters out of 6134895
- 1543039 words of memory out of 5000000
- 51775 multiletter control sequences out of 15000+600000
- 537790 words of font info for 48 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 56i,11n,77p,10392b,2923s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-t10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb
-></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on main.pdf (4 pages, 155692 bytes).
+ 48839 strings out of 494923
+ 1019053 string characters out of 6180742
+ 1537135 words of memory out of 5000000
+ 51492 multiletter control sequences out of 15000+600000
+ 537449 words of font info for 47 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 56i,11n,77p,10392b,2742s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmtt9.pfb>
+Output written on main.pdf (3 pages, 137349 bytes).
 PDF statistics:
- 194 PDF objects out of 1000 (max. 8388607)
- 174 compressed objects within 2 object streams
- 63 named destinations out of 1000 (max. 500000)
+ 165 PDF objects out of 1000 (max. 8388607)
+ 148 compressed objects within 2 object streams
+ 57 named destinations out of 1000 (max. 500000)
  77 words of extra memory for PDF output out of 10000 (max. 10000000)
 

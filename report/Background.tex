@@ -20,18 +20,12 @@ let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
 
 \subsection{Flattening}
 %It is difficult to exploit nested data-parallelism. A common approach is to add data-parallel operations, such as \texttt{map}, to existing languages, for example High Performance Fortran. However, this approach is not well suited for irregular data structures, such as trees or graphs \cite{nesl}.
-It is difficult to exploit nested data-parallelism. An approach to this problem is flattening \cite{flat}. The aim is to transform nested parallelism, into one-level parallelism
+It is difficult to exploit nested data-parallelism. An approach to this problem is flattening \cite{flat}. The aim is to transform nested parallelism, into one-level parallelism. To see flattening, lets flatten a nested collection; let \texttt{A = [[1, 2], [3, 4, 5], [6]]}, this can be flattened into two collections (here represented as a tuple, but it could be a different data-structure) \texttt{(Ashape = [2, 3, 1], Aval = [1, 2, 3, 4, 5, 6])}. This technique can be applied recursively to any depth, a depth of \texttt{n} would give \texttt{n} shape arrays, for example \texttt{A} would be represented as \texttt{A = ([3], (Ashape, Aval)) $\to$ ([3], ([2, 3, 1], [1, 2, 3, 4, 5, 6]))}
 
 \subsection{Incremental flattening}
 A principal critical for this code transformation from low-level GPU languages to Futhark, is flattening. 
- 
-\begin{multicols}{3}
-\begin{itemize}
-\item 12
-\item 32
-\item 23
-\end{itemize}
-\end{multicols}
+
+
 \begin{comment}
 \subsection{Threshold parameters}
 To choose the proper code version for the program, based on representative data, we need something to base our choices from. At runtime, Futhark generates some parameters we can use as this basis. These parameters represent a piece of codefi

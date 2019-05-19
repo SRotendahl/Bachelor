@@ -13,6 +13,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Design}{1}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {A}Code examples}{3}{appendix.A}
+\contentsline {section}{\numberline {A}Code examples}{2}{appendix.A}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{3}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{2}{subsection.A.1}
