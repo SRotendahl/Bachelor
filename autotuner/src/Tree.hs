@@ -1,4 +1,4 @@
-module Tree (buildTree, printTree) where
+module Tree (buildTree, getSubtrees, printTree) where
 
 import Data.List
 import Data.Tree
@@ -19,9 +19,11 @@ toTree thress prevThress =
         nextThress = map ((:prevThress) . fst) $ -- Should be it's own function
                      filter (((==) $ sort prevThress) . sort . snd) thress
 
+{-
 addCompVals :: [(String,Int)] -> String -> (String, (Maybe Int))
 addCompVals ds thres = (thres, val)
   where val = lookup thres ds
+-}
 
 hackyAddBools :: String -> (String, Bool)
 hackyAddBools str = (str, False)
@@ -31,7 +33,8 @@ buildTree :: [(String, [String])] -> (Tree (String, Bool))
 buildTree threshs = fmap hackyAddBools $
                             unfoldTree (toTree threshs) []
                     
--- buildForest :: [(String, [(String,Int)]] -> [(String, [String])]-> [(Tree (String, (Maybe Int)))]
--- For later
+getSubtrees :: Bool -> (Tree (String, Bool)) -> [(Tree (String, Bool))]
+getSubtrees b tree = filter f $ subForest tree
+  where f = (==b) . snd . rootLabel 
 
 printTree = drawTree
