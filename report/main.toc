@@ -1,0 +1,20 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}Background}{1}{section.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Futhark}{1}{subsection.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Nested parallelism}{2}{subsection.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3}Moderate flattening}{2}{subsection.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4}Incremental flattening}{3}{subsection.2.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3}Autotuning}{5}{section.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {A}Code examples}{9}{appendix.A}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{9}{subsection.A.1}

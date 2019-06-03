@@ -1,0 +1,9 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Background}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Futhark}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Nested parallelism}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Moderate flattening}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Incremental flattening}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Autotuning}{}% 7
+\BOOKMARK [1][-]{appendix.A}{Code examples}{}% 8
+\BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71]prog-guide-cuda}{appendix.A}% 9

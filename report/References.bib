@@ -17,8 +17,6 @@
  address = {Orlando, FL, USA},
 } 
 
-
-
 @article{nesl,
  author = {Blelloch, Guy E. and Hardwick, Jonathan C. and Chatterjee, Siddhartha and Sipelstein, Jay and Zagha, Marco},
  title = {Implementation of a Portable Nested Data-parallel Language},
@@ -63,6 +61,13 @@ author = {Henriksen, Troels},
 title  = {Why Futhark?},
 date   = {2019-05},
 url    = {https://futhark-lang.org/}
+}
+
+@online{futhark-moderate-blog,
+author = {Henriksen, Troels},
+title  = {Streaming Combinators and Extracting Flat Parallelism},
+date   = {2019-06},
+url    = {https://futhark-lang.org/blog/2017-06-25-futhark-at-pldi.html}
 }
 
 @online{ppopp,
@@ -110,47 +115,20 @@ url    = {https://github.com/diku-dk/futhark-ppopp19}
  keywords = {GPGPU, compilers, functional language, parallel},
 } 
 
-@article{CUB,
-    author =       "Duane Merrill and Michael Garland",
-    title =        "Single-pass Parallel Prefix Scan with Decoupled Look-back",
-    journal =      "NVIDIA Corporation",
-    year =         "2016",
-    DOI =          "https://research.nvidia.com/publication/single-pass-parallel-prefix-scan-decoupled-look-back",
-}
-
-@article{chainArticle,
- author = {Yan, Shengen and Long, Guoping and Zhang, Yunquan},
- title = {StreamScan: Fast Scan Algorithms for GPUs Without Global Barrier Synchronization},
- journal = {SIGPLAN Not.},
- issue_date = {August 2013},
- volume = {48},
- number = {8},
- month = feb,
- year = {2013},
- issn = {0362-1340},
- pages = {229--238},
- numpages = {10},
- url = {http://doi.acm.org/10.1145/2517327.2442539},
- doi = {10.1145/2517327.2442539},
- acmid = {2442539},
+@inproceedings{segred,
+ author = {Larsen, Rasmus Wriedt and Henriksen, Troels},
+ title = {Strategies for Regular Segmented Reductions on GPU},
+ booktitle = {Proceedings of the 6th ACM SIGPLAN International Workshop on Functional High-Performance Computing},
+ series = {FHPC 2017},
+ year = {2017},
+ isbn = {978-1-4503-5181-2},
+ location = {Oxford, UK},
+ pages = {42--52},
+ numpages = {11},
+ url = {http://doi.acm.org/10.1145/3122948.3122952},
+ doi = {10.1145/3122948.3122952},
+ acmid = {3122952},
  publisher = {ACM},
  address = {New York, NY, USA},
- keywords = {cuda, gpu, opencl, parallel algorithms, prefix-sum, scan},
-}
-
-
-@MISC{brent-kung-img,
-    author = {{Wikipedia, the free encyclopedia}},
-    title = {Prefix sum},
-    year = {2018},
-    note = {[Online; accessed October 29, 2018]},
-    url = {https://en.wikipedia.org/wiki/File:Prefix_sum_16.svg}
-}
-
-@MISC{memo,
-    author = {{CUDA Toolkit Documentation}},
-    title = {Memory Hierarchy, section 2.3 figure 7},
-    year = {2018},
-    note = {[Online; accessed November 2, 2018]},
-    url = {https://docs.nvidia.com/cuda/cuda-c-programming-guide/graphics/memory-hierarchy.png}
-}
+ keywords = {GPGPU, functional programming, parallelism},
+} 
