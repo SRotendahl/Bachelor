@@ -15,6 +15,12 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Autotuning}{5}{section.3}
 \defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1}Search space and portability}{7}{subsection.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{The search space}{7}{section*.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Portability}{7}{section*.5}
+\defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {A}Code examples}{9}{appendix.A}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{9}{subsection.A.1}
