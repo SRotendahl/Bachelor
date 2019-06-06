@@ -1,7 +1,7 @@
 \section{Background}
-\subsection{Futhark}
 A common way to increase computer performance, is to increase the capacity for parallelism. For practical usage, however, this is difficult to implement, due to low-level GPU-specific languages requiring domain specific knowledge to make full use of that capacity. A wast amount of work has gone into transforming high-level hardware-agnostic code into these low-level GPU-specific languages \cite{inc-flat}. 
 
+\subsection{Futhark}
 The programming language \textbf{Futhark} aims to solve this problem. The creator of Futhark writes the purpose, of the language, nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more precisely, as \textit{"a statically typed, data-parallel, and purely functional array language"}, but better than a description, is an example:
 \begin{center}
 \lstset{language=haskell}
@@ -16,78 +16,77 @@ let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
 \label{matmultFuthark}
 \end{center}
 A Futhark program for matrix-matrix multiplication can be seen in listing \ref{matmultFuthark}, the syntax is similar to languages such as ML, and Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we would have liked to include an example of CUDA, but it was to long, so see \ref{cuda-matmult} for that). It allows the programmer to write efficient parallel code, without all the domain specific knowledge regarding massively parallel systems. 
-%Mentioned that the compiler optimizses with the static funct etc.
 
-\subsection{Flattening}
-\label{flattening}
-%It is difficult to exploit nested data-parallelism. A common approach is to add data-parallel operations, such as \texttt{map}, to existing languages, for example High Performance Fortran. However, this approach is not well suited for irregular data structures, such as trees or graphs \cite{nesl}.
-It is difficult to exploit nested data-parallelism. An approach to this problem is flattening \cite{flat}. The aim is to transform nested parallelism, into one-level parallelism. To briefly understand the concept of
-% More general example for A
-flattening, we will flatten a nested collection; To flatten a collection, we represent it as a \texttt{field} \cite{flat}, here we will represented a \texttt{field} as a tuple, but it could be a different data-structure. The second element of the \texttt{field} tuple, is either a collection, or another \texttt{field}, the first element, is a collection representing the shape of the second element; \texttt{field = (shape, val)}. So for a flat collection (\texttt{A}) the field wold be, \texttt{([length(a)], A)}, where brackets represent a collection, and the shape being the length, due to it being flat.
-%let \texttt{A = [1, 2, 3, 4, 5, 6]}, this can be flattened into what is called a \textbf{field}   The collection \texttt{A}, flattened into a field, would be \texttt{(Ashape = [6], Aval = [1, 2, 3, 4, 5, 6])}. 
-The \texttt{field} structure can be applied recursively to any depth. A depth of \texttt{n} would give \texttt{n} shape collections, for example let \texttt{B = [[1, 2], [3, 4, 5], [6]]}, this would be flattened to the field \texttt{B = ([3], (Bshape, Bval)) $\to$ B = ([3], ([2, 3, 1], [1, 2, 3, 4, 5, 6]))}. 
+The reason why Futhark is a functional language, is that functional languages lends themselves well to parallel problems, due to the functional paradigm not relying on evaluation order an side effects, as much as other many other paradigms. An example of this is \texttt{map}, which can process each element in parallel. However there are still issues, with the main one being that one parallel thread may not spawn more threads, also called \textit{flat} parallelism. Due to this issue, among others like to small of a stack and no function pointers, a functional language by itself is not a solution, and modifying an existing language such as Haskell is not optimal due to the size and expressiveness of it, being poorly suited for the restrictive nature of a GPU. 
 
-With the collection flattened to a field structure, work can now be applied in parallel, by stepping up or down in the field, for example taking the head of each nested collection would step down in \texttt{B} once, to get \texttt{step-down([3], ([3], ([2, 3, 1], [1, 2, 3, 4, 5, 6]))) = ([2, 3, 1], [1, 2, 3, 4, 5, 6])}, and then distributing the head function to each segment in parallel, by giving each segment of \texttt{[1..6]} to a core and performing the function, giving back the field \texttt{([3], [1, 3, 6])}.\\\\
-%We could possibly expand on this
-With the ability to flatten, nested parallelism can be mapped to hardware, as one-level. However this is not necessarily optimal, as it does not take the capability of the hardware into account, leading to poor utilization of locality optimization. The problem then becomes how to optimize for nested parallelism, hardware capabilities, and the data being worked on. This is what the following section of \textit{incremental flattening} addresses.
+Many problems are not flat. Take the \texttt{dotprod} function from listing \ref{matmultFuthark}. Here there is a \texttt{map2}\footnote{\texttt{map2} is a variant of \texttt{map} taking two arrays instead of a single element and an array. For example \texttt{map2 (+) [1,2,3] [4,5,6] $\to$ [5,7,9]}} which is nested inside of a \texttt{reduce}, both operations are parallel, thereby giving \textit{nested parallelism}. This is the main issue mentioned before, and mapping this nested parallelism into efficient flat parallelism is the most important function performed by the Futhark compiler. 
+
+\subsection{Nested parallelism}
+Nested parallelism is when there are parallel constructs nested within each other, a simple example is a perfect loop nest, e.g. nested loops with all the work at the innermost level of the nest.
+
+Futhark supports such nested parallelism. More specifically, Futhark supports nested \textit{data}-parallelism. Data-parallelism is when some function/operation, is applied to a dataset in parallel, such that one thread uses function \texttt{x} on a subset of data \texttt{y}, and another thread also uses function \texttt{x}, but on a different subset of \texttt{y}. Other languages/environments that support nested data-parallelism are the likes of; CUDA, Open MP, OpenCL, NESL etc. With NESL \cite{nesl} being the conceptual precursor to the other languages. NESL solved the issue of nested data-parallelism by flattening data structures (both regular and irregular), by a process called flattening \cite{flat}. NESL solution however is often inefficient, due to it always maximizing available parallelism, which can lead to overhead, that is greater than exploiting less of the parallel construct. It uses a lot of memory, due to copies of the data, and finally, locality-of-reference optimizations are basically impossible due to poor access pattern information \cite{futhark-moderate-blog}.
+
+\subsection{Moderate flattening}
+In the world of GPU's we have \textit{kernel}s, a kernel is simply a GPU program. In CUDA specifically, it allows the programmer to define a function, that, when called, is executed \textit{N} times in parallel by \textit{N} different \textit{CUDA threads} or \textit{CUDA blocks}\footnote{For a futher explanation see threads and blocks see \cite{prog-guide-cuda}}. Such a function is called a kernel, and an example of a CUDA kernel is the matrix-matrix multiplication in appendix \ref{cuda-matmult}. 
+
+A kernel can be thought of as the work, that is to be done, in a perfect \textit{parallel nest}. A perfect parallel nest is a nest where all the work inside the nest, is at the innermost level of the nest. 
+\begin{figure}
+\centering
+	\begin{minipage}{0.45\textwidth}
+	\centering
+	\begin{lstlisting}
+map (\xs -> let y = reduce (+) 0 xs 
+		in map (+y) xs)
+	xss
+	\end{lstlisting}
+	\captionof{lstlisting}{Code fragment before distribution.} \label{beforeDist}
+	\end{minipage}\hspace*{\fill}
+	\begin{minipage}{0.45\textwidth}
+	\centering
+	\begin{lstlisting}
+let ys = map (\xs -> reduce (+) 0 xs) xss
+in map (\xs y -> map (+y) xs) xss ys
+	\end{lstlisting}
+	\captionof{lstlisting}{Code fragment after distribution.} \label{afterDist}
+	\end{minipage}
+	\captionof{figure}{Two version of a fragment of code, showing the distribution of SOACs (\textit{second-order array combinators}) \cite{futhark-moderate-blog}.}
+	\label{loopDist}
+\end{figure}
+\noindent An example of nested data-parallelism and transformation to kernels, can be seen in figure \ref{loopDist}. We can see that the outer \texttt{map}, of listing \ref{beforeDist}, contains more parallelism in it, in terms of the parallel constructs \texttt{reduce} and \texttt{map}, so in the case where the outer \texttt{map} does not saturate the GPU, we would want to exploit the parallelism of the \texttt{map} body. With listing \ref{beforeDist} this is not possible, since the outer \texttt{map} would be parallelised, and the inner sequentialized to one GPU kernel. Instead we can transform it to listing \ref{afterDist}. Here the SOACs of the body (\texttt{map} and \texttt{reduce}) in listing \ref{beforeDist}, are distributed out into their own \texttt{map} nests, giving two perfect \texttt{map} nests, and thereby translates to two GPU kernels, where the first kernel of line 1, is passed into the second kernel of line 2, allowing for further exploitation of the nested parallelism.
+
+This transformation is dubbed \textit{moderate flattening} \cite{futhark-nested-para}, due to its conceptual resemblance to the flattening algorithm put forth by \citeauthor{flat} \cite{flat}. However it is moderate in it approach, due to it flattening the parallel construct until the parallelism saturates the hardware, after which it efficiently sequentialize the remaining parallelism. While flattening supports both regular and irregular structures, Futhark only supports regular structures, and will sequentialize the irregular structures (however Futhark, and its creator documents how to optimize for regular structures). As we saw in Figure \ref{loopDist}, Futhark flattens nested parallel construct by extracting kernels, based on rewrite/flattening rules. At the time of implementing moderate flattening, the algorithm used to apply these rules where based on heuristics about the structure of \texttt{map} nest contexts. These where good approximations but due to the nature of GPU's (having different capacities for parallelism) there is no one size fits all. 
+
 
 \subsection{Incremental flattening}
-To illustrate the need for incremental flattening, lets go back to the matrix-matrix multiplication example in listing \ref{matmultFuthark}. There are 3 levels of nested parallelism to exploit the outer and inner \texttt{map} on line 5, and the \texttt{dotprod} function. Instead of trying to completely flatten all three levels, lets look at the options we have. With these three levels there is, at least, 3(4) different ways to execute the code \cite{inc-flat};
-\begin{inparadesc}
-	\item[1)] The entire function should be run sequentially.
-	\item[2)] Otherwise \texttt{dotprod} should be sequentialized, to optimize locality.
-	\item[3)] If the parallelism in the two \texttt{maps}, would over-saturate the hardware, then another chunk can be sequentialized, to optimize locality. 
-	\item[4)] If the size of the two maps is not big enough to saturate the hardware, then the \texttt{dotprod} function should also be executed in parallel.
-\end{inparadesc} 
-The optimal choice here will, as stated in the end of section \ref{flattening}, depend on the hardware, and the data being worked on. To visualize the choices further, lets look at them as a tree. In tree \ref{MatMultTree} there are 4 choices, as mentioned prior, and these choices are dependent on each other; \begin{inparadesc}
-	\item[V1)] Is the case where the entire matrix-matrix multiplication is executes sequentially.
-	\item[V2)] Is the case where the outer \texttt{map} (of line 5 in listing \ref{matmultFuthark}) is execute in parallel, and the rest sequentially. 
-	\item[V3)] Is where both the inner and outer \texttt{map} is execute in parallel, and the \texttt{dotprod} function (of line 1) is executed sequentially.  
-	\item[V4)] is the case where everything is executed in parallel.
-\end{inparadesc} 
+Moderate flattening relied on heuristics, to appropriately flatten the parallelism in a Futhark program, however, as mentioned, this is a good approximation but it lacks the ability to dynamically flatten appropriately to the hardware capabilities, and the size of the data being worked on. This is where incremental flattening comes in. In short incremental flattening statically generates multiple different, semantically equivalent, piecewise code versions of the same program, based on the rules of moderate flattening (along with some additional ones) \cite{inc-flat}, and then dynamically chooses whether or not to further exploit parallelism or not.  
+
+To get an intuition for incremental flattening, lets go back to the matrix-matrix multiplication example in listing \ref{matmultFuthark}. Due to matrix-matrix multiplication containing a lot of \texttt{map}s (as do many GPU programs), we will briefly explain the code versions generated by the flattening rule, when a \texttt{map} containing additional parallelism (CV is short for code version); 
+\begin{itemize}
+\item[CV0] The body of the map will be executed sequentially. This means that there will be assigned one GPU thread to each element of the array being mapped over, each thread executing the map body sequentially.
+\item[CV1] The body of the map is partially executed in parallel. This means that there will be assigned one GPU group/block to each element of the array being mapped over. This is partial since it does not exploit the parallelism fully, due to not having enough threads to fully parallelise the entire construct within the \texttt{map} body.
+\item[CV2] Continues to flatten the \texttt{map} function, since we have still have further parallel capacity to exploit.  
+\end{itemize}
+\begin{center}
+	\centering 
+	\input{maptree}
+	\captionof{figure}{A tree showing the structure of the three different code versions generate by flattening a \texttt{map} nest}
+	\label{maptree}
+\end{center}
+In matrix-matrix multiplication, there are three levels of nested parallelism to exploit; the outer and inner \texttt{map} on line 5, and the \texttt{dotprod} function. Lets look at the different ways we can execute the function, there are at least 5 different ways to execute the code, generating 5 different code versions (denoted by a V) \cite{inc-flat};
+\begin{itemize}
+	\item[V0)] The outer \texttt{map} is distributed out across the parallel construct, executing the body of the function sequentially. More specifically one GPU thread calculates one row in the resulting matrix each. This is CV1 for \texttt{map}.
+	\item[V1)] The outer \texttt{map} is executed in parallel, and the inner \texttt{map} of \texttt{main} is executed partially in parallel. More specifically one GPU group/block calculates one row in the resulting matrix. This is CV2 for \texttt{map}. 
+	\item[V2)] The two outer maps of \texttt{main}, are extracted as kernels and the kernel of the outer \texttt{map} will invoke the inner \texttt{map} kernel saturating the GPU, and the body of the two \texttt{map}s (\texttt{dotprod}) is executed sequentially. More specifically each GPU thread is calculating one element in the resulting matrix. This is CV1 for \texttt{map}.
+	\item[V3)] The two outer \texttt{maps}, does not saturate the GPU, but the \texttt{dotprod} function would oversaturate it, therefore is \texttt{dotprod} partially executed in parallel. More specifically each element of the result matrix is executed by a GPU group/block. This is CV2
+	\item[V4)] If the entire parallel nest does not oversaturate the GPU, the entire nest is executed in parallel\footnote{Reduce does not appear to be a parallel construct, due to the elements being dependent on each other, however this is done by a \textit{segmented reduce} \cite{segred}}
+\end{itemize} 
+We have to choose between these different, but semantically equivalent, ways of execution. The optimal choice will depend on the hardware, and the data being worked on. To visualize the choices, we will look at them as a tree. In Figure \ref{MatMultTree} there are four choices, we have to consider, and these choices are dependent on each other
 \begin{center}
 	\centering 
 	\input{MatMultTree}
-	\captionof{figure}{The structure of choices found in the futhark program for matrix-matrix multiplication (see listing \ref{matmultFuthark}). (T) and (F), symbolises the result of the choice, and which path to take based on it, and (V) represents the outcome of the choice}
+	\captionof{figure}{The structure of choices found in the futhark program for matrix-matrix multiplication (see listing \ref{matmultFuthark}). (V) represents the resulting code version of a choice}
 	\label{MatMultTree}
 \end{center}
-Futhark has taken an approach to this choice, mentioned in the section above, where it generates several piecewise, semantically equivalent, code versions of the same code in a program, each exploiting a different level of parallelism, which are then discriminated at runtime by statically generated predicates \cite{inc-flat}.
+With these dependent choices, the idea of incremental flattening becomes increasingly clear. We step though the code, and decided whether we should flatten the parallelism available (for example a \texttt{map} nest), or whether we should sequentialize it, and exploit locality-of-reference optimizations. Due to the dependency of the choices, we end up iterating through the parallel nest, and flattening until we reach the full capacity of the hardware, hence the name \textit{incremental flattening}. The choices will not always be in form of a unbalanced tree (although they are for the most part), they can also be balanced, and/or form a forest, we will look more closely at this later.
 
-The process of picking a code version is done using the generated predicates, and \textit{threshold parameters}, and is called tuning, we tune the parameters to get the best runtime based on the hardware, and data given. Currently the predicates are a simple less-than comparison, but that could change. By default the threshold parameter is set to a value off $2^{15}$, as an estimate, but is likely sub-optimal. Due to the way the code versions are generated, they can be dependent on each other. If we think back to the example in listing \ref{matmultFuthark}, we saw that there were, at least, 3 different executions regarding exploitation of parallelism, this means that there are also 3 code versions, guarded by predicates. If the predicate for the two outer \texttt{maps} shows they would saturate the GPU, then the code version where the parallelism would over-saturate the GPU, and run the entire function sequentially, would not get picked, we then step down into the \texttt{dotprod} function, here there is a predicate that decides if \texttt{dotprod} should also be executed in parallel, or whether it would over-saturate, and should be executed sequentially. From this it is clear that the predicates/threshold are dependent on each other.
-
-To inspect the structure of these predicates and thresholds parameters further, lets look at an actual Futhark program;
-\begin{center}
-	\centering
-	\input{LocValCalibTree}
-	\captionof{figure}{The dependencies between thresholds, of the test program \texttt{LocVolCalib.fut}. The dependency is based on a comparison of the threshold (Th), the edge to the next node is then taken based on that comparison, with either a true (T), or false (F) value. Each path through the tree, to one, or more, code versions (V), is then an execution of the program.}
-	\label{LocVolCalibTree}
-\end{center}
-\noindent To tune a program we need to examine each execution path through the tree. It is important not to get an end node confused with an execution path. Two example of paths through the tree in figure \ref{LocVolCalibTree}, that show this, could be;
-\begin{itemize}
-	\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, True)\}}
-	\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, False), (T8, False), (T9, True), (T16, False), (T17, True)\}}
-\end{itemize}  
-The first path is simple, the code represented by \texttt{T4, T5, T6} is executed in parallel, where everything after it, is executed sequentially. The second path is more interesting, \texttt{T7} has two child nodes, that are reached with a false comparison. Here it is clear that two end nodes are reached, namely \texttt{(V6, V9)}, and these two code versions are then combined into one program. This is also important to note, because we could have a forest, instead of a single tree, and this would leave multiple independent code versions, that are to be combined.
-
-
-\begin{comment}
-\subsection{Threshold parameters}
-To choose the proper code version for the program, based on representative data, we need something to base our choices from. At runtime, Futhark generates some parameters we can use as this basis. These parameters represent a piece of codefi
-
-\subsection{Structure of the threshold parameter}
-% Vi har nok skrevet det med dependencies før, men så kan vi bare lige rykke det/flette sammen
-The aforementioned threshold parameters, can be dependent on each other. Imagine a nested loop where it is determined, for the outer loop, that it should not be executed in parallel, therefore the inner loop should also not be executed in parallel, thereby making the inner dependent on the outer. These dependencies builds a tree, which an example of can be seen in figure \ref{LocVolCalibTree}.
-\begin{figure}[H]
-\centering
-\input{Tree}
-\caption{The dependencies between thresholds, of the test program \texttt{LocVolCalib.fut}. The dependency is based on a comparison of the threshold (T), the edge to the next node is then taken based on that comparison. Each path through the tree, to one, or more, end nodes, is then an execution of the program.}
-\label{LocVolCalibTree}
-\end{figure}
-\noindent To tune a program we need to examine each execution path. It is important not to get an end node confused with an execution path. Two example of paths through the tree in figure \ref{LocVolCalibTree}, that show this, could be;
-\begin{itemize}
-\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, True)\}}
-\item \texttt{\{(T4, False), (T5, False), (T6, False), (T7, False), (T8, False), (T9, True), (T16, False), (T17, True)\}}
-\end{itemize} 
-The first path is simple, the code represented by \texttt{T4, T5, T6} is executed in parallel, where everything after it, is executed sequentially. The second path is more interesting, \texttt{T7} has two child nodes, that are reached with a false comparison. Here it is clear that two end nodes is reached, namely \texttt{(E6, E9)}. This is also important to note, because we could have a forest, instead of a single tree, and this would leave multiple end nodes.
-\end{comment}
 
