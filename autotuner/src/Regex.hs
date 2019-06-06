@@ -7,19 +7,26 @@ import Data.List.Split
 import Data.List
 import Data.Maybe
 
-cleanGroups :: [String] -> (String,[String])
+cleanGroups :: [String] -> (String,[(String,Bool)])
 cleanGroups (grp1:grp2:[]) =
-  (grp1 , tail (splitOn "!" grp2))
+  (grp1, 
+    filter (not . (=="") . fst) .
+    map (\x -> (x!!1, not . (=="!") . (!!0) $ x)) .
+    catMaybes .
+    map (matchRegex $ mkRegex "(!?)(.*)") .
+    splitOn " "
+    $ grp2
+  )
 
 removeAll :: (Eq a) => a -> [[a]] -> [[a]]
 removeAll = map . filter . (/=)
 
-getTresh :: String -> [(String,[String])]
+getTresh :: String -> [(String,[(String,Bool)])]
 getTresh sizeOutput = -- Prob needs to be split up a bit
   let regex = mkRegex "(.*)\\ \\(threshold\\ \\((.*)\\)\\)"       
       outputLines = lines sizeOutput
       matches = catMaybes $ map (matchRegex regex) outputLines
-      getGroups = cleanGroups . removeAll ' ' 
+      getGroups = cleanGroups 
   in  map getGroups matches
 
 compToTuple :: [String] -> (String,Integer)
