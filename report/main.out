@@ -5,8 +5,8 @@
 \BOOKMARK [2][-]{subsection.2.3}{Futhark}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{Moderate flattening}{section.2}% 6
 \BOOKMARK [2][-]{subsection.2.5}{Incremental flattening}{section.2}% 7
-\BOOKMARK [1][-]{section.3}{Autotuning}{}% 8
-\BOOKMARK [2][-]{subsection.3.1}{Search space and portability}{section.3}% 9
+\BOOKMARK [2][-]{subsection.2.6}{Structure of the code versions}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Search space and portability}{}% 9
 \BOOKMARK [1][-]{appendix.A}{Code examples}{}% 10
 \BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71]prog-guide-cuda}{appendix.A}% 11
 \BOOKMARK [1][-]{appendix.B}{Graphs}{}% 12
