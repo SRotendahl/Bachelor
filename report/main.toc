@@ -5,22 +5,34 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2}Background}{1}{section.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Futhark}{1}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.1}Parallelism}{1}{subsection.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Nested parallelism}{2}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Flat parallelism}{1}{subsection.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Moderate flattening}{2}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.3}Futhark}{2}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4}Incremental flattening}{3}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.4}Moderate flattening}{3}{subsection.2.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Autotuning}{5}{section.3}
+\contentsline {subsection}{\numberline {2.5}Incremental flattening}{4}{subsection.2.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Search space and portability}{7}{subsection.3.1}
+\contentsline {section}{\numberline {3}Autotuning}{6}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{The search space}{7}{section*.4}
+\contentsline {paragraph}{Threshold parameter}{6}{section*.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{Portability}{7}{section*.5}
+\contentsline {paragraph}{Dataset value}{6}{section*.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {A}Code examples}{9}{appendix.A}
+\contentsline {paragraph}{Predicate}{6}{section*.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{9}{subsection.A.1}
+\contentsline {subsection}{\numberline {3.1}Search space and portability}{8}{subsection.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{The search space}{8}{section*.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Portability}{8}{section*.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {A}Code examples}{10}{appendix.A}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71]{prog-guide-cuda}}{10}{subsection.A.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B}Graphs}{11}{appendix.B}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.1}Theoretical performance for GPU's and CPU's \cite {cpu-vs-gpu}}{11}{subsection.B.1}

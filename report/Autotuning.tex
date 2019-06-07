@@ -1,12 +1,9 @@
 \section{Autotuning}
-The process of autotuning a Futhark program is, to automatically pick the fastest combination (or single) code versions, based on the hardware the program is executed on, and some representative data. In the process of selecting the appropriate code version we have three important terms we, that we be central to this report, and therefore we wish to clearly define them in the context of this report;
-\begin{basedescript}{
-		\desclabelstyle{\multilinelabel}
-		\desclabelwidth{2cm}}
-	\item [Threshold parameter] or just \textit{threshold} is a value that symbolizes the capacity for parallelism (memory, thread count etc.), of the hardware the program is executed on. 
-	\item [Dataset value] is a value that represent some of the dataset given. For example for the outer \texttt{map} in matrix-matrix multiplication, the dataset value would (primarily) be constructed by the number of rows.
-	\item [Predicate] threshold comparison, or just comparison, is a comparison between a threshold and a dataset value that guard which code version to use.   
-\end{basedescript}
+The process of autotuning a Futhark program is, to automatically pick the fastest combination (or single) code versions, based on the hardware the program is executed on, and some representative data. In the process of selecting the appropriate code version we have three important terms we, that we be central to this report, and therefore we wish to clearly define them in the context of this report;	
+\paragraph{Threshold parameter} or just \textit{threshold} is a value that symbolizes the capacity for parallelism (memory, thread count etc.), of the hardware the program is executed on.
+\paragraph{Dataset value} is a value that represent some of the dataset given. For example for the outer \texttt{map} in matrix-matrix multiplication, the dataset value would (primarily) be constructed by the number of rows.
+\paragraph{Predicate} threshold comparison, or just comparison, is a comparison between a threshold and a dataset value that guard which code version to use. \\
+
 To pick the best version, we need to tune the threshold parameters, to values that will result en the combination of code versions that gives the fastest runtime. This process is called tuning. The guarding predicates are of the form $threshod \; \leq \; dataset\; value$. By default the threshold parameter is set to a value off $2^{15}$, as an estimate, but is likely sub-optimal. With these terms, we can now fill out the example in Figure \ref{MatMultTree}, getting Figure \ref{MatMultTreeFilled}. 
 \begin{center}
 	\centering 

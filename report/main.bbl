@@ -130,6 +130,36 @@
       \verb http://doi.acm.org/10.1145/173284.155343
       \endverb
     \endentry
+    \entry{cpu-vs-gpu}{online}{}
+      \name{author}{1}{}{%
+        {{hash=9167c54f5ff34c87063e77eb33b29888}{%
+           family={Galloy},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{9167c54f5ff34c87063e77eb33b29888}
+      \strng{fullhash}{9167c54f5ff34c87063e77eb33b29888}
+      \strng{bibnamehash}{9167c54f5ff34c87063e77eb33b29888}
+      \strng{authorbibnamehash}{9167c54f5ff34c87063e77eb33b29888}
+      \strng{authornamehash}{9167c54f5ff34c87063e77eb33b29888}
+      \strng{authorfullhash}{9167c54f5ff34c87063e77eb33b29888}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{addendum}{The graph used is an updated version from the article, and can be found here \url{https://github.com/mgalloy/cpu-vs-gpu}}
+      \field{month}{6}
+      \field{title}{CPU vs GPU performance}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://michaelgalloy.com/2013/06/11/cpu-vs-gpu-performance.html
+      \endverb
+      \verb{url}
+      \verb https://michaelgalloy.com/2013/06/11/cpu-vs-gpu-performance.html
+      \endverb
+    \endentry
     \entry{futhark-moderate-blog}{online}{}
       \name{author}{1}{}{%
         {{hash=877d0c9dfa523172d9e414d7847d3fea}{%
