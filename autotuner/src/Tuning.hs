@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Tuning (main) where
+module Tuning (main , tune) where
 
 import Data.Ord
 import Data.Function
