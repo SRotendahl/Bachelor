@@ -1930,15 +1930,15 @@
     <bcf:citekey order="7">futhark-home</bcf:citekey>
     <bcf:citekey order="8">ppopp</bcf:citekey>
     <bcf:citekey order="9">ppopp</bcf:citekey>
-    <bcf:citekey order="10">prog-guide-cuda</bcf:citekey>
-    <bcf:citekey order="11">futhark-moderate-blog</bcf:citekey>
+    <bcf:citekey order="10">segred</bcf:citekey>
+    <bcf:citekey order="11">prog-guide-cuda</bcf:citekey>
     <bcf:citekey order="12">futhark-moderate-blog</bcf:citekey>
-    <bcf:citekey order="13">futhark-nested-para</bcf:citekey>
-    <bcf:citekey order="14">flat</bcf:citekey>
+    <bcf:citekey order="13">futhark-moderate-blog</bcf:citekey>
+    <bcf:citekey order="14">futhark-nested-para</bcf:citekey>
     <bcf:citekey order="15">flat</bcf:citekey>
-    <bcf:citekey order="16">inc-flat</bcf:citekey>
+    <bcf:citekey order="16">flat</bcf:citekey>
     <bcf:citekey order="17">inc-flat</bcf:citekey>
-    <bcf:citekey order="18">segred</bcf:citekey>
+    <bcf:citekey order="18">inc-flat</bcf:citekey>
     <bcf:citekey order="19">prog-guide-cuda</bcf:citekey>
     <bcf:citekey order="20">cpu-vs-gpu</bcf:citekey>
   </bcf:section>
