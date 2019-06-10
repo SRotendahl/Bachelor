@@ -1,10 +1,37 @@
 \input{preamble}	
 \begin{document}
-  \coverpage{Autotuning Futhark}
+%% Change `ku-farve` to `nat-farve` to use SCIENCE's old colors or
+%% `natbio-farve` to use SCIENCE's new colors and logo.
+%% Change `ku-en` to `nat-en` to use the `Faculty of Science` header
+\AddToShipoutPicture*{\put(0,0){\includegraphics*{include/futhark}}}
+
+
+\AddToShipoutPicture*{\put(0,0){\includegraphics*[viewport=0 0 700 600]
+    {include/nat-farve}}}
+\AddToShipoutPicture*{\put(0,602){\includegraphics*[viewport=0 600 700 1600]
+    {include/natbio-farve}}}
+
+\clearpage
+
+%Disse linjer skaber forside, evt indholdsfortegnelse, og sætter sidetal
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle              % Forside
+\thispagestyle{empty}   % Fjerner sidetal forside
+\newpage                % Første rigtige side
+\setcounter{page}{1}    % Sætter rigtigt sidetal på første side
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \thispagestyle{empty}
+% \tableofcontents
+\newpage
+\setcounter{page}{1}
+\tableofcontents
+\newpage
 \input{Abstract}
 \input{Introduction}
 \input{Background}
 \input{Autotuning}
+\input{GottaGoFast}
 %%%%%%%%%%%%%%%%% End of Report %%%%%%%%%%%%%%%%%%
 \newpage
 \printbibliography

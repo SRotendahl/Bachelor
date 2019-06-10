@@ -19,6 +19,69 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{opentunner}{inproceedings}{}
+      \name{author}{7}{}{%
+        {{hash=e78fa9bb024897b05487b4d0e3aab461}{%
+           family={Ansel},
+           familyi={A\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+        {{hash=804f70e575015a1bc78123759a08dde4}{%
+           family={Kamil},
+           familyi={K\bibinitperiod},
+           given={Shoaib},
+           giveni={S\bibinitperiod}}}%
+        {{hash=4f9e11fe0b69785748cd8f7d4a672635}{%
+           family={Veeramachaneni},
+           familyi={V\bibinitperiod},
+           given={Kalyan},
+           giveni={K\bibinitperiod}}}%
+        {{hash=d1cfd2886ba18f14cebbea565ab7a156}{%
+           family={Ragan{-}Kelley},
+           familyi={R\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=2a3f756e5ed1421174fb95e91bdec14b}{%
+           family={Bosboom},
+           familyi={B\bibinitperiod},
+           given={Jeffrey},
+           giveni={J\bibinitperiod}}}%
+        {{hash=733a2bfdb60236ac574efac247cac4d5}{%
+           family={O'Reilly},
+           familyi={O\bibinitperiod},
+           given={Una{-}May},
+           giveni={U\bibinitperiod}}}%
+        {{hash=5321287c9790dfc7c650498e6fd22793}{%
+           family={Amarasinghe},
+           familyi={A\bibinitperiod},
+           given={Saman\bibnamedelima P.},
+           giveni={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{a3808305ad2695511c53901a6b9071d0}
+      \strng{fullhash}{15b49a0ae1c66cd850826d63e17de2e0}
+      \strng{bibnamehash}{a3808305ad2695511c53901a6b9071d0}
+      \strng{authorbibnamehash}{a3808305ad2695511c53901a6b9071d0}
+      \strng{authornamehash}{a3808305ad2695511c53901a6b9071d0}
+      \strng{authorfullhash}{15b49a0ae1c66cd850826d63e17de2e0}
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Parallel Architectures and Compilation, {PACT} '14, Edmonton, AB, Canada, August 24-27, 2014}
+      \field{title}{OpenTuner: an extensible framework for program autotuning}
+      \field{year}{2014}
+      \field{pages}{303\bibrangedash 316}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1145/2628071.2628092
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2628071.2628092
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2628071.2628092
+      \endverb
+    \endentry
     \entry{flat}{article}{}
       \name{author}{2}{}{%
         {{hash=32a0460996f7163915e892129cadc85b}{%
@@ -453,6 +516,34 @@
       \endverb
       \verb{url}
       \verb http://developer.download.nvidia.com/compute/cuda/2_0/docs/NVIDIA_CUDA_Programming_Guide_2.0.pdf
+      \endverb
+    \endentry
+    \entry{oldtune}{article}{}
+      \name{author}{1}{}{%
+        {{hash=506edfcc12758d829a83b641cbfc2f62}{%
+           family={Thorøe},
+           familyi={T\bibinitperiod},
+           given={Frederik},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{506edfcc12758d829a83b641cbfc2f62}
+      \strng{fullhash}{506edfcc12758d829a83b641cbfc2f62}
+      \strng{bibnamehash}{506edfcc12758d829a83b641cbfc2f62}
+      \strng{authorbibnamehash}{506edfcc12758d829a83b641cbfc2f62}
+      \strng{authornamehash}{506edfcc12758d829a83b641cbfc2f62}
+      \strng{authorfullhash}{506edfcc12758d829a83b641cbfc2f62}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{6}
+      \field{title}{Auto-tuning of threshold-parameters in Futhark}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://futhark-lang.org/student-projects/mette-kowalski-bsc-thesis.pdf
+      \endverb
+      \verb{url}
+      \verb https://futhark-lang.org/student-projects/mette-kowalski-bsc-thesis.pdf
       \endverb
     \endentry
   \enddatalist
