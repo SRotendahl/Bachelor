@@ -1,21 +1,23 @@
-\documentclass[11pt,a4paper,titlepage]{article}
+% Opsætter KU Tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+\usepackage[a4paper, hmargin={2.8cm, 2.8cm}, vmargin={2.5cm, 2.5cm}]{geometry}
+\usepackage{eso-pic}  % \AddToShipoutPicture
+\usepackage{graphicx} % \includegraphics
+\usepackage{url}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{geometry}
-%\usepackage[margin=2cm,headheight=13.6cm]{geometry}
 \usepackage{color}
 \usepackage{listings}
 \usepackage{mdwlist}
-\usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage{geometry}
 \usepackage[backend=biber]{biblatex}
 \usepackage{textcomp}
 \usepackage{paralist}
-\usepackage{caption}
 \usepackage{tcolorbox}
-\usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{float}
 \usepackage{titling}
@@ -112,57 +114,79 @@ morekeywords={__global__, __device__, __syncthreads},  % CUDA specific keywords
   belowskip=3mm,
 }
 
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\rhead{Simon Rotendahl \& Carl Mathias Graae Larsen}
-\usepackage{datetime}
-\usepackage{moresize}
 
-\newdateformat{monthyeardate}{%
-  \monthname[\THEMONTH] \THEYEAR}
 
-\newcommand{\rulebreak}{%
-	\par%
-	\vspace{0.9cm}%
-    \noindent\rule{4cm}{0.4pt}%
-    \vspace{1.2cm}%
-    \par%
-}
+% Pakker til skrifttyper, tekst osv.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc} % Implementere Unicode
+\usepackage[T1]{fontenc}    % Unicode skrifttype, fx. é skrives som 1 tegn
+\usepackage{microtype}      % Forbedre linjeombrydningen
+\usepackage{libertine}      % Skrifttype
+\usepackage[scaled=0.83]{inconsolata} % Skrifttype til kode til kode
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\coverpage}[1]{%
-	\pagenumbering{roman}%
-	\thispagestyle{empty}%
-	\lhead{\textsc{Bachelors project}}%
-    \title{Auto-tuning Futhark}%
-    \author{Simon Rotendahl (mpx651) \& Carl Mathias Graae Larsen (pwh334)\\ \{\textit{simon, cala}\}@di.ku.dk}%
-    \newgeometry{left=2cm,bottom=0cm,right=2cm,top=0cm}%
-	\begin{center}\hspace{0pt}\vfill%
-    \uppercase{Department of Computer Science at The University of Copenhagen}
-	\rulebreak%
-    {\Large\textbf{Bachelors project}}
-    
-    \vspace{0.5cm}
-    {\HUGE\textbf{\textit{#1}}}
-    
-    \vspace{0.5cm}
-	\theauthor%
-	\par%
-	\vspace{0.9cm}%
-    \noindent\rule{4cm}{0.4pt}%
-    \vspace{0.45cm}
-    % If TOC gets to long, uncomment multicols for columns
-    %\begin{multicols}{2}
-	\tableofcontents
-	%\end{multicols}
-	\rulebreak%
-    \monthyeardate\today\par
-    \hspace{0pt}
-	\end{center}%
-    \vfill
-    \hspace{0pt}
-	\pagebreak%
-    \restoregeometry%
-    \pagenumbering{arabic}%
-}
+% Pakker til matematik og kode.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{mathtools}       % Udvidelse til amsmath pakken
+\usepackage{algpseudocode}   % pseudocode til algoritmer
+\usepackage{algorithm}       % Pakke til algoritmer
+\usepackage{amsthm}          % Pakke til Theroms
+\usepackage{algorithmicx}
+\usepackage{amssymb}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{subfig}
+
+% Pakker til layout.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}        % Gør det muligt at bruge sidehoveder
+\usepackage{graphicx}        % Mulighed for bl.a. \includegraphics
+\usepackage{parskip}         % Første paragraf i afsnit indrykkes ikke
+\usepackage{listings}        % Pakke til at indsætte kode
+\usepackage{enumitem}        % Gør det muligt at tilpasse lister
+\usepackage{titlesec}        % Tilpassing af afstand mellem sektioner
+\usepackage[lastpage,user]{zref} % Side x af y
+\usepackage{caption}
+\usepackage{scrextend}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Implementerer en række makroer og de pakker der er importeret
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy}                        % Implementerer sidehoved
+\lhead{BSc Thesis} % Venstre sidehoved
+\rhead{Simon Rotendahl \& Carl Mathias Graae Larsen}  % Højre sidehoved
+\cfoot{\thepage\ of \zpageref{LastPage}} % Side x af y
+\newtheorem*{prp}{Propostion}            % Skaber nyt theorem
+\setlist{nolistsep}              % Formindsker mellemrum mellem listepunkter
+
+% Definitioner af farver
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{KURed1}{RGB}{144,26,30}    % Official KU Red 1
+\definecolor{KURed2}{RGB}{199,36,41}    % Unofficial KU Red
+\definecolor{KUGray1}{RGB}{102,102,102} % Official KU Gray 1
+\definecolor{KUGray2}{RGB}{133,133,133} % Official KU Gray 2
+\definecolor{KUGray3}{RGB}{163,163,163} % Official KU Gray 3
+\definecolor{KUGray4}{RGB}{194,194,194} % Official KU Gray 4
+\definecolor{KUGray5}{RGB}{224,224,224} % Official KU Gray 5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Laver titel
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \addbibresource{References.bib}
+
+\title{
+  \vspace{13em}
+  \large{BSc Thesis} \\
+  \Huge{Autotuning Futhark} \\
+}
+
+\author{
+  Simon Rotendahl --- \textit{mpx651@ku.dk} \\ Carl Mathias Graae Larsen --- \textit{pwh334@ku.dk}
+}
+
+\date{
+  \vspace{22em}
+  \today \\
+Supervisor: Troels Henriksen
+}
+

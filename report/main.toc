@@ -1,13 +1,13 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {english}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Background}{1}{section.2}
+\contentsline {section}{\numberline {2}Background}{2}{section.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Parallelism}{1}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.1}Parallelism}{2}{subsection.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Flat parallelism}{1}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Flat parallelism}{2}{subsection.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3}Futhark}{2}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
@@ -15,18 +15,20 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.5}Incremental flattening}{4}{subsection.2.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.6}Structure of the code versions}{6}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.6}Structure of the code versions}{5}{subsection.2.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Search space and portability}{7}{section.3}
+\contentsline {section}{\numberline {3}Search space and portability}{6}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{The search space}{8}{section*.4}
+\contentsline {paragraph}{The search space}{6}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{Portability}{8}{section*.5}
+\contentsline {paragraph}{Portability}{6}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {A}Code examples}{10}{appendix.A}
+\contentsline {section}{\numberline {4}Gotta Go Fast!}{7}{section.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71-73]{prog-guide-cuda}}{10}{subsection.A.1}
+\contentsline {section}{\numberline {A}Code examples}{9}{appendix.A}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {B}Graphs}{11}{appendix.B}
+\contentsline {subsection}{\numberline {A.1}Matrix Multiplication - CUDA for GPUs \cite [p. 71-73]{prog-guide-cuda}}{9}{subsection.A.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {B.1}Theoretical performance for GPU's and CPU's \cite {cpu-vs-gpu}}{11}{subsection.B.1}
+\contentsline {section}{\numberline {B}Graphs}{10}{appendix.B}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.1}Theoretical performance for GPU's and CPU's \cite {cpu-vs-gpu}}{10}{subsection.B.1}

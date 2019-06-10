@@ -7,7 +7,8 @@
 \BOOKMARK [2][-]{subsection.2.5}{Incremental flattening}{section.2}% 7
 \BOOKMARK [2][-]{subsection.2.6}{Structure of the code versions}{section.2}% 8
 \BOOKMARK [1][-]{section.3}{Search space and portability}{}% 9
-\BOOKMARK [1][-]{appendix.A}{Code examples}{}% 10
-\BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71-73]prog-guide-cuda}{appendix.A}% 11
-\BOOKMARK [1][-]{appendix.B}{Graphs}{}% 12
-\BOOKMARK [2][-]{subsection.B.1}{Theoretical performance for GPU's and CPU's cpu-vs-gpu}{appendix.B}% 13
+\BOOKMARK [1][-]{section.4}{Gotta Go Fast!}{}% 10
+\BOOKMARK [1][-]{appendix.A}{Code examples}{}% 11
+\BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71-73]prog-guide-cuda}{appendix.A}% 12
+\BOOKMARK [1][-]{appendix.B}{Graphs}{}% 13
+\BOOKMARK [2][-]{subsection.B.1}{Theoretical performance for GPU's and CPU's cpu-vs-gpu}{appendix.B}% 14

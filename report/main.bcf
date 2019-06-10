@@ -1939,8 +1939,10 @@
     <bcf:citekey order="16">flat</bcf:citekey>
     <bcf:citekey order="17">inc-flat</bcf:citekey>
     <bcf:citekey order="18">inc-flat</bcf:citekey>
-    <bcf:citekey order="19">prog-guide-cuda</bcf:citekey>
-    <bcf:citekey order="20">cpu-vs-gpu</bcf:citekey>
+    <bcf:citekey order="19">oldtune</bcf:citekey>
+    <bcf:citekey order="20">opentunner</bcf:citekey>
+    <bcf:citekey order="21">prog-guide-cuda</bcf:citekey>
+    <bcf:citekey order="22">cpu-vs-gpu</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
