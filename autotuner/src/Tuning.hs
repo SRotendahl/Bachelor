@@ -163,14 +163,18 @@ benchRuntimes progName nRuns tuneCont = do
 
 extractRuntimes :: [(String, [(String, Dataset)])] -> Runtimes
 extractRuntimes ((_,x):[]) = map (\(n,d) -> (n, runtimes d)) x
+extractRuntimes [] =
+  error "Json contains no programs."
 extractRuntimes _ =
-  error "Json contains multiple programs, this is not currently supported."
+  error "Json contains multiple programs, this is not supported."
 
 -- Get comparison values --
 extractComps :: [(String, [(String, Dataset)])] -> [(String, [(String, Integer)])]
 extractComps ((_,x):[]) = map (\(n,d) -> (n, nub . getComparison . err $ d)) x
+extractComps [] =
+  error "Json contains no programs."
 extractComps _ =
-  error "Json contains multiple programs, this is not currently supported."
+  error "Json contains multiple programs, this is not supported."
 
 getComps :: String -> String -> IO [(String, [(String, Integer)])]
 getComps backend progName = do
