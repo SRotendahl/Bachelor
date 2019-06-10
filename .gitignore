@@ -1,6 +1,8 @@
 *.toc
 *.pdf
 *.bcf
+*.synctex.gz
+*.run.xml
 *.out
 *.log
 *.sizes
