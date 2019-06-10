@@ -17,7 +17,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.6}Structure of the code versions}{6}{subsection.2.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Search space and portability}{8}{section.3}
+\contentsline {section}{\numberline {3}Search space and portability}{7}{section.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {paragraph}{The search space}{8}{section*.4}
 \defcounter {refsection}{0}\relax 

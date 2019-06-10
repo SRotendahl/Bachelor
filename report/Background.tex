@@ -127,10 +127,10 @@ To inspect the structure of these predicates and thresholds parameters further, 
 	\captionof{figure}{The dependencies between thresholds, of the test program \texttt{LocVolCalib.fut}. (Th) is a threshold comparison, (V) is a code version, and (T) and (F) are indicative of the path we take, based on the threshold comparison}
 	\label{LocVolCalibTree}
 \end{center}
-\noindent To tune a program we need to examine each execution path through the tree. It is important not to get an end node (code version) confused with a version of the program. Two example of paths, and corresponding code versions, through the tree in Figure \ref{LocVolCalibTree}, that shows this, could be;
+\noindent It is important not to get an end node (code version) confused with a complete program. While this can be the case, we will give two examples of paths, and corresponding code versions, through the tree in Figure \ref{LocVolCalibTree}, to illustrate this;
 \begin{itemize}
 	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, True)\} $\to$ V4}
-	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, False), (Th8, False), (Th9, True), (Th16, False), (Th17, True)\} $\to$ (V6, V9)}
+	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, False), (Th8, False), (Th16, False), (Th9, True), (Th17, True)\} $\to$ (V6, V9)}
 \end{itemize}  
 The first path is simple, the code represented by \texttt{T4, T5, T6} is executed in parallel, where everything after it, is executed sequentially. The second path is more interesting, \texttt{T7} has two child nodes, that are reached with a false comparison. Here it is clear that two end nodes are reached, namely \texttt{(V6, V9)}, and these two code versions are then combined into one program. This is also important to note, because we could have a forest, instead of a single tree, and this would leave multiple code versions, that are to be combined.
 
