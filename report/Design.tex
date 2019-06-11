@@ -8,3 +8,77 @@
   \item Explain the idea behind how we perform an exhaustive search.
     \item Look at previous project 'comparison based tuner'
 \end{itemize}
+
+\subsection{Auto-tuning in Introduction}
+in broad terms auto-tuning is the process of automatically tuning a set of
+parameters so as to optimize some aspect of the program when run. This
+process can be done both at compile- or runtime, but in the case of Futhark,
+and this report it's done at runtime. In our, and most other, cases this aspect
+we are trying to optimize will be the runtime, that we are trying to minimize. 
+
+
+\subsection{Auto-tuning in Futhark} % Might just be the intro to this section
+In the case of auto-tuning Futhark the goal is to find the configuration of 
+threshold parameters that will optimize the running time of the program for 
+on a set of inputs given by the user. As we have seen in section \textbf{BACKGROUND}
+the values that are choosen for the thresholds parameters decide which code
+version is used for a given input. So the goal is to pick the values for the
+threshold parameters that will result in the different inputs ending in the
+code version that is optimal for their size.
+
+\subsection{Searching for the opimal threshold values}
+% Maybe mention how the old tuner solved this problem
+There are many ways you could choose to search for the optimal paths, in this
+report we have implemented the most simple version, an exhaustive search. An
+exhaustive search is simply about looking through all combinations and choosing
+the best one. Of course it's not possible to try all combinations of all numbers
+that fit within the threshold parameter data type this would take far too long. 
+% Include a calculation to show the point.
+To solve this problem the search space needs to be bounded to reduce the number
+of combination that has to be checked. The way to do this is to use the
+information available about the structure of threshold parameters, to make sure
+that only values that would result in a different code version being run for 
+one of the data sets. 
+
+\section{Another version of everything}
+\subsection{Building the Tree}
+Every Futhark program can be given a flag so the structure of the threshold 
+parameters are printed out. The string representing each threshold parameter
+can be seen in figure \_. 
+
+We translate the list of these strings into a tree structure similar to the
+trees we have see in Section \_. 
+We start by finding the thresholds that don't depend on any other thresholds
+being true or false in order for them to be evaluated. These nodes must be the
+roots. Currently there will only exist one of these, but to make the program
+adaptable to future changes to the compiler we take the possibility that the
+structure of the thresholds being a forest into account. To keep it as a tree
+we create a root node that has no useful information, but will simply be the
+parent of the forest. \\
+
+To construct the rest of the tree we simply run recursively on all the children
+of the previous node finding one who has the same dependents as the current
+node, but also depends on the current node itself. All of these are made
+children of the current node, and the function is run on each of them. The
+recursion ends when no children are found for a node.
+
+The way the information is extracted can also be seen in figure \_. 
+%some more description here, make figure first
+
+Unlike the theoretical trees the implemented trees cannot carry information on
+the edges themselves, this means the information is instead encoded in the
+children. So each node is a tuple containing the name of the threshold
+parameter and a boolean denoting the result of the parents threshold
+comparison that lead to the node.\\
+While this solution works currently, a change in the Futhark compiler could
+mean that nodes could have multiple parents, and therefore requiring more
+information than a single boolean. This problem can be solved quite simply by
+duplicating the problematic subtree, there is a version that came from a
+comparisons being true, and one for comparisons being false.
+
+
+
+\subsection{Conflicts}
+It's not always possible to find a set of threshold parameter values that will
+optimize the running time for every data set, so here a decision has to be made
+for how you want to resolve conflicts of this type.
