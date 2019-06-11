@@ -5653,7 +5653,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37222) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:218:42-62 -> /futlib/array.fut:61:1-62:12",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:219:42-62 -> /futlib/array.fut:61:1-62:12",
                                "Function return value does not match shape of type ",
                                "*", "[", outer_loop_count_37204, "]",
                                "intrinsics.i32");
@@ -5677,7 +5677,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37235) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:200:5-48 -> test/LocVolCalib.fut:15:62-70 -> /futlib/array.fut:61:1-62:12",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:201:5-48 -> LocVolCalib.fut:16:62-70 -> /futlib/array.fut:61:1-62:12",
                                "Function return value does not match shape of type ",
                                "*", "[", numT_37207, "]", "intrinsics.i32");
         if (memblock_unref_device(ctx, &out_mem_56392, "out_mem_56392") != 0)
@@ -5714,7 +5714,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37261) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:200:5-48 -> test/LocVolCalib.fut:20:62-70 -> /futlib/array.fut:61:1-62:12",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:201:5-48 -> LocVolCalib.fut:21:62-70 -> /futlib/array.fut:61:1-62:12",
                                "Function return value does not match shape of type ",
                                "*", "[", numX_37205, "]", "intrinsics.i32");
         if (memblock_unref_device(ctx, &out_mem_56392, "out_mem_56392") != 0)
@@ -5735,7 +5735,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37281) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:200:5-48 -> test/LocVolCalib.fut:21:68-76 -> /futlib/array.fut:61:1-62:12",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:201:5-48 -> LocVolCalib.fut:22:68-76 -> /futlib/array.fut:61:1-62:12",
                                "Function return value does not match shape of type ",
                                "*", "[", numY_37206, "]", "intrinsics.i32");
         if (memblock_unref_device(ctx, &out_mem_56392, "out_mem_56392") != 0)
@@ -5829,7 +5829,7 @@ static int futrts_main(struct futhark_context *ctx,
     if (!empty_or_match_37335) {
         ctx->error =
             msgprintf("Error at %s:\n%s%s%s%d%s%s%s%s%s%s%s%d%s%s%s%s%s%s\n",
-                      "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:201:23-39 -> test/LocVolCalib.fut:25:1-42:15",
+                      "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:202:23-39 -> LocVolCalib.fut:26:1-43:15",
                       "Function return value does not match shape of type ",
                       "(", "[", numX_37205, "]", "[", "3", "]",
                       "intrinsics.f32", ", ", "[", numX_37205, "]", "[", "3",
@@ -5925,7 +5925,7 @@ static int futrts_main(struct futhark_context *ctx,
     if (!empty_or_match_37380) {
         ctx->error =
             msgprintf("Error at %s:\n%s%s%s%d%s%s%s%s%s%s%s%d%s%s%s%s%s%s\n",
-                      "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:202:23-39 -> test/LocVolCalib.fut:25:1-42:15",
+                      "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:203:23-39 -> LocVolCalib.fut:26:1-43:15",
                       "Function return value does not match shape of type ",
                       "(", "[", numY_37206, "]", "[", "3", "]",
                       "intrinsics.f32", ", ", "[", numY_37206, "]", "[", "3",
@@ -5947,7 +5947,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37386) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:203:18-44 -> test/LocVolCalib.fut:45:3-59 -> /futlib/array.fut:66:1-67:19",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:204:18-44 -> LocVolCalib.fut:46:3-59 -> /futlib/array.fut:66:1-67:19",
                                "Function return value does not match shape of type ",
                                "*", "[", numY_37206, "]", "t");
         if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -5970,7 +5970,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!ok_or_empty_37396) {
         ctx->error = msgprintf("Error at %s:\n%s%d%s%d%s%d%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:204:45-59 -> /futlib/array.fut:24:29-36",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:205:45-59 -> /futlib/array.fut:24:29-36",
                                "Index [", 0, ":", j_37388,
                                "] out of bounds for array of shape [",
                                numT_37207, "].");
@@ -5992,7 +5992,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!ok_or_empty_37404) {
         ctx->error = msgprintf("Error at %s:\n%s%d%s%d%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:204:63-77 -> /futlib/array.fut:21:29-33",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:205:63-77 -> /futlib/array.fut:21:29-33",
                                "Index [", 1,
                                "] out of bounds for array of shape [",
                                numT_37207, "].");
@@ -6022,7 +6022,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!ok_or_empty_37418) {
         ctx->error = msgprintf("Error at %s:\n%s%s%s%s%s%d%s%d%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:204:31-79 -> /futlib/array.fut:41:38-44",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:205:31-79 -> /futlib/array.fut:41:38-44",
                                "Index [", "", ":", "", ":", -1,
                                "] out of bounds for array of shape [", j_37388,
                                "].");
@@ -6043,7 +6043,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!empty_or_match_37423) {
         ctx->error = msgprintf("Error at %s:\n%s%s%d%s%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:204:31-79 -> /futlib/array.fut:41:1-44",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:205:31-79 -> /futlib/array.fut:41:1-44",
                                "Function return value does not match shape of type ",
                                "[", j_37388, "]", "t");
         if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6063,7 +6063,7 @@ static int futrts_main(struct futhark_context *ctx,
         
         if (!empty_or_match_37281) {
             ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                                   "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:208:9-53 -> test/LocVolCalib.fut:52:32-49 -> /futlib/array.fut:66:1-67:19",
+                                   "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:209:9-53 -> LocVolCalib.fut:53:32-49 -> /futlib/array.fut:66:1-67:19",
                                    "Function return value does not match shape of type ",
                                    "*", "[", numY_37206, "]", "t");
             if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6090,7 +6090,7 @@ static int futrts_main(struct futhark_context *ctx,
         
         if (!empty_or_match_37430) {
             ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                                   "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:208:9-53 -> test/LocVolCalib.fut:52:16-50 -> /futlib/array.fut:66:1-67:19",
+                                   "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:209:9-53 -> LocVolCalib.fut:53:16-50 -> /futlib/array.fut:66:1-67:19",
                                    "Function return value does not match shape of type ",
                                    "*", "[", numX_37205, "]", "t");
             if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6115,7 +6115,7 @@ static int futrts_main(struct futhark_context *ctx,
         
         if (!empty_or_match_37281) {
             ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                                   "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:208:9-53 -> test/LocVolCalib.fut:53:32-53 -> /futlib/array.fut:66:1-67:19",
+                                   "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:209:9-53 -> LocVolCalib.fut:54:32-53 -> /futlib/array.fut:66:1-67:19",
                                    "Function return value does not match shape of type ",
                                    "*", "[", numY_37206, "]", "t");
             if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6139,7 +6139,7 @@ static int futrts_main(struct futhark_context *ctx,
         
         if (!empty_or_match_37430) {
             ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                                   "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:208:9-53 -> test/LocVolCalib.fut:53:16-54 -> /futlib/array.fut:66:1-67:19",
+                                   "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:209:9-53 -> LocVolCalib.fut:54:16-54 -> /futlib/array.fut:66:1-67:19",
                                    "Function return value does not match shape of type ",
                                    "*", "[", numX_37205, "]", "t");
             if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6163,7 +6163,7 @@ static int futrts_main(struct futhark_context *ctx,
         
         if (!empty_or_match_37261) {
             ctx->error = msgprintf("Error at %s:\n%s%s%s%d%s%s\n",
-                                   "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:208:9-53 -> test/LocVolCalib.fut:54:32-49 -> /futlib/array.fut:66:1-67:19",
+                                   "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:209:9-53 -> LocVolCalib.fut:55:32-49 -> /futlib/array.fut:66:1-67:19",
                                    "Function return value does not match shape of type ",
                                    "*", "[", numX_37205, "]", "t");
             if (memblock_unref_device(ctx, &mem_55312, "mem_55312") != 0)
@@ -6195,7 +6195,7 @@ static int futrts_main(struct futhark_context *ctx,
     
     if (!index_ok_37450) {
         ctx->error = msgprintf("Error at %s:\n%s%d%s%d%s%d%s%d%s\n",
-                               "test/LocVolCalib.fut:216:1-220:8 -> test/LocVolCalib.fut:219:13-82 -> test/LocVolCalib.fut:219:24-73 -> test/LocVolCalib.fut:214:6-32",
+                               "LocVolCalib.fut:217:1-221:8 -> LocVolCalib.fut:220:13-82 -> LocVolCalib.fut:220:24-73 -> LocVolCalib.fut:215:6-32",
                                "Index [", res_37251, ", ", res_37250,
                                "] out of bounds for array of shape [",
                                numY_37206, "][", numX_37205, "].");
