@@ -11,6 +11,7 @@ import Control.Monad
 import Text.Regex
 import Text.Regex.Base
 
+import System.IO
 import System.IO.Silently
 import System.Process
 import System.Directory
@@ -123,10 +124,12 @@ unpackMaybePrograms (Just (Programs prog)) =
 
 parseBenchJson :: BS.ByteString -> [(ProgramName, [(DatasetName, Dataset)])]
 parseBenchJson = unpackMaybePrograms . decode
+
 handleJsonFile :: String -> String -> (BS.ByteString -> a) -> IO a
 handleJsonFile tmpName compCmd f = do
   silence $ callCommand compCmd 
-  jsonDump <- BS.readFile tmpName
+  jsonH <- openFile tmpName ReadMode
+  jsonDump <- BS.hGetContents jsonH
   let res = f jsonDump 
   removeFile tmpName
   return res
@@ -152,7 +155,7 @@ createTuneStr = concat . map (\(str,n) -> tuneThresSrt str n)
 benchRuntimes ::  String -> Integer -> String -> IO Runtimes
 benchRuntimes progName nRuns tuneCont = do
   let tuneFileName = (progName ++ ".tuning")
-  writeFile tuneFileName tuneCont
+  withFile tuneFileName WriteMode (flip hPutStr $ tuneCont)
   let tmpName = ".tmpJsonRuntimes.json"
   let cmd = "futhark bench --backend=opencl -r " ++ show nRuns ++ 
             " --exclude-case=notune --skip-compilation --json=" ++
