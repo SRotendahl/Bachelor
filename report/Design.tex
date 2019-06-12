@@ -8,7 +8,6 @@
   \item Explain the idea behind how we perform an exhaustive search.
     \item Look at previous project 'comparison based tuner'
 \end{itemize}
-
 \subsection{Auto-tuning in Introduction}
 in broad terms auto-tuning is the process of automatically tuning a set of
 parameters so as to optimize some aspect of the program when run. This
@@ -127,6 +126,34 @@ for every dataset, and the values between will result in true for some, and
 false for others. These values are then put on their corresponding threshold in
 the tree we've constructed.
 \\
-% Need to create some example figure to go through.
+To explain how the paths are found we will use the example tree in
+\textbf{FIGURE}. The Futhark compiler cannot currently create such a tree, but
+it highlights most of the ideas that might be implemented in the Futhark
+compiler in the future, and show that our autotuner will handle such cases. \\
+We construct all possible combinations in a bottom up manner. First
+all the paths possible in the leaves are found, this is of course trivial as
+each combination only consists of a single threshold, so the result will just
+be each value as a singleton list (See \textbf{FIGURE}).\\
+Next we look at the parents of the leaves. Here we need to combine the nodes
+own values with the children combinations to create every possible
+combination. There are a two cases that can occur here. \\
+The first case is if we have a single child that is dependent on the result of
+the comparison being true, false, or we have one of each. In
+\textbf{FIGURE} we have the example with one of each. Here we take the first
+value of the node, the one that will always be true, and combine it with all
+the combinations we got from the leaf. The same is done for the last value of
+the node, will always have the comparison result in false, and combine it with
+the combinations from the false child. Then we take the values in the middle
+and combine them with all the combinations of both children, as these result in
+the comparison being true or false depending on the dataset. If there was only
+one child the part that was explained about the other is simply not performed.\\
+The second case is when 
+there are multiple children that depend on the comparison result, as in
+\textbf{FIGURE}. In this case we need to combine the threshold value
+combinations of all these children into all combinations of those. These cases
+occur when the program can end in multiple code versions, so we need to check
+every combination of those code versions. After combining the results from the
+children we create every combination of the childrens, now combined, results
+and the nodes own values. 
 
 
