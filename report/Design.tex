@@ -42,86 +42,72 @@ one of the data sets.
 
 \section{Another version of everything}
 \subsection{Building the Tree}
-Every, compiled, Futhark program can be given a flag so the structure of the threshold 
-parameters is printed out. The syntax of the string representing each threshold parameter
+Every, compiled, Futhark program can be given a flag so the thresholds, and their structure, is printed out. The syntax of the string representing each threshold parameter
 can be seen in Figure \ref{thresholdSyntax}.
 \begin{figure}[h]
 	$$\underbrace{\texttt{main.suff\_outer\_par\_6}}_\text{threshold parameter \#6} \overbrace{\texttt{(threshold (!main.suff\_outer\_par\_4} \underbrace{\texttt{!main.suff\_intra\_par\_5))}}_\text{(!) indicates a false comparison}}^\text{list of thresholds that \#6 is dependent on}$$
-	\caption{The syntax of thresholds, printed by Futhark, with the command}
+	\caption{The syntax of thresholds, printed by Futhark.}
 	\label{thresholdSyntax}
 \end{figure}
 We translate the list of these strings into a tree structure similar to the
 trees we have see in Section \ref{BabyGotBack}. 
 We start by finding the thresholds that does not depend on any other thresholds
-being true or false in order for them to be evaluated, this will make them root nodes in their respective trees. Currently there will only exist one of these, but to make the program
+being true or false, in order for them to be evaluated, this will make them root nodes in their respective trees. Currently there will only exist one of these root nodes, but in order to make the program
 adaptable to future changes to the compiler, we take into account, the possibility that the
 structure of the thresholds will exhibit a forest. In order to process a forest, in the same way we would a tree, 
 we create a root node that has no useful information, but will simply be the
 parent of the forest. \\
 
 To construct the rest of the tree we execute recursively on all the children
-of the previous node finding one who has the same dependents as the current
+of the previous node finding one who has the same dependencies as the current
 node, but also depends on the current node itself. All of these are made
-children of the current node, and the function is run on each of them. The
+children of the current node, and the function is executed on each of them. The
 recursion ends when no children are found for a node.
-\begin{figure}
-	\centering
-	\input{recusionTree}
-	\caption{stuff}
-\end{figure}
 
-
-The way the information is extracted can also be seen in figure \_. 
-%some more description here, make figure first
-
-Unlike the theoretical trees the implemented trees cannot carry information on
+Unlike the theoretical trees, seen previously, the implemented trees cannot carry information on
 the edges themselves, this means the information is instead encoded in the
 children. So each node is a tuple containing the name of the threshold
 parameter and a boolean denoting the result of the parents threshold
-comparison that lead to the node.\\
+comparison that lead to the node. The process of constructing the tree can be seen in Figure \ref{buildThresTree}.
+\input{recursionTree}
+
 While this solution works currently, a change in the Futhark compiler could
-mean that nodes could have multiple parents, and therefore requiring more
+result in nodes having multiple parents, and therefore requiring more
 information than a single boolean. This problem can be solved quite simply by
-duplicating the problematic subtree, there is a version that came from a
+duplicating the problematic subtree, thereby having a version of the subtree that came from a
 comparisons being true, and one for comparisons being false.
 
-
 \subsection{Exhaustive Search}
-An exhaustive search is simply trying every combination possible to find the
-combination that is being searched for. In our case we are looking for the
-combination that results in the lowest running time. If we knew nothing about
-the thresholds, or their structure we would have to try every combination of
-numbers between 0 and whatever the highest number their implementation allows.
-This search would obviously take far longer than any of us would be alive even
-if it was a tiny program, so we need a way to limit the search space.
+An exhaustive search is simply trying every possible element of the search space, 
+to find a certain element, based on some motivation. In our case we are searching in the set of possible 
+threshold configurations, with the motivation of finding the configuration that results in the lowest running time. If we knew nothing about
+the thresholds, or their structure we would have to try every configuration of
+numbers between 0 and whatever the highest number their implementation allows. 
+With a simple program such a matrix-matrix multiplication (which has 4 thresholds, see Figure \ref{MatMultTreeFilled}), and assuming an upper limit of $2^{15}$ which is the threshold default, and therefore a conservative limit,
+we would end up with $\left(2^{15}\right)^4 \approx 1.153\times10^{18}$ configurations.
+This search would obviously take far longer than any of us would be alive, so we need a way to limit the search space.
 \\
 They way we limit the search space is by using our knowledge of the threshold
 parameters and only trying values that would result in a different set of code 
-version being run on at least one of the datasets. More specifically, we will
+version being executed on at least one of the datasets. More specifically, we will
 use the knowledge that the comparisons are of the form
 (\texttt{Threshold\_value <= comparison\_value}). Since the
-\texttt{comparison\_value} is constant for a certain input there are only
-really two different threshold values that need to be checked for one threshold 
+\texttt{comparison\_value} is constant for a certain dataset there are effectively
+only two different threshold values that need to be checked for one threshold 
 in isolation. One where it's equal to the \texttt{comparison\_value} and one
 where it's $\texttt{comparison\_value} + 1$, as these will result in true and
-false respectively and they are the only options.
+false respectively, with those being the only options.
 Of course the thresholds are not in isolation, but structured as we've seen
-\textbf{Ref}, so some choices in earlier thresholds will make later choices in
-the tree redundant, as they are never compared. We can see this idea in
-\textbf{figure (Text for figure: In \textit{a} we see the tree, in \textit{b} 
-  we see
-  the case that the first comparison results in true, Since the first
-  comparison resulted in true the next two are never performed, and they can be
-  forgotten. The same idea can be seen in \textit{c} where the first results in
-  false, the second in true, and so the last is never performed.
-}.
-\\
+Figure \ref{LocVolCalibTree} for example, so some comparison result in earlier 
+thresholds will make later thresholds in the tree redundant, as they are never compared. We can see this idea in Figure \ref{redundant}
+\input{redundantThres}
 One thing that is also important is that we are tuning with multiple datasets,
 so we can't just think of all the unique paths through one tree. Instead we
 need to think of each dataset as having it's own tree, with it's own 
 \texttt{comparison\_value} for each threshold. This means the search space is
 not every unique path through the tree, but every possible unique combination
 of paths through the many trees we now have. 
+\input{combinationTree}
 
 \subsection{Identifying all unique combinations}
 The values that the thresholds are compared to in each dataset are extracted,

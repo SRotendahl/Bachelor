@@ -1,0 +1,45 @@
+\forestset{sn edges/.style={for tree={parent anchor=south, child anchor=north}}}
+
+\begin{figure}[h]
+\centering
+	\begin{minipage}{0.25\textwidth}
+	\centering
+	\begin{forest}
+	[\texttt{(NULL, false)}]
+	\end{forest}
+	\end{minipage}\hspace*{\fill}
+	\begin{minipage}{0.25\textwidth}
+	\centering
+	\begin{forest}
+	[\texttt{(NULL, false)}
+		[\texttt{(Th4, false)}]
+	]
+	\end{forest}
+	\end{minipage}\hspace*{\fill}
+	\begin{minipage}{0.25\textwidth}
+	\centering
+	\begin{forest}
+	[\texttt{(NULL, false)}
+		[\texttt{(Th4, false)}
+			[\texttt{(Th5, false)}
+			]
+		]
+	]
+	\end{forest}
+	\end{minipage}\hspace*{\fill}
+	\begin{minipage}{0.25\textwidth}
+	\centering
+	\begin{forest}
+	[\texttt{(NULL, false)}
+		[\texttt{(Th4, false)}
+			[\texttt{(Th5, false)}
+				[\texttt{(Th6, false)}]
+			]
+		]
+	]
+	\end{forest}
+	\end{minipage}
+	\captionof{figure}{The recusive steps of building the tree structure for the thresholds, with (Th) being a threshold parameter. The list of thresholds for the tree would be \texttt{[main.suff\_intra\_par\_5 (threshold (!main.suff\_outer\_par\_4)), main.suff\_outer\_par\_4 (threshold ()), main.suff\_outer\_par\_6 (threshold (!main.suff\_outer\_par\_4 !main.suff\_intra\_par\_5))]}}
+	%We might want to remove the list of thresholds
+	\label{buildThresTree}
+\end{figure}

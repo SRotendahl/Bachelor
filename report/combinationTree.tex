@@ -1,0 +1,116 @@
+\forestset{
+  colour my roots/.style={
+    before typesetting nodes={
+      edge=#1,
+      for ancestors={
+        edge=#1,
+        #1,
+      },
+      #1,
+    }
+  },
+  my edge label/.style={
+    edge label={
+      node [midway, fill=white, font=\scriptsize] {#1}
+    }
+  }
+}
+
+\begin{figure}[h]
+\centering
+	\subfloat[][small]{
+	\centering
+	\begin{forest}
+[Th4
+	[V1,edge label={node[midway,left,font=\scriptsize]{T}}]
+	[Th5,edge label={node[midway,right,font=\scriptsize]{F}}
+		[V2,edge label={node[midway,left,font=\scriptsize]{T}}]
+		[Th6,edge label={node[midway,right,font=\scriptsize]{F}}
+			[V3,colour my roots=red, edge label={node[midway,left,font=\scriptsize]{T}}]
+			[Th7,edge label={node[midway,right,font=\scriptsize]{F}}
+				[Th16,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V5,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th17,edge label={node[midway,right,font=\scriptsize]{F}}
+						[V6, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V7,edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+				[Th8,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V8,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th9,edge label={node[midway,right,font=\scriptsize]{F}}
+						[V9, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V10,edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+			[V4, edge label={node[midway, right,font=\scriptsize]{T}}]
+			]
+		]
+	]	
+]
+\end{forest}
+	\label{combinationA}}
+	\subfloat[][medium]{
+	\centering
+		\begin{forest}
+[Th4
+	[V1,edge label={node[midway,left,font=\scriptsize]{T}}]
+	[Th5,edge label={node[midway,right,font=\scriptsize]{F}}
+		[V2,edge label={node[midway,left,font=\scriptsize]{T}}]
+		[Th6,edge label={node[midway,right,font=\scriptsize]{F}}
+			[V3,edge label={node[midway,left,font=\scriptsize]{T}}]
+			[Th7,edge label={node[midway,right,font=\scriptsize]{F}}
+				[Th16,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V5,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th17,edge label={node[midway,right,font=\scriptsize]{F}}
+						[V6, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V7,edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+				[Th8,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V8,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th9,edge label={node[midway,right,font=\scriptsize]{F}}
+						[V9, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V10,edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+			[V4,colour my roots=green,edge label={node[midway, right,font=\scriptsize]{T}}]
+			]
+		]
+	]	
+]
+\end{forest}
+	\label{combinationB}}
+	\subfloat[][large]{
+	\centering
+	\begin{forest}
+[Th4
+	[V1,edge label={node[midway,left,font=\scriptsize]{T}}]
+	[Th5,edge label={node[midway,right,font=\scriptsize]{F}}
+		[V2,edge label={node[midway,left,font=\scriptsize]{T}}]
+		[Th6,edge label={node[midway,right,font=\scriptsize]{F}}
+			[V3,edge label={node[midway,left,font=\scriptsize]{T}}]
+			[Th7,edge label={node[midway,right,font=\scriptsize]{F}}
+				[Th16,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V5,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th17, edge label={node[midway,right,font=\scriptsize]{F}}
+						[V6, colour my roots=blue, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V7, edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+				[Th8,edge label={node[midway,left,font=\scriptsize]{F}}
+					[V8,edge label={node[midway,left,font=\scriptsize]{T}}]
+					[Th9,edge label={node[midway,right,font=\scriptsize]{F}}
+						[V9 ,colour my roots=blue, edge label={node[midway,left,font=\scriptsize]{T}}]
+						[V10, edge label={node[midway,right,font=\scriptsize]{F}}]
+					]
+				]
+			[V4,edge label={node[midway, right,font=\scriptsize]{T}}]
+			]
+		]
+	]	
+]
+\end{forest}
+	\label{combinationC}}
+	\caption{Text}
+	\label{combination}
+\end{figure}

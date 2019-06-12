@@ -1,0 +1,47 @@
+\forestset{sn edges/.style={for tree={parent anchor=south, child anchor=north}}}
+
+\begin{figure}[h]
+\centering
+	\subfloat[][]{
+	\centering
+	\begin{forest}
+	[$\quad$, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+		[$\quad$, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			[$\quad$, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			]
+		]
+	]
+	\end{forest}
+	\label{redundantA}}
+	\hspace*{0.25\textwidth}
+	\subfloat[][]{
+	\centering
+	\begin{forest}
+	[T, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+		[X, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			[X, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			]
+		]
+	]
+	\end{forest}
+	\label{redundantB}}
+	\hspace*{0.25\textwidth}
+	\subfloat[][]{
+	\centering
+	\begin{forest}
+	[F, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+		[T, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			[X, circle, draw, edge label={node[midway,right,font=\scriptsize]{F}}
+			]
+		]
+	]
+	\end{forest}
+	\label{redundantC}}
+	\captionof{figure}{In Figure \ref{redundantA} we see the tree, with \textit{X} denoting that the comparison has not be performed, in Figure \ref{redundantB} 
+  we see
+  the case that the first comparison results in true. Since the first
+  comparison resulted in true the next two are never performed, and they can be
+  forgotten. The same idea can be seen in Figure \ref{redundantC} where the first results is
+  false, the second in true, and so the last is never performed.}
+	\label{redundant}
+\end{figure}
