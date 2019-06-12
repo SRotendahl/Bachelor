@@ -147,21 +147,18 @@ pathToRuntime runF (p,n) = do
   return (p,runT)
 
 tuneThresSrt :: String -> Integer -> String
-tuneThresSrt name val = name ++ '=':(show val) ++ ","
+tuneThresSrt name val = "-p --size=" ++ name ++ '=':(show val) ++ " "
 
 createTuneStr :: Path -> String
 createTuneStr = concat . map (\(str,n) -> tuneThresSrt str n)
 
 benchRuntimes ::  String -> Integer -> String -> IO Runtimes
 benchRuntimes progName nRuns tuneCont = do
-  let tuneFileName = (progName ++ ".tuning")
-  withFile tuneFileName WriteMode (flip hPutStr $ tuneCont)
   let tmpName = ".tmpJsonRuntimes.json"
   let cmd = "futhark bench --backend=opencl -r " ++ show nRuns ++ 
             " --exclude-case=notune --skip-compilation --json=" ++
-            tmpName ++ " " ++ progName
+            tmpName ++ " " ++ tuneCont ++ progName
   res <- handleJsonFile tmpName cmd (extractRuntimes . parseBenchJson)
-  removeFile tuneFileName
   return res
 
 extractRuntimes :: [(String, [(String, Dataset)])] -> Runtimes
