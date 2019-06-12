@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Tuning (main , tune) where
+module Tuning (tune) where
 
 import Data.Ord
 import Data.Function
@@ -23,10 +23,12 @@ import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy as BS
 
+{-
 main :: String -> [String] -> IO ()
 main a bs = do
   res <- tune "test/LocVolCalib.fut" "opencl" 1
   print . head $ res
+-}
 
 -- Tuning function and its helper --
 type Path = [(String, Integer)]
