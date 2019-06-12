@@ -1,14 +1,15 @@
 \input{preamble}	
 \begin{document}
+\newgeometry{hmargin={2.8cm, 2.8cm}, vmargin={2.5cm, 2.5cm}}
 %% Change `ku-farve` to `nat-farve` to use SCIENCE's old colors or
 %% `natbio-farve` to use SCIENCE's new colors and logo.
 %% Change `ku-en` to `nat-en` to use the `Faculty of Science` header
-\AddToShipoutPicture*{\put(0,0){\includegraphics*{include/futhark}}}
+\AddToShipoutPicture*{\put(0,-50){\includegraphics*{include/futhark}}}
 
 
-\AddToShipoutPicture*{\put(0,0){\includegraphics*[viewport=0 0 700 600]
+\AddToShipoutPicture*{\put(0,-50){\includegraphics*[viewport=0 0 700 600]
     {include/nat-farve}}}
-\AddToShipoutPicture*{\put(0,602){\includegraphics*[viewport=0 600 700 1600]
+\AddToShipoutPicture*{\put(10,532){\includegraphics*[viewport=0 600 700 1600]
     {include/natbio-farve}}}
 
 \clearpage
@@ -25,6 +26,7 @@
 % \tableofcontents
 \newpage
 \setcounter{page}{1}
+\restoregeometry
 \tableofcontents
 \newpage
 \input{Abstract}
