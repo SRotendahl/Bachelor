@@ -1,2 +1,19 @@
 \section{Gotta Go Fast!}
-There was an existing autotunner for Futhark \cite{oldtune}, which was based on OpenTunner \cite{opentunner}. The existing autotunner uses hill-climbing techniques, on a filtered set of possible threshold settings, as opposed to ours, that perform an exhaustive search. 
+In this section we will run benchmarks to test our autotunner. There was an existing autotunner for Futhark \cite{oldtune}, which was based on OpenTunner \cite{opentunner}. The existing autotunner uses hill-climbing techniques, on a filtered set of possible threshold settings, as opposed to ours, that perform an exhaustive search. We will be comparing the existing autotunner to ours, with executing without tuning being the baseline. %the following should maybe be left out 
+Our aim is not to run faster than the existing autotunner, but see if we pick a different execution path, than it does, since it is not guaranteed to pick the best path.
+
+We have a few programs we will be benchmarking, all from \cite{ppopp}, and we will autotune with different configurations of datasets. 
+\paragraph{LocVolCalib}
+There are three datasets for the \texttt{LocVolCalib} program, \textit{small, medium} and \textit{large}, as well as a training set for each size.
+
+In Figure \ref{LocVolCalib-SmallMedium}, we have autotunned for the \textit{small} and \textit{medium} datasets, and executed the program on all three. We plot the speedup, or slow down, compared to executing without tuning\footnote{Where the default value for thresholds is $2^{15}$, which is quite high, meaning that it will favor large datasets}.
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=.7\textwidth]{imagefile}
+%	\label{LocVolCalib-SmallMedium}
+%\end{figure}
+In Figure \ref{LocVolCalib-SmallMedium} we see that on the \textit{large} dataset, no tuning is vastly superior, and with \textit{small} and \textit{medium}, tuning is superior.
+
+This is the behavior we expect. When we tune with the training sets for \textit{small} and \textit{medium}, those should execute faster. This also means that \textit{large} will run inefficiently, since after being tuned, it does not exploit as much parallelism as the high default of the thresholds.   
+
+%It is important to note, that \textit{large} is about XXX larger than \textit{medium}, while \textit{medium} is only XXX larger than \textit{small}
