@@ -76,9 +76,24 @@ information than a single boolean. This problem can be solved quite simply by
 duplicating the problematic subtree, there is a version that came from a
 comparisons being true, and one for comparisons being false.
 
+\subsection{Identifying all unique combinations}
+The values that the thresholds are compared to in each dataset are extracted,
+to a list of values for each threshold. Then they are sorted and duplicates are
+removed. Since the comparisons are all less than or equal
+(\texttt{Threshold\_value <= comparison\_value}) comparisons the we can simply
+pick the smallest \texttt{comparison\_value} and be sure that the comparison
+will result in true for all our dataset. It's also possible to construct a
+value that will guarantee that the comparison will result in false. We do this
+by simply taking the largest value for each threshold, were all but the largest
+dataset will result in false, and incrementing it by one. This will mean it
+will also result in false for the largest dataset. We put this false-value at
+the end of the list of values we extracted from the program. We are left with a
+list of values for each threshold, the first value will make the comparison for
+every dataset result in true, the last will make the comparison result in false
+for every dataset, and the values between will result in true for some, and
+false for others. These values are then put on their corresponding threshold in
+the tree we've constructed.
+\\
+% Need to create some example figure to go through.
 
 
-\subsection{Conflicts}
-It's not always possible to find a set of threshold parameter values that will
-optimize the running time for every data set, so here a decision has to be made
-for how you want to resolve conflicts of this type.
