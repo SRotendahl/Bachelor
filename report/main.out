@@ -18,5 +18,3 @@
 \BOOKMARK [1][-]{section.6}{Gotta Go Fast!}{}% 18
 \BOOKMARK [1][-]{appendix.A}{Code examples}{}% 19
 \BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71-73]prog-guide-cuda}{appendix.A}% 20
-\BOOKMARK [1][-]{appendix.B}{Graphs}{}% 21
-\BOOKMARK [2][-]{subsection.B.1}{Theoretical performance for GPU's and CPU's cpu-vs-gpu}{appendix.B}% 22

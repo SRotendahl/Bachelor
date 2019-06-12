@@ -99,7 +99,7 @@ where it's $\texttt{comparison\_value} + 1$, as these will result in true and
 false respectively, with those being the only options.
 Of course the thresholds are not in isolation, but structured as we've seen
 Figure \ref{LocVolCalibTree} for example, so some comparison result in earlier 
-thresholds will make later thresholds in the tree redundant, as they are never compared. We can see this idea in Figure \ref{redundant}
+thresholds will make later thresholds in the tree redundant, as they are never compared. We can see this idea in Figure \ref{redundant}. A concrete example would be Figure \ref{MatMultTreeFilled}, with the thresholds $t_i = [10, 20, 30, 40]$, and the matrix sizes $n=20, p=30, n\times p=600, m=50$, so the predicate of $t_0 \leq n$ would result in taking the \texttt{true} branch, however this is also the case for $t_0 = 11$, making these two different settings, having the same dynamic behavior.
 \input{redundantThres}
 One thing that is also important is that we are tuning with multiple datasets,
 so we can't just think of all the unique paths through one tree. Instead we
