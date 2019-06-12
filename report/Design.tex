@@ -98,10 +98,11 @@ where it's $\texttt{comparison\_value} + 1$, as these will result in true and
 false respectively, with those being the only options.
 Of course the thresholds are not in isolation, but structured as we've seen
 Figure \ref{LocVolCalibTree} for example, so some comparison result in earlier 
-thresholds will make later thresholds in the tree redundant, as they are never compared. We can see this idea in Figure \ref{redundant}. A concrete example would be Figure \ref{MatMultTreeFilled}, with the thresholds $t_i = [10, 20, 30, 40]$, and the matrix sizes $n=20, p=30, n\times p=600, m=50$, so the predicate of $t_0 \leq n$ would result in taking the \texttt{true} branch, however this is also the case for $t_0 = 11$, making these two different settings, having the same dynamic behavior.
+thresholds will make later thresholds in the tree redundant, as they are never compared. We can see this idea in Figure \ref{redundant}. A concrete example would be Figure \ref{MatMultTreeFilled}, with the thresholds $t_i = [10, 20, 30, 40]$, and the matrix sizes $n=20, p=30, n\times p=600, m=50$, so the predicate of $t_0 \leq n$ would result in taking the \texttt{true} branch, however this is also the case for $t_0 = 11$, making these two different configurations, having the same dynamic behavior.
 \input{redundantThres}
+We also limit our search space by removing duplicate thresholds comparisons. It is possible for different datasets to have the same comparison value for a threshold, this will give duplicates. We remove these possible duplicates to limit the search space for redundant configurations.
 One thing that is also important is that we are tuning with multiple datasets,
-so we can't just think of all the unique paths through one tree. Instead we
+so we can not just think of all the unique paths through one tree. Instead we
 need to think of each dataset as having it's own tree, with it's own 
 \texttt{comparison\_value} for each threshold. This means the search space is
 not every unique path through the tree, but every possible unique combination
@@ -112,13 +113,12 @@ of paths through the many trees we now have.
 The values that the thresholds are compared to in each dataset are extracted,
 to a list of values for each threshold. Then they are sorted and duplicates are
 removed. Since the comparisons are all less than or equal
-(\texttt{Threshold\_value <= comparison\_value}) comparisons the we can simply
-pick the smallest \texttt{comparison\_value} and be sure that the comparison
+(\texttt{Threshold\_value <= comparison\_value}) comparisons we can simply
+set the threshold to the smallest \texttt{comparison\_value} and be sure that the comparison
 will result in true for all our dataset. It's also possible to construct a
 value that will guarantee that the comparison will result in false. We do this
-by simply taking the largest value for each threshold, were all but the largest
-dataset will result in false, and incrementing it by one. This will mean it
-will also result in false for the largest dataset. We put this false-value at
+by taking the largest value for each threshold, where all but the largest
+dataset will result in false, and then incrementing that value by one. If we then set the threshold to that value, then the comparison will be false for the largest dataset, as well as all the others. We put this false-value at
 the end of the list of values we extracted from the program. We are left with a
 list of values for each threshold, the first value will make the comparison for
 every dataset result in true, the last will make the comparison result in false
