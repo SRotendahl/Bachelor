@@ -42,25 +42,34 @@ one of the data sets.
 
 \section{Another version of everything}
 \subsection{Building the Tree}
-Every Futhark program can be given a flag so the structure of the threshold 
-parameters are printed out. The string representing each threshold parameter
-can be seen in figure \_. 
-
+Every, compiled, Futhark program can be given a flag so the structure of the threshold 
+parameters is printed out. The syntax of the string representing each threshold parameter
+can be seen in Figure \ref{thresholdSyntax}.
+\begin{figure}[h]
+	$$\underbrace{\texttt{main.suff\_outer\_par\_6}}_\text{threshold parameter \#6} \overbrace{\texttt{(threshold (!main.suff\_outer\_par\_4} \underbrace{\texttt{!main.suff\_intra\_par\_5))}}_\text{(!) indicates a false comparison}}^\text{list of thresholds that \#6 is dependent on}$$
+	\caption{The syntax of thresholds, printed by Futhark, with the command}
+	\label{thresholdSyntax}
+\end{figure}
 We translate the list of these strings into a tree structure similar to the
-trees we have see in Section \_. 
-We start by finding the thresholds that don't depend on any other thresholds
-being true or false in order for them to be evaluated. These nodes must be the
-roots. Currently there will only exist one of these, but to make the program
-adaptable to future changes to the compiler we take the possibility that the
-structure of the thresholds being a forest into account. To keep it as a tree
+trees we have see in Section \ref{BabyGotBack}. 
+We start by finding the thresholds that does not depend on any other thresholds
+being true or false in order for them to be evaluated, this will make them root nodes in their respective trees. Currently there will only exist one of these, but to make the program
+adaptable to future changes to the compiler, we take into account, the possibility that the
+structure of the thresholds will exhibit a forest. In order to process a forest, in the same way we would a tree, 
 we create a root node that has no useful information, but will simply be the
 parent of the forest. \\
 
-To construct the rest of the tree we simply run recursively on all the children
+To construct the rest of the tree we execute recursively on all the children
 of the previous node finding one who has the same dependents as the current
 node, but also depends on the current node itself. All of these are made
 children of the current node, and the function is run on each of them. The
 recursion ends when no children are found for a node.
+\begin{figure}
+	\centering
+	\input{recusionTree}
+	\caption{stuff}
+\end{figure}
+
 
 The way the information is extracted can also be seen in figure \_. 
 %some more description here, make figure first
