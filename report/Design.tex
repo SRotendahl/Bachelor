@@ -8,14 +8,15 @@
 %we are trying to optimize will be the runtime, that we are trying to minimize. 
 Our goal when autotuning a Futhark program is to find the set of values for the
 threshold parameters that will minimize the running time of the program on the
-given datasets. For the most part there is no way to know to be completely sure
+given datasets. There is no way to be completely sure
 which combination of values will lead to the fastest running time on the given
 datasets, except to try them all out. This is called an exhaustive search, and
 it is the way we will find the optimal set of values for the threshold
 parameters. 
 
+As we saw in section \ref{BabyGotBack}, the threshold parameters within a program exhibit a tree structure (for example Figure \ref{LocVolCalibTree}), of dependencies. Therefore we will build a structure analogous to these 
 \textbf{Either 'Building the Tree' and 'Limiting Search Space' need to be
-swapped somehow, or we need a way to tie intro to 'Building the Tree'.}
+swapped somehow, or we need a way to tie intro to 'Building the Tree'. I have tried to tie them together}
 
 \subsection{Building the Tree}
 Every, compiled, Futhark program can be given a flag so the thresholds, and their structure, is printed out. The syntax of the string representing each threshold parameter
@@ -27,17 +28,20 @@ can be seen in Figure \ref{thresholdSyntax}.
 \end{figure}
 We translate the list of these strings into a tree structure similar to the
 trees we have see in Section \ref{BabyGotBack}. 
-We start by finding the thresholds that does not depend on any other thresholds
-being true or false, in order for them to be evaluated, this will make them root nodes in their respective trees. Currently there will only exist one of these root nodes, but in order to make the program
+We start by finding the thresholds that does not depend on any other thresholds, 
+%being true or false, in order for them to be evaluated, 
+%this will make them root nodes in their respective trees. 
+these thresholds will be root nodes of their respective trees.
+Currently there will only exist one of these root nodes, but in order to make the program
 adaptable to future changes to the compiler, we take into account, the possibility that the
 structure of the thresholds will exhibit a forest. In order to process a forest, in the same way we would a tree, 
 we create a root node that has no useful information, but will simply be the
-parent of the forest. \\
+parent of the forest, hence for referenced as the \textit{nullroot}. \\
 
 To construct the rest of the tree we execute recursively on all the children
-of the previous node finding one who has the same dependencies as the current
+of the previous node, finding one who has the same dependencies as the current
 node, but also depends on the current node itself. All of these are made
-children of the current node, and the function is executed on each of them. The
+children of the current node, and the function is executed on each of the children. The
 recursion ends when no children are found for a node.
 
 Unlike the theoretical trees, seen previously, the implemented trees cannot carry information on
@@ -62,7 +66,7 @@ we would end up with $\left(2^{15}\right)^4 \approx 1.153\times10^{18}$ configur
 This search would obviously take far longer than any of us would be alive, so we need a way to limit the search space.
 \\
 They way we limit the search space is by using our knowledge of the threshold
-parameters and only trying values that would result in a different set of code 
+parameters and only trying values that would result in a different sets of code 
 version being executed on at least one of the datasets. More specifically, we will
 use the knowledge that the comparisons are of the form
 (\texttt{Threshold\_value <= comparison\_value}). Since the
@@ -100,11 +104,14 @@ every dataset result in true, the last will make the comparison result in false
 for every dataset, and the values between will result in true for some, and
 false for others. These values are then put on their corresponding threshold in
 the tree we've constructed.
+%We could show this list kinda like figure 7, but I 
+%dont know if it is needed
 \\
 To explain how the paths are found we will use the example tree in Figure \ref{treeNoName0}.
 \input{treeNoName0}
 The Futhark compiler cannot currently create such a tree, but
 it highlights most of the ideas that might be implemented in the Futhark
+%are we comfortable in saying most :p
 compiler in the future, and show that our autotuner will handle such cases. \\
 We construct all possible combinations in a bottom up manner. First
 all the paths possible in the leaves are found, this is of course trivial as
@@ -115,22 +122,25 @@ Next we look at the parents of the leaves. Here we need to combine the nodes
 own values with the children combinations to create every possible
 combination. There are a two cases that can occur here. \\
 The first case is if we have a single child that is dependent on the result of
-the comparison being true, false, or we have one of each. In
-\textbf{FIGURE} we have the example with one of each. Here we take the first
+the comparison being true, false, or we have one of each. 
+%I dont completely get what you mean here with "with of each
+%If the node only have 1 child, how can we have one of each. The explination comes afterwards, but when this
+%line is read, it can be confusing.
+\input{treeNoName2}
+In Figure \ref{treeNoName2} we have the example with one of each. Here we take the first
 value of the node, the one that will always be true, and combine it with all
 the combinations we got from the leaf. The same is done for the last value of
-the node, will always have the comparison result in false, and combine it with
+the node, the one that will always have the comparison result in false, and combine it with
 the combinations from the false child. Then we take the values in the middle
 and combine them with all the combinations of both children, as these result in
 the comparison being true or false depending on the dataset. If there was only
 one child the part that was explained about the other is simply not performed.\\
 The second case is when 
-there are multiple children that depend on the comparison result, as in
-\textbf{FIGURE}. In this case we need to combine the threshold value
+there are multiple children that depend on the comparison result, as in \ref{treeNoName0}. In this case we need to combine the threshold value
 combinations of all these children into all combinations of those. These cases
 occur when the program can end in multiple code versions, so we need to check
 every combination of those code versions. After combining the results from the
-children we create every combination of the childrens, now combined, results
+children we create every combination of the children's, now combined, results
 and the nodes own values. 
 
 
@@ -138,7 +148,7 @@ and the nodes own values.
 The loop construct that Futhark\textbf{REF} has will run a piece of code several times with
 a value that possibly changes each iteration. This means that the threshold
 parameters that correspond to the code inside a loop will be compared multiple
-times, and that the value is compared to could change each iteration. The
+times, and that the value is compared to could change in each iteration. The
 effect of this is that an exhaustive search cannot just assume that each
 threshold is only compared a single time per dataset. This problem is
 trivially solved by the solution put forward earlier in this section, since
