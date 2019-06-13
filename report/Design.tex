@@ -126,14 +126,16 @@ for every dataset, and the values between will result in true for some, and
 false for others. These values are then put on their corresponding threshold in
 the tree we've constructed.
 \\
-To explain how the paths are found we will use the example tree in
-\textbf{FIGURE}. The Futhark compiler cannot currently create such a tree, but
+To explain how the paths are found we will use the example tree in Figure \ref{treeNoName0}.
+\input{treeNoName0}
+The Futhark compiler cannot currently create such a tree, but
 it highlights most of the ideas that might be implemented in the Futhark
 compiler in the future, and show that our autotuner will handle such cases. \\
 We construct all possible combinations in a bottom up manner. First
 all the paths possible in the leaves are found, this is of course trivial as
 each combination only consists of a single threshold, so the result will just
-be each value as a singleton list (See \textbf{FIGURE}).\\
+be each value as a singleton list (see Figure \ref{treeNoName1}).
+\input{treeNoName1}
 Next we look at the parents of the leaves. Here we need to combine the nodes
 own values with the children combinations to create every possible
 combination. There are a two cases that can occur here. \\

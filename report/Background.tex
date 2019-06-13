@@ -28,7 +28,8 @@ This allows for a completely flat array, that can be mapped directly to the GPU.
 
 \subsection{Futhark}
 The problem of mapping parallelism to flat hardware, and the difficulty of writing parallel code, in GPGPU languages such as CUDA and OpenCL, is what the programming language \textbf{Futhark} aims to solve. The creator of Futhark writes the purpose, of the language, nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more precisely, as \textit{"a statically typed, data-parallel, and purely functional array language"}, but better than a description, is an example:
-\begin{center}
+\begin{figure}
+\centering
 \lstset{language=haskell}
 \begin{lstlisting}
 let dotprod [n] (xs: [n]f32) (ys: [n]f32): f32 =
@@ -39,7 +40,7 @@ let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
 \end{lstlisting}%
 \captionof{lstlisting}{Matrix-matrix multiplication in Futhark \cite{ppopp}}
 \label{matmultFuthark}
-\end{center}
+\end{figure}
 A Futhark program for matrix-matrix multiplication can be seen in listing \ref{matmultFuthark}, the syntax is similar to languages such as ML, and Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we would have liked to include an example of CUDA, but it was to long, so see \ref{cuda-matmult} for that). It allows the programmer to write efficient parallel code, without all the hardware specific knowledge regarding massively parallel systems. 
 
 The reason for Futhark being a functional language, is that functional languages lends themselves well to parallel problems, due to the functional paradigm not relying on evaluation order and side effects, as much as other many other paradigms. An example of this is \texttt{map}, which can process each element in parallel. However along with the problem of flat parallelism being required by the hardware, among other issues like to small of a stack and no function pointers, a functional language by itself is not a solution, and modifying an existing language such as Haskell is not optimal due to the size and expressiveness of it, being poorly suited for the restrictive nature of a GPU's. 

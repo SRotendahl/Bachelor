@@ -1,0 +1,26 @@
+\forestset{sn edges/.style={for tree={parent anchor=east, child anchor=west}}}
+
+\begin{figure}[h]
+\centering
+\begin{forest}
+[, phantom
+	[\texttt{('nullroot', false, [])}]
+	[\texttt{('Th1', false, [p11, p12])}]
+	[\texttt{('Th4', true, [p41, p42])}]
+]
+\end{forest}
+\begin{forest}
+[, phantom
+	[\texttt{('Th3', false, [p31, p32])}]
+	[\texttt{('Th0', false, [p01, p02, p03])}]
+]
+\end{forest}
+\begin{forest}
+[, phantom
+	[\texttt{('Th2', false, [p21, p22, p23])}]
+	[\texttt{('Th5', false, [p51, p52])}]
+]
+\end{forest}
+\caption{Mathias er cute!}
+\label{treeNoName1}
+\end{figure}
