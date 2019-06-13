@@ -52,24 +52,19 @@ To determine the amount of parallelism to exploit, we need a closer loke at GPU'
 A kernel can be thought of as the work, that is to be done, in a perfect \textit{parallel nest}. A perfect parallel nest is a nest where all the work, is at the innermost level. 
 \begin{figure}[h]
 \centering
-	\begin{minipage}{0.45\textwidth}
+	\subfloat[][Code fragment before distribution.]
+	{
 	\centering
-	\begin{lstlisting}
-map (\xs -> let y = reduce (+) 0 xs 
-		in map (+y) xs)
-	xss
-	\end{lstlisting}
-	\captionof{lstlisting}{Code fragment before distribution.} \label{beforeDist}
-	\end{minipage}\hspace*{\fill}
-	\begin{minipage}{0.45\textwidth}
+	\input{beforeDist}	
+	\label{beforeDist} 
+	}\hspace{2cm}
+	\subfloat[][Code fragment after distribution.]
+	{
 	\centering
-	\begin{lstlisting}
-let ys = map (\xs -> reduce (+) 0 xs) xss
-in map (\xs y -> map (+y) xs) xss ys
-	\end{lstlisting}
-	\captionof{lstlisting}{Code fragment after distribution.} \label{afterDist}
-	\end{minipage}
-	\captionof{figure}{Two version of a fragment of code, showing the distribution of SOACs (\textit{second-order array combinators}) \cite{futhark-moderate-blog}.}
+	\input{afterDist}
+	\label{afterDist}
+	}
+	\caption{Two version of a fragment of code, showing the distribution of SOACs (\textit{second-order array combinators}) \cite{futhark-moderate-blog}.}
 	\label{loopDist}
 \end{figure}
 \noindent Futhark transforms nested data-parallelism into structures, from which kernels can later be extracted, and an example of this transformation can be seen in figure \ref{loopDist}. We can see that the outer \texttt{map}, of listing \ref{beforeDist}, contains more parallelism in it, in terms of the parallel constructs \texttt{reduce} and \texttt{map}, so in the case where the outer \texttt{map} does not saturate the GPU's capacity, we would want to exploit the parallelism of the \texttt{map} body. With listing \ref{beforeDist} this is not possible, since the outer \texttt{map} would be parallelised, and the inner sequentialized to one GPU kernel. Instead we can transform it to listing \ref{afterDist}. Here the SOACs of the body (the parallel constructs \texttt{map} and \texttt{reduce}) in listing \ref{beforeDist}, are distributed out into their own \texttt{map} nests, giving two perfect \texttt{map} nests, and thereby translates to two GPU kernels, where the code of line 1 (eventual first kernel), is passed into the code of line 2 (eventual second kernel), allowing for further exploitation of the nested parallelism.
