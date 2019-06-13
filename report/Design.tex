@@ -1,45 +1,22 @@
 \section{Design \& Implementation}
 
-\begin{itemize}
-  \item Connect to background with the trees
-  \item Explain autotuning in more detail than the introduction.
-    \item write the autotuning part of the introduction so they connect.
-  \item Explain what it means to do an exhaustive search
-  \item Explain the idea behind how we perform an exhaustive search.
-    \item Look at previous project 'comparison based tuner'
-\end{itemize}
-\subsection{Auto-tuning in Introduction}
-in broad terms auto-tuning is the process of automatically tuning a set of
-parameters so as to optimize some aspect of the program when run. This
-process can be done both at compile- or runtime, but in the case of Futhark,
-and this report it's done at runtime. In our, and most other, cases this aspect
-we are trying to optimize will be the runtime, that we are trying to minimize. 
+%\subsection{Auto-tuning in Introduction}
+%in broad terms auto-tuning is the process of automatically tuning a set of
+%parameters so as to optimize some aspect of the program when run. This
+%process can be done both at compile- or runtime, but in the case of Futhark,
+%and this report it's done at runtime. In our, and most other, cases this aspect
+%we are trying to optimize will be the runtime, that we are trying to minimize. 
+Our goal when autotuning a Futhark program is to find the set of values for the
+threshold parameters that will minimize the running time of the program on the
+given datasets. For the most part there is no way to know to be completely sure
+which combination of values will lead to the fastest running time on the given
+datasets, except to try them all out. This is called an exhaustive search, and
+it is the way we will find the optimal set of values for the threshold
+parameters. 
 
+\textbf{Either 'Building the Tree' and 'Limiting Search Space' need to be
+swapped somehow, or we need a way to tie intro to 'Building the Tree'.}
 
-\subsection{Auto-tuning in Futhark} % Might just be the intro to this section
-In the case of auto-tuning Futhark the goal is to find the configuration of 
-threshold parameters that will optimize the running time of the program for 
-on a set of inputs given by the user. As we have seen in section \ref{BabyGotBack}
-the values that are choosen for the thresholds parameters decide which code
-version is used for a given input. So the goal is to pick the values for the
-threshold parameters that will result in the different inputs ending in the
-code version that is optimal for their size.
-
-\subsection{Searching for the opimal threshold values}
-% Maybe mention how the old tuner solved this problem
-There are many ways you could choose to search for the optimal paths, in this
-report we have implemented the most simple version, an exhaustive search. An
-exhaustive search is simply about looking through all combinations and choosing
-the best one. Of course it's not possible to try all combinations of all numbers
-that fit within the threshold parameter data type this would take far too long. 
-% Include a calculation to show the point.
-To solve this problem the search space needs to be bounded to reduce the number
-of combination that has to be checked. The way to do this is to use the
-information available about the structure of threshold parameters, to make sure
-that only values that would result in a different code version being run for 
-one of the data sets. 
-
-\section{Another version of everything}
 \subsection{Building the Tree}
 Every, compiled, Futhark program can be given a flag so the thresholds, and their structure, is printed out. The syntax of the string representing each threshold parameter
 can be seen in Figure \ref{thresholdSyntax}.
@@ -76,10 +53,8 @@ information than a single boolean. This problem can be solved quite simply by
 duplicating the problematic subtree, thereby having a version of the subtree that came from a
 comparisons being true, and one for comparisons being false.
 
-\subsection{Exhaustive Search}
-An exhaustive search is simply trying every possible element of the search space, 
-to find a certain element, based on some motivation. In our case we are searching in the set of possible 
-threshold configurations, with the motivation of finding the configuration that results in the lowest running time. If we knew nothing about
+\subsection{Limiting Search Space}
+If we knew nothing about
 the thresholds, or their structure we would have to try every configuration of
 numbers between 0 and whatever the highest number their implementation allows. 
 With a simple program such a matrix-matrix multiplication (which has 4 thresholds, see Figure \ref{MatMultTreeFilled}), and assuming an upper limit of $2^{15}$ which is the threshold default, and therefore a conservative limit,
@@ -157,3 +132,13 @@ children we create every combination of the childrens, now combined, results
 and the nodes own values. 
 
 
+\subsection{Handling Loops}
+The loop construct that Futhark\textbf{REF} has will run a piece of code several times with
+a value that possibly changes each iteration. This means that the threshold
+parameters that correspond to the code inside a loop will be compared multiple
+times, and that the value is compared to could change each iteration. The
+effect of this is that an exhaustive search cannot just assume that each
+threshold is only compared a single time per dataset. This problem is
+trivially solved by the solution put forward earlier in this section, since
+these extra comparisons will just be added to the list of comparison values and
+the different combinations they represent will be tried out.
