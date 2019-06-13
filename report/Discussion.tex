@@ -1,0 +1,16 @@
+\section{Discussion/Short comings/Future work kinda things}
+%discussion\\
+%For lang køre tid\\
+%pga. for mange veje, yderligere filtrering\\
+%pålidelig\\
+%Syntetsik data hvor man dække samme ting men med mindre dataset\\
+The autotuner we have reach, does what it is supposed to do. However there are some issues. To actually tune a program, it can be slower than the current autotuner. It is slower on larger number of datasets, and that is due to ours using an exhaustive search, of all possible combinations, this means that, in the worst-case, we need to test $execution \; paths^{\# \; of \; datasets}$ number of executions, and that can obviously take quite a bit of time. While in the case of a single, or a few datasets, our can be just as fast, or even faster, due to the use of hill-climbing techniques, used in the previous autotuner. 
+
+This leads us into reliability. The previous tuner was not guaranteed to produce the optimal result, in could get stuck in a local minimum. This happens often enough for it to be a problem, whereas ours will always give the optimal answer. 
+
+While using an exhaustive search is reliable, it still has the problem of the many executions to test. We will briefly describe two methods, to reduce the number.
+\begin{itemize}
+	\item \textbf{Further filtration} should be performed. There are heuristics about Futhark programs, that can be used to reduces the number, a specific one is nest of two \texttt{map}s. It is often that we want to work on nested data, like a matrix, and mapping over its columns and rows. For this we would use two \texttt{map}s, and very rarely is only the outer \texttt{map} executed in parallel. However our autotuner does not take such heuristics into account (otherwise it would not be an exhaustive search), but if heuristics such as these are implemented, the number of thresholds for \texttt{map-map} would be reduced exponentially with the number of datasets.
+	\item \textbf{Synthetic data} is currently being considered, instead of the training data we have been using now. The aim is to create data, that can emulated the actual data being used, more efficiently. If such synthetic data could reduce the number of datasets needed, the number of executions that needs to be tested, would be reduced exponentially.	
+\end{itemize}
+

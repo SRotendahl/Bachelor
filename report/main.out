@@ -13,5 +13,6 @@
 \BOOKMARK [2][-]{subsection.4.3}{Identifying all unique combinations}{section.4}% 13
 \BOOKMARK [2][-]{subsection.4.4}{Handling Loops}{section.4}% 14
 \BOOKMARK [1][-]{section.5}{Gotta Go Fast!}{}% 15
-\BOOKMARK [1][-]{appendix.A}{Code examples}{}% 16
-\BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71-73]prog-guide-cuda}{appendix.A}% 17
+\BOOKMARK [1][-]{section.6}{Discussion/Short comings/Future work kinda things}{}% 16
+\BOOKMARK [1][-]{appendix.A}{Code examples}{}% 17
+\BOOKMARK [2][-]{subsection.A.1}{Matrix Multiplication - CUDA for GPUs [p. 71-73]prog-guide-cuda}{appendix.A}% 18
