@@ -2,6 +2,7 @@
 
 \begin{figure}[h]
 \centering
+\subfloat[][]{
 \begin{forest}
 	for tree={%
 		grow=east,
@@ -13,14 +14,26 @@
 [, phantom
 	[\texttt{('Th1', false, [p11, p12, p13])}
 		[\texttt{('Th4', true, [p41, p42])}]
-		[\texttt{('Th3', false, [p31, p32])}]
-	]
-	[\texttt{('Th0', false, [p01, p02, p03])}
-		[\texttt{('Th2', false, [p21, p22, p23])}]
-		[\texttt{('Th5', false, [p51, p52])}]
-	]
+  [\texttt{('Th3', false, [p31, p32])}]]
 ]
 \end{forest}
+\label{treeNoName20}}
+\\
+\subfloat[][]{
+	\begin{forest}
+		for tree={%
+			grow=east,
+			l sep=0.5cm,
+			s sep=0.5cm,
+			minimum height=0.8cm,
+			minimum width=1cm,
+		}
+		[\texttt{('Th0', false, [p01, p02, p03])}
+		[\texttt{('Th2', false, [p21, p22, p23])}]
+		[\texttt{('Th5', false, [p51, p52])}]
+		]
+	\end{forest}
+	\label{treeNoName21}}
 \caption{Mathias er cute!}
 \label{treeNoName2}
 \end{figure}
