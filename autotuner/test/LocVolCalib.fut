@@ -3,7 +3,7 @@
 --
 -- compiled input @ LocVolCalib-data/train-small.in
 -- compiled input @ LocVolCalib-data/train-medium.in
--- compiled input @ LocVolCalib-data/medium.in
+-- compiled input @ LocVolCalib-data/test1.in
 --
 -- notune compiled input @ LocVolCalib-data/small.in
 -- notune compiled input @ LocVolCalib-data/medium.in
