@@ -110,9 +110,8 @@ the tree we've constructed.
 To explain how the paths are found we will use the example tree in Figure \ref{treeNoName0}.
 \input{treeNoName0}
 The Futhark compiler cannot currently create such a tree, but
-it highlights most of the ideas that might be implemented in the Futhark
-%are we comfortable in saying most :p
-compiler in the future, and show that our autotuner will handle such cases. \\
+it highlights some of the changes that  might be implemented in the Futhark
+compiler in the future, and shows that our autotuner will handle such cases. \\
 We construct all possible combinations in a bottom up manner. First
 all the paths possible in the leaves are found, this is of course trivial as
 each combination only consists of a single threshold, so the result will just
@@ -121,22 +120,22 @@ be each value as a singleton list (see Figure \ref{treeNoName1}).
 Next we look at the parents of the leaves. Here we need to combine the nodes
 own values with the children combinations to create every possible
 combination. There are a two cases that can occur here. \\
-The first case is if we have a single child that is dependent on the result of
-the comparison being true, false, or we have one of each. 
-%I dont completely get what you mean here with "with of each
-%If the node only have 1 child, how can we have one of each. The explination comes afterwards, but when this
-%line is read, it can be confusing.
+The first case is if we only have a single child, which will dependent on the result of
+the comparison being true or false, or we have two children that depend on
+opposite results of the comparison. 
 \input{treeNoName2}
-In Figure \ref{treeNoName2} we have the example with one of each. Here we take the first
+In Figure \textbf{Only the bottom of the trees}\ref{treeNoName2} we have an example of the first case. Here we take the first
 value of the node, the one that will always be true, and combine it with all
 the combinations we got from the leaf. The same is done for the last value of
 the node, the one that will always have the comparison result in false, and combine it with
 the combinations from the false child. Then we take the values in the middle
 and combine them with all the combinations of both children, as these result in
 the comparison being true or false depending on the dataset. If there was only
-one child the part that was explained about the other is simply not performed.\\
+one child the part that was explained about the other is not performed and
+instead the true/false only value, whichever type of child did not exist, is
+put in a singleton list as that value will lead to a code version.\\
 The second case is when 
-there are multiple children that depend on the comparison result, as in \ref{treeNoName0}. In this case we need to combine the threshold value
+there are multiple children that depend on the comparison result, as in \textbf{Only the bottom of the trees}\ref{treeNoName2}. In this case we need to combine the threshold value
 combinations of all these children into all combinations of those. These cases
 occur when the program can end in multiple code versions, so we need to check
 every combination of those code versions. After combining the results from the
