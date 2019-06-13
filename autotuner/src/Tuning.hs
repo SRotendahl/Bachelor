@@ -21,7 +21,7 @@ import Data.Aeson.Types
 import Data.Traversable
 import qualified Data.HashMap.Strict as HM  
 import qualified Data.Text as T
-import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString as BS
 
 {-
 main :: String -> [String] -> IO ()
@@ -125,13 +125,12 @@ unpackMaybePrograms (Just (Programs prog)) =
   map (\(n, (Program p)) -> (n,p)) prog
 
 parseBenchJson :: BS.ByteString -> [(ProgramName, [(DatasetName, Dataset)])]
-parseBenchJson = unpackMaybePrograms . decode
+parseBenchJson = unpackMaybePrograms . decodeStrict'
 
 handleJsonFile :: String -> String -> (BS.ByteString -> a) -> IO a
 handleJsonFile tmpName compCmd f = do
   silence $ callCommand compCmd 
-  jsonH <- openFile tmpName ReadMode
-  jsonDump <- BS.hGetContents jsonH
+  jsonDump <- BS.readFile tmpName
   let res = f jsonDump 
   removeFile tmpName
   return res
