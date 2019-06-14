@@ -176,7 +176,8 @@ The example in figure \ref{treeNoName21} would give us the following result.\vsp
 
 \subsection{Handling Loops}
 The loop construct that Futhark\textbf{REF} has will run a piece of code several times with
-a value that possibly changes each iteration. This means that the threshold
+a value that possibly changes each iteration. This means that, unlike the
+assumption we made earlier, the threshold
 parameters that correspond to the code inside a loop will be compared multiple
 times, and that the value is compared to could change in each iteration. The
 effect of this is that an exhaustive search cannot just assume that each
