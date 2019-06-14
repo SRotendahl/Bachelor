@@ -15,9 +15,7 @@ it is the way we will find the optimal set of values for the threshold
 parameters. 
 
 As we saw in section \ref{BabyGotBack}, the threshold parameters within a program exhibit a tree structure (for example Figure \ref{LocVolCalibTree}), of dependencies. Therefore we will build a structure analogous to these 
-\textbf{Either 'Building the Tree' and 'Limiting Search Space' need to be
-swapped somehow, or we need a way to tie intro to 'Building the Tree'. I have tried to tie them together}
-
+%
 \subsection{Building the Tree}
 Every, compiled, Futhark program can be given a flag so the thresholds, and their structure, is printed out. The syntax of the string representing each threshold parameter
 can be seen in Figure \ref{thresholdSyntax}.
@@ -115,19 +113,6 @@ all the paths possible in the leaves are found, this is of course trivial as
 each combination only consists of a single threshold, so the result will just
 be each value as a singleton list (see Figure \ref{treeNoName1}).
 \input{treeNoName1}
-\begin{figure}[]
-  \centering
-  \textbf{Jeg kan ikke finde ud af at få det sammen med træerne}
-$\to \texttt{[[('TH0',p01)],
-[('TH0',p11),('TH3',p31),('TH4',p41)],[('TH0',p11),('TH3',p31),('TH4',p42)],[('TH0',p11),('TH3',p32),('TH4',p41)],[('TH0',p11),('TH3',p32),('TH4',p42)]
-[('TH0',p12),('TH3',p31),('TH4',p41)],[('TH0',p12),('TH3',p31),('TH4',p42)],[('TH0',p12),('TH3',p32),('TH4',p41)],[('TH0',p12),('TH3',p32),('TH4',p42)]
-]}$
-
-$\to \texttt{[[('TH1',p11),('TH2',p21)],[('TH1',p11),('TH2',p22)],[('TH1',p11),('TH2',p23)]
-             [[('TH1',p12),('TH2',p21)],[('TH1',p12),('TH2',p22)],[('TH1',p12),('TH2',p23)]
-             [[('TH1',p12),('TH5',p51)],[('TH1',p12),('TH5',p52)]
-             [[('TH1',p13),('TH5',p51)],[('TH1',p13),('TH5',p52)]]}$
-\end{figure}
 Next we look at the parents of the leaves. Here we need to combine the nodes
 own values with the children combinations to create every possible
 combination. There are a two cases that can occur here. \\
@@ -175,7 +160,7 @@ The example in figure \ref{treeNoName21} would give us the following result.\vsp
 
 
 \subsection{Handling Loops}
-The loop construct that Futhark\textbf{REF} has will run a piece of code several times with
+The loop construct that Futhark\footnote{Details regarding loops in Futhark, can be found in the documentation \url{https://futhark.readthedocs.io/en/latest/language-reference.html?highlight=loop}} has will run a piece of code several times with
 a value that possibly changes each iteration. This means that, unlike the
 assumption we made earlier, the threshold
 parameters that correspond to the code inside a loop will be compared multiple
