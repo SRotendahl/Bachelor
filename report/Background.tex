@@ -141,7 +141,14 @@ To inspect the structure of these predicates and thresholds parameters further, 
 	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, True)\} $\to$ V4}
 	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, False), (Th8, False), (Th16, False), (Th9, True), (Th17, True)\} $\to$ (V6, V9)}
 \end{itemize}  
-The first path is simple, the code represented by \texttt{T4, T5, T6} is executed in parallel, where everything after it, is executed sequentially. The second path is more interesting, \texttt{T7} has two child nodes, that are reached with a false comparison. Here it is clear that two end nodes are reached, namely \texttt{(V6, V9)}, and these two code versions are then combined into one program. This is also important to note, because we could have a forest, instead of a single tree, and this would leave multiple code versions, that are to be combined.
+The first path is simple, the code represented by \texttt{T4, T5, T6} is
+executed in parallel, where everything after it, is executed sequentially. The
+second path is more interesting, \texttt{T7} has two child nodes, that are
+reached with a false comparison. Here it is clear that two end nodes are
+reached, namely \texttt{(V6, V9)}, and these two code versions are both run,
+and together they are semantically equivalent to the original program. This is
+also important to note, because we could have a forest, instead of a single
+tree, and this would leave multiple code versions, that are to be combined.
 
 
 
