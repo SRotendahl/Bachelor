@@ -2,6 +2,7 @@
 \section{Code examples}
 \subsection{Matrix Multiplication - CUDA for GPUs \cite[p. 71-73]{prog-guide-cuda}}
 \label{cuda-matmult}
+Matrix multiplication in CUDA. It is important to note that this will fail for matrices, which shape is not divisible with the block size. We have kept it like this, since this is what NVIDIA puts forth in their programming guide for CUDA.  
 \lstset{language=java}
 \begin{lstlisting}
 __global__ void Muld(float* A, float* B, int wA, int wB, float* C) 
