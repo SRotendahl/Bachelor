@@ -19,29 +19,31 @@ When flattening a datastructure, we want to keep the information regarding the n
 \end{center}
 This allows for a completely flat array, that can be mapped directly to the GPU. However the concept of flattening has practical issues. GPU's are not infinitely parallel, it has some capacity for parallelism,< and going beyond that will result in more overhead, than computational gain. This problem is in no way addressed by flattening. Along with overhead, comes the issue that parallelism effectively destroys information about access patterns, making locality optimizations pretty much impossible, so we end up with greater overhead than gain, along with losing potential optimizations, when we always use the maximum parallelism available (fully flatten datastructures). 
 
-\subsection{Futhark}
-The problem of mapping parallelism to flat hardware, and the difficulty of writing parallel code, in GPGPU languages such as CUDA and OpenCL, is what the programming language \textbf{Futhark} aims to solve. The creator of Futhark writes the purpose, of the language, nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more precisely, as \textit{"a statically typed, data-parallel, and purely functional array language"}, but better than a description, is an example:
-\begin{figure}
-\centering
-\lstset{language=haskell}
-\begin{lstlisting}
-let dotprod [n] (xs: [n]f32) (ys: [n]f32): f32 =
+\begin{comment}
+	\subsection{Futhark}
+	The problem of mapping parallelism to flat hardware, and the difficulty of writing parallel code, in GPGPU languages such as CUDA and OpenCL, is what the programming language \textbf{Futhark} aims to solve. The creator of Futhark writes the purpose, of the language, nicely on the home page for the language \textit{"Because it’s nicer than writing CUDA or OpenCL by hand!"} \cite{futhark-home}. On the same page, Futhark is described, more precisely, as \textit{"a statically typed, data-parallel, and purely functional array language"}, but better than a description, is an example:
+	\begin{figure}
+	\centering
+	\lstset{language=haskell}
+	\begin{lstlisting}
+	let dotprod [n] (xs: [n]f32) (ys: [n]f32): f32 =
 	reduce (+) 0f32 (map2 (*) xs ys)
-
-let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
+	
+	let main [n][m][p] (xss: [n][m]f32) (yss: [m][p]f32): [n][p]f32 =
 	map (\xs -> map (dotprod xs) (transpose yss)) xss
-\end{lstlisting}%
-\captionof{lstlisting}{Matrix-matrix multiplication in Futhark \cite{ppopp}}
-\label{matmultFuthark}
-\end{figure}
-A Futhark program for matrix-matrix multiplication can be seen in listing \ref{matmultFuthark}, the syntax is similar to languages such as ML, and Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we would have liked to include an example of CUDA, but it was to long, so see \ref{cuda-matmult} for that). It allows the programmer to write efficient parallel code, without all the hardware specific knowledge regarding massively parallel systems. 
-
-The reason for Futhark being a functional language, is that functional languages lends themselves well to parallel problems, due to the functional paradigm not relying on evaluation order and side effects, as much as other many other paradigms. An example of this is \texttt{map}, which can process each element in parallel. However along with the problem of flat parallelism being required by the hardware, among other issues like to small of a stack and no function pointers, a functional language by itself is not a solution, and modifying an existing language such as Haskell is not optimal due to the size and expressiveness of it, being poorly suited for the restrictive nature of a GPU's. 
-
-In the following sections we will look at how Futhark solves the problem of
-GPU's requiring flat parallelism, and the solution even being independent from
-this limitation. An example of a simple problem, that is not flat, is the
-\texttt{dotprod} function from listing \ref{matmultFuthark}. Here there is a \texttt{map2}\footnote{\texttt{map2} is a variant of \texttt{map} taking two arrays instead of a single element and an array. For example \texttt{map2 (+) [1,2,3] [4,5,6] $\to$ [5,7,9]}} which is nested inside of a \texttt{reduce}\footnote{Reduce does not obviously appear to be a parallel construct, due to the elements being dependent on each other, however this is done by a \textit{segmented reduce} \cite{segred}, making it effectively so.}, both operations are parallel, thereby giving \textit{nested parallelism}. In more general terms, nested parallelism is when there are parallel constructs nested within each other. Futhark supports such nested parallelism. More specifically, Futhark supports nested \textit{data}-parallelism. Data-parallelism is when some function/operation, is applied to a dataset in parallel, such that one thread uses function \texttt{x} on a subset of data \texttt{y}, and another thread also uses function \texttt{x}, but on a different subset of \texttt{y}. Other languages/environments that support nested data-parallelism are the likes of; CUDA, Open MP, OpenCL, NESL etc. With NESL being the conceptual precursor to the other languages. As mentoned earlier, NESL solved the issue of nested data-parallelism by flattening data structures (both regular and irregular), resulting in maximum parallelism, which can be inefficient. Therefore we need to determine when it is useful to exploit more parallelism. 
+	\end{lstlisting}%
+	\captionof{lstlisting}{Matrix-matrix multiplication in Futhark \cite{ppopp}}
+	\label{matmultFuthark}
+	\end{figure}
+	A Futhark program for matrix-matrix multiplication can be seen in listing \ref{matmultFuthark}, the syntax is similar to languages such as ML, and Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we would have liked to include an example of CUDA, but it was to long, so see \ref{cuda-matmult} for that). It allows the programmer to write efficient parallel code, without all the hardware specific knowledge regarding massively parallel systems. 
+	
+	The reason for Futhark being a functional language, is that functional languages lends themselves well to parallel problems, due to the functional paradigm not relying on evaluation order and side effects, as much as other many other paradigms. An example of this is \texttt{map}, which can process each element in parallel. However along with the problem of flat parallelism being required by the hardware, among other issues like to small of a stack and no function pointers, a functional language by itself is not a solution, and modifying an existing language such as Haskell is not optimal due to the size and expressiveness of it, being poorly suited for the restrictive nature of a GPU's. 
+	
+	In the following sections we will look at how Futhark solves the problem of
+	GPU's requiring flat parallelism, and the solution even being independent from
+	this limitation. An example of a simple problem, that is not flat, is the
+	\texttt{dotprod} function from listing \ref{matmultFuthark}. Here there is a \texttt{map2}\footnote{\texttt{map2} is a variant of \texttt{map} taking two arrays instead of a single element and an array. For example \texttt{map2 (+) [1,2,3] [4,5,6] $\to$ [5,7,9]}} which is nested inside of a \texttt{reduce}\footnote{Reduce does not obviously appear to be a parallel construct, due to the elements being dependent on each other, however this is done by a \textit{segmented reduce} \cite{segred}, making it effectively so.}, both operations are parallel, thereby giving \textit{nested parallelism}. In more general terms, nested parallelism is when there are parallel constructs nested within each other. Futhark supports such nested parallelism. More specifically, Futhark supports nested \textit{data}-parallelism. Data-parallelism is when some function/operation, is applied to a dataset in parallel, such that one thread uses function \texttt{x} on a subset of data \texttt{y}, and another thread also uses function \texttt{x}, but on a different subset of \texttt{y}. Other languages/environments that support nested data-parallelism are the likes of; CUDA, Open MP, OpenCL, NESL etc. With NESL being the conceptual precursor to the other languages. As mentoned earlier, NESL solved the issue of nested data-parallelism by flattening data structures (both regular and irregular), resulting in maximum parallelism, which can be inefficient. Therefore we need to determine when it is useful to exploit more parallelism. 
+\end{comment}
 
 \subsection{Moderate flattening}
 To determine the amount of parallelism to exploit, we need a closer loke at GPU's. In the world of GPU's we have \textit{kernel}s, and a kernel is simply a GPU program. In CUDA specifically, it allows the programmer to define a function, that, when called, is executed \textit{N} times in parallel by \textit{N} different \textit{CUDA threads} or \textit{CUDA blocks}\footnote{For a further explanation of threads and blocks see \cite[p. 5-9]{prog-guide-cuda}}. Such a function is called a kernel, and an example of a CUDA kernel is the matrix-matrix multiplication in appendix \ref{cuda-matmult}. 
