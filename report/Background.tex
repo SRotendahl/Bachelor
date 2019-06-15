@@ -62,7 +62,7 @@ A kernel can be thought of as the work, that is to be done, in a perfect \textit
 	\caption{Two examples of perfect and imperfect code. In \ref{perMapNest} and \ref{impMapNest} we see two \texttt{map} nests, where \ref{impMapNest} is not perfectly nested due to the concatenation being performed in between. In the two \texttt{map-scan} nests of \ref{perScanNest} and \ref{impScanNest} we see that one is perfectly nested, while the other has a conditional expression in between making it imperfectly nested.}
 	\label{nests}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 	\subfloat[][Code fragment before distribution.]
 	{
@@ -103,7 +103,7 @@ incremental flattening statically generates multiple different, semantically
 equivalent, piecewise code versions of the same program, based on the rules of
 moderate flattening (along with some additional ones) \cite{inc-flat}, and then
 dynamically chooses whether or not to further exploit parallelism or not.
-\begin{figure}
+\begin{figure}[h]
 \centering
 \lstset{language=haskell}
 \begin{lstlisting}
