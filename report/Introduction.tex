@@ -17,8 +17,7 @@ Futhark \cite{futhark-home}. Futhark is a statically typed, data-parallel, and
 purely functional array language. The aim of Futhark is to shift the burden of
 writing efficient parallel code, from the programmer, to the compiler. The
 burden referred to is that to write efficient GPU code, a deep understanding of
-the hardware architecture, and the compiler is required. Not only does
-languages such as CUDA and OpenCL require this, but even when this knowledge is
+the hardware architecture, and the compiler is required. Not only does common GPU languages such as CUDA and OpenCL require this, but even when this knowledge is
 held it will result in non-portable code, since a lot of the optimizations made
 will be specific to a certain GPU, or at least to a certain GPU architecture. 
 
@@ -39,12 +38,11 @@ A Futhark program for matrix-matrix multiplication can be seen in listing
 \ref{IntromatmultFuthark}, the syntax is similar to languages such as ML, and
 Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we
 would have liked to include an example of CUDA, but it was to long, so see
-\ref{cuda-matmult} for a simpler version that only allows arrays of size
-\textbf{FIX}). It's clear that if it's possible to achieve similar speeds 
+\ref{cuda-matmult} for a simple version). It is clear that if it is possible to achieve similar speeds 
 with Futhark it would be very preferable over languages like CUDA.
 
 
-To achieve this shift the Futhark compiler creates multiple semantically
+To achieve the shift from programmer to compiler, the Futhark compiler creates multiple semantically
 equivalent versions of the code in a program, where each code version will
 exploit a different amount of parallelism. These code versions are then to be
 discriminated at runtime. To discriminate these code versions, Futhark asses
@@ -59,8 +57,8 @@ being worked on, it will select the best execution.
 
 Adjusting these parameters to select the execution that will minimize the
 running time is called tuning. The aim of this project is to automatize this
-process, so that it doesn't have to be done by hand. This process is what we
-call auto-tuning.
+process, so that it does not have to be done by hand. This process is what we
+call autotuning.
 
 An analogy to tuning Futhark, is being a kid in a candy store. We have a bag
 (parallel hardware, which will most commonly be a GPU), that is to be filled
