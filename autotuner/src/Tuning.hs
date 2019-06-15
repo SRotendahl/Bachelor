@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Tuning (tune) where
+module Tuning (printAndSaveTuning) where
 
 import Data.Ord
 import Data.Function
@@ -24,11 +24,21 @@ import qualified Data.Text as T
 import qualified Data.ByteString as BS
 
 {-
-main :: String -> [String] -> IO ()
+main :: String -> String -> IO ()
 main a bs = do
   res <- tune "test/LocVolCalib.fut" "opencl" 1
   print . head $ res
 -}
+
+outThresholds :: String -> Integer -> String
+outThresholds name val = name ++ '=':(show val) ++ ","
+
+printAndSaveTuning prog backend nRuns = do
+  paths <- tune prog backend nRuns
+  let str = createTuneStr outThresholds . head $ paths
+  putStrLn str
+  
+  
 
 -- Tuning function and its helper --
 type Path = [(String, Integer)]
@@ -50,7 +60,7 @@ tune prog backend nRuns = do
   putStrLn $ "Number of paths: " ++ (show . length $ paths)
   runs <- pathsToRuntimes nRuns prog paths
   let ordRuns = sortBy (hackyRuntimeSort `on` snd) runs
-  return . map fst $ ordRuns
+  return . map fst $ ordRuns 
 
 -- Calculating Threshold values --
 combineTHvals :: [(String, Integer)] -> [(String, [Integer])]
@@ -142,7 +152,7 @@ pathsToRuntimes nRuns prog paths = do
 
 pathToRuntime :: (String -> IO Runtimes) -> (Path,Integer) -> IO (Path,Runtimes)
 pathToRuntime runF (p,n) = do 
-  let pStr = createTuneStr p
+  let pStr = createTuneStr tuneThresSrt p
   if n `mod` 10 == 1 then putStrLn $ "Path nr. " ++ (show n) else return ()
   runT <- runF pStr
   return (p,runT)
@@ -150,14 +160,14 @@ pathToRuntime runF (p,n) = do
 tuneThresSrt :: String -> Integer -> String
 tuneThresSrt name val = "-p --size=" ++ name ++ '=':(show val) ++ " "
 
-createTuneStr :: Path -> String
-createTuneStr = concat . map (\(str,n) -> tuneThresSrt str n)
+createTuneStr :: (String -> Integer -> String) -> Path -> String
+createTuneStr f = concat . map (\(str,n) -> f str n)
 
 benchRuntimes ::  String -> Integer -> String -> IO Runtimes
 benchRuntimes progName nRuns tuneCont = do
   let tmpName = ".tmpJsonRuntimes.json"
   let cmd = "futhark bench --backend=opencl -r " ++ show nRuns ++ 
-            " --exclude-case=notune --skip-compilation --json=" ++
+            " --exclude-case=notune --no-tuning --skip-compilation --json=" ++
             tmpName ++ " " ++ tuneCont ++ progName
   res <- handleJsonFile tmpName cmd (extractRuntimes . parseBenchJson)
   return res
