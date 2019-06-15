@@ -1,29 +1,15 @@
-\section{Discussion/Short comings/Future work kinda things}
-%discussion\\
-%For lang køre tid\\
-%pga. for mange veje, yderligere filtrering\\
-%pålidelig\\
-%Syntetsik data hvor man dække samme ting men med mindre dataset\\
-\begin{comment}
-The autotuner we have reach, does what it is supposed to do. However there are
-some issues. To actually tune a program, it can be slower than the current
-autotuner. It is slower on larger number of datasets, and that is due to ours
-using an exhaustive search, of all possible combinations, this means that, in
-the worst-case, we need to test $execution \; paths^{\# \; of \; datasets}$
-number of executions, and that can obviously take quite a bit of time. While in
-the case of a single, or a few datasets, our can be just as fast, or even
-faster, due to the use of hill-climbing techniques, used in the previous
-autotuner. 
+\section{Reflections \& Future work (Very unfinished)}
 
-This leads us into reliability. The previous tuner was not guaranteed to
-produce the optimal result, in could get stuck in a local minimum. This happens
-often enough for it to be a problem, whereas ours will always give the optimal
-answer. 
+Our autotuner does what it's supposed to, performs and exhaustive search of all
+possible combinations of code versions in the given datasets and returns the
+one that performs the best. This means that in most cases the results it gives
+are better than the current autotuner. The problem it has is that to perform an
+exhaustive search the number of combinations that needs to be checked increases
+very quickly as you add more datasets. In the \texttt{LocVolCalib} program the
+number of combinations that needs to be checked for one dataset is 13, while
+the number of combinations that needs to be checked if you want to tune for all
+three datasets is 5463. 
 
-While using an exhaustive search is reliable, it still has the problem of the
-many executions to test. We will briefly describe two methods, to reduce the
-number.
-\end{comment}
 \begin{itemize}
 	\item \textbf{Further filtration} should be performed. There are heuristics
     about Futhark programs, that can be used to reduces the number, a specific
