@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Tuning (printAndSaveTuning) where
+module Autotuning (main) where
 
 import Data.Ord
 import Data.Function
@@ -23,42 +23,25 @@ import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
 import qualified Data.ByteString as BS
 
-{-
-main :: String -> String -> IO ()
-main a bs = do
-  res <- tune "test/LocVolCalib.fut" "opencl" 1
-  print . head $ res
--}
-
-outThresholds :: String -> Integer -> String
-outThresholds name val = name ++ '=':(show val) ++ ","
-
-printAndSaveTuning prog backend nRuns = do
-  paths <- tune prog backend nRuns
-  let str = createTuneStr outThresholds . head $ paths
-  putStrLn str
-  
-  
-
 -- Tuning function and its helper --
 type Path = [(String, Integer)]
 type Runtimes = [(String, [Integer])]
 
 -- Sort paths by runtimes --
-hackyRuntimeSort :: Runtimes -> Runtimes -> Ordering
-hackyRuntimeSort a b =
+runtimeSortTotal :: Runtimes -> Runtimes -> Ordering
+runtimeSortTotal len a b =
   ra `compare` rb
   where ra = foldl (+) 0 . concat . map snd $ a
         rb = foldl (+) 0 . concat . map snd $ b
 
-tune :: String -> String -> Integer -> IO [Path]
-tune prog backend nRuns = do
-  comps <- getComps backend prog
+tune :: String -> String -> String -> Integer -> IO [Path]
+tune execute prog backend nRuns = do
+  comps <- getComps execute backend prog 
   let thVals = allTHvals comps
   tree <- getStructure prog
   let paths = snd . foldTree foldThTree $ addTHvalsToTree thVals tree
   putStrLn $ "Number of paths: " ++ (show . length $ paths)
-  runs <- pathsToRuntimes nRuns prog paths
+  runs <- pathsToRuntimes nRuns prog execute paths
   let ordRuns = sortBy (hackyRuntimeSort `on` snd) runs
   return . map fst $ ordRuns 
 
@@ -70,7 +53,6 @@ combineTHvals = map (\l -> (fst . head $ l, nub $ map snd l))
 addFalseVal :: [Integer] -> [Integer]
 addFalseVal xs = xs ++ (((+1) . last $ xs):[])
 
--- (THName, (AlwaysTrue, Both, AlwaysFalse))
 allTHvals :: [(String, [(String, Integer)])]
           -> [(String, [Integer])]
 allTHvals = map (\th -> (fst th, addFalseVal . sort . snd $ th))
@@ -146,9 +128,9 @@ handleJsonFile tmpName compCmd f = do
   return res
 
 -- Get Runtimes --
-pathsToRuntimes :: Integer -> String -> [Path] -> IO [(Path,Runtimes)]
-pathsToRuntimes nRuns prog paths = do
-  mapM (pathToRuntime $ benchRuntimes prog nRuns) $ zip paths [1..]
+pathsToRuntimes :: Integer -> String -> String -> [Path] -> IO [(Path,Runtimes)]
+pathsToRuntimes nRuns prog execute paths = do
+  mapM (pathToRuntime $ benchRuntimes execute prog nRuns) $ zip paths [1..]
 
 pathToRuntime :: (String -> IO Runtimes) -> (Path,Integer) -> IO (Path,Runtimes)
 pathToRuntime runF (p,n) = do 
@@ -163,10 +145,10 @@ tuneThresSrt name val = "-p --size=" ++ name ++ '=':(show val) ++ " "
 createTuneStr :: (String -> Integer -> String) -> Path -> String
 createTuneStr f = concat . map (\(str,n) -> f str n)
 
-benchRuntimes ::  String -> Integer -> String -> IO Runtimes
-benchRuntimes progName nRuns tuneCont = do
+benchRuntimes :: String ->  String -> Integer -> String -> IO Runtimes
+benchRuntimes execute progName nRuns tuneCont = do
   let tmpName = ".tmpJsonRuntimes.json"
-  let cmd = "futhark bench --backend=opencl -r " ++ show nRuns ++ 
+  let cmd = execute ++ " bench --backend=opencl -r " ++ show nRuns ++ 
             " --exclude-case=notune --no-tuning --skip-compilation --json=" ++
             tmpName ++ " " ++ tuneCont ++ progName
   res <- handleJsonFile tmpName cmd (extractRuntimes . parseBenchJson)
@@ -187,16 +169,13 @@ extractComps [] =
 extractComps _ =
   error "Json contains multiple programs, this is not supported."
 
-getComps :: String -> String -> IO [(String, [(String, Integer)])]
-getComps backend progName = do
+getComps :: String -> String -> String -> IO [(String, [(String, Integer)])]
+getComps execute backend progName = do
   let tmpName = ".tmpBenchOutput.json"
-  let cmd = "futhark bench --backend=opencl -p -L  " ++ progName ++ 
-            " --skip-compilation --exclude-case=notune --json="
+  let cmd = execute ++ " bench --backend=opencl -p -L  " ++ progName ++ 
+            " --exclude-case=notune --json="
             ++ tmpName
   handleJsonFile tmpName cmd $ extractComps . parseBenchJson 
-
-fileNameToExe :: String -> String
-fileNameToExe fileName = ("./" ++) . head . (splitOn ".fut") $ fileName
 
 compToTuple :: [String] -> (String,Integer)
 compToTuple (thresh:val:[]) = (thresh, read val) 
@@ -211,7 +190,7 @@ getComparison comp =
 -- Get threshold structure --
 getStructure :: String -> IO (Tree (String,Bool))
 getStructure prog = do
-  sizes <- readProcess (fileNameToExe prog) ["--print-sizes"] ""
+  sizes <- readProcess (dropExtension prog) ["--print-sizes"] ""
   return . buildTree . getTresh $ sizes
 
 cleanGroups :: [String] -> (String,[(String,Bool)])
@@ -266,3 +245,69 @@ buildTree threshs =
                     
 printTree :: (Show a) => Tree a -> String
 printTree = drawTree . fmap show 
+
+---------------- CLI ------------------
+main :: String -> [String] -> IO ()
+main = mainWithOptions initialAutotuneOptions commandLineOptions
+  "options...       programs..." $ \progs config -> Just $ runAutotuner config progs
+
+runAutotuner :: AutotuneOptions -> [FilePath] -> IO ()
+runAutotuner opts [x] = do
+  res <- head $ tune (optFuthark opts) (optBackend opts) (optRuns opts) x
+  let outStr = outThresholds (fst res) (snd res)
+  case optRes opts of 
+    Nothing -> return ()
+    Just file -> writeFile file outStr
+  putStrLn "Tuning file Content:\n" ++ outStr
+
+runAutotuner opts xs = error "Mutiple programs are not currently supported"
+
+outThresholds :: String -> Integer -> String
+outThresholds name val = name ++ '=':(show val) ++ ","
+
+data AutotuneOptions = AutotuneOptions
+                    { optBackend :: String
+                    , optFuthark :: String
+                    , optRuns :: Int
+                    , optRes :: Maybe FilePath
+                    , optEntryPoint :: Maybe String
+                    }
+
+initialAutotuneOptions :: AutotuneOptions
+initialAutotuneOptions = AutotuneOptions "opencl" "futhark" 10 Nothing Nothing
+
+commandLineOptions :: [FunOptDescr BenchOptions]
+commandLineOptions = [
+    Option "r" ["runs"]
+    (ReqArg (\n ->
+              case reads n of
+                [(n', "")] | n' >= 0 ->
+                  Right $ \config ->
+                  config { optRuns = n'
+                         }
+                _ ->
+                  Left $ error $ "'" ++ n ++ "' is not a non-negative integer.")
+     "RUNS")
+    "Run each test case this many times."
+  , Option [] ["backend"]
+    (ReqArg (\backend -> Right $ \config -> config { optBackend = backend })
+     "PROGRAM")
+    "The compiler used (defaults to 'futhark-opencl')."
+  , Option [] ["futhark"]
+    (ReqArg (\prog -> Right $ \config -> config { optFuthark = prog })
+     "PROGRAM")
+    "The binary used for operations (defaults to 'futhark')."
+   , Option [] ["result"]
+     (ReqArg (\file ->
+                Right $ \config -> config { optRes = Just file})
+     "FILE")
+     "Where to save the resulting threshold values"
+   , Option "e" ["entry-point"]
+     (ReqArg (\s -> Right $ \config ->
+                 config { optEntryPoint = Just s })
+       "NAME")
+     "Only run this entry point."
+   ]
+   where max_timeout :: Int
+         max_timeout = maxBound `div` 1000000
+
