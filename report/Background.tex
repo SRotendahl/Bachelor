@@ -5,7 +5,7 @@ A common way to increase computer performance, is to increase the capacity for p
 \end{comment}
 In this section, we want to present the theory and concepts necessary, to understand how to autotune Futhark programs. In order to grasp these concepts, a brief simplified explanation of the hardware we execute parallel code on, that being GPU's, is in order. 
 
-The idea of a GPU is to devote more transistors to compute, than a CPU, with the consequence of less transistors for data caching and flow control. More specifically, a GPU consists of some number of \textit{streaming multiprocessors (SMP)}, these are general purpose, but with significant limitation, like not supporting branch prediction, but it gains support for instruction-level parallelism. A thread is an abstraction for one execution of a function. A SMP can execute some amount of threads, with highly efficient context switching, at once. We say that on an SMP, there can fit one workgroup, so if an SMP can execute 128 threads, that SMP (and therefore that GPU) has a maximum workgroup size of 128. Now this workgroup is an abstraction that we use, since the threads on one SMP have fast communication with each other through what we call \textit{shared memory}, this allows for synchronization of the threads within the block. 
+The idea of a GPU is to devote more transistors to compute, than a CPU, with the consequence of less transistors for data caching and flow control. More specifically, a GPU consists of some number of \textit{streaming multiprocessors (SMP)}, these are general purpose, but with significant limitation, like not supporting branch prediction, but it gains support for instruction-level parallelism. A thread is an abstraction for one execution of a function. A SMP can execute some amount of threads, with highly efficient context switching, at once. We say that on an SMP, there can fit one workgroup, so if an SMP can execute 128 threads, that SMP (and therefore that GPU) has a maximum workgroup size of 128. Now this workgroup is an abstraction that we use, since the threads on one SMP have fast communication with each other through what we call \textit{shared memory}, this allows for synchronization of the threads within the block.
 
 It is important to keep in mind that this communication is fast within an SMP, but using the memory of the GPU is slow, so when we split work across SMP (workgroups) and handle their intermediate results can be expensive. 
 
@@ -22,7 +22,7 @@ When flattening a datastructure, we want to keep the information regarding the n
 \begin{center}
 \texttt{[[1,2,3],[4,5],[6,7,8,9]] $\to$ ([3], ([3,2,4], [1,2,3,4,5,6,7,8,9]))}
 \end{center}
-This allows for a completely flat array, that can be mapped directly to the GPU. However the concept of flattening has practical issues. GPU's are not infinitely parallel, it has some capacity for parallelism,< and going beyond that will result in more overhead, than computational gain. This problem is in no way addressed by flattening. Along with overhead, comes the issue that parallelism effectively destroys information about access patterns, making locality optimizations pretty much impossible, so we end up with greater overhead than gain, along with losing potential optimizations, when we always use the maximum parallelism available (fully flatten datastructures). 
+This allows for a completely flat array, that can be mapped directly to the GPU. However the concept of flattening has practical issues. GPU's are not infinitely parallel, it has some capacity for parallelism, and going beyond that will result in more overhead, than computational gain. This problem is in no way addressed by flattening. Along with overhead, comes the issue that parallelism effectively destroys information about access patterns, making locality optimizations pretty much impossible, so we end up with greater overhead than gain, along with losing potential optimizations, when we always use the maximum parallelism available (fully flatten datastructures). 
 
 \begin{comment}
 	\subsection{Futhark}
@@ -53,7 +53,28 @@ This allows for a completely flat array, that can be mapped directly to the GPU.
 \subsection{Moderate flattening}
 To determine the amount of parallelism to exploit, we need a closer loke at GPU's. In the world of GPU's we have \textit{kernel}s, and a kernel is simply a GPU program. In CUDA specifically, it allows the programmer to define a function, that, when called, is executed \textit{N} times in parallel by \textit{N} different \textit{CUDA threads} or \textit{CUDA blocks}\footnote{For a further explanation of threads and blocks see \cite[p. 5-9]{prog-guide-cuda}}. Such a function is called a kernel, and an example of a CUDA kernel is the matrix-matrix multiplication in appendix \ref{cuda-matmult}. 
 
-A kernel can be thought of as the work, that is to be done, in a perfect \textit{parallel nest}. A perfect parallel nest is a nest where all the work, is at the innermost level. 
+A kernel can be thought of as the work, that is to be done, in a perfect \textit{parallel nest}. A perfect parallel nest is a nest where all the work, is at the innermost level. Some contrived examples of perfect and imperfect nests can be seen in Figure \ref{nests}.
+\begin{figure}[h]
+	\centering
+	\subfloat[][A perfect \texttt{map} nest in Haskell, multiplying every element of a two dimensional array by 2.]{
+	\centering
+	\input{codeSnippet/perMap}
+	\label{perMapNest}}\hspace{2cm}
+	\subfloat[][An imperfect \texttt{map} nest in Haskell, concatenating a 2 to every array, and multiplying every element of that by 2.]{
+	\centering
+	\input{codeSnippet/impMap}
+	\label{impMapNest}}\\
+	\subfloat[][A perfect \texttt{map-scan} nest in Haskell, leftscanning every element of a two dimensional array.]{
+	\centering
+	\input{codeSnippet/perScan}	
+	\label{perScanNest}}\hspace{2cm}
+	\subfloat[][A imperfect \texttt{map-scan} nest in Haskell, which only scans an element of the array, if the first element of the nested array is over 3.]{
+	\centering
+	\input{codeSnippet/impScan}
+	\label{impScanNest}}
+	\caption{Two examples of perfect and imperfect code. In \ref{perMapNest} and \ref{impMapNest} we see two \texttt{map} nests, where \ref{impMapNest} is not perfectly nested due to the concatenation being performed in between. In the two \texttt{map-scan} nests of \ref{perScanNest} and \ref{impScanNest} we see that one is perfectly nested, while the other has a conditional expression in between making it imperfectly nested.}
+	\label{nests}
+\end{figure}
 \begin{figure}[h]
 \centering
 	\subfloat[][Code fragment before distribution.]
