@@ -19,16 +19,16 @@
 \maketitle              % Forside
 \thispagestyle{empty}   % Fjerner sidetal forside
 \newpage                % Første rigtige side
-\setcounter{page}{1}    % Sætter rigtigt sidetal på første side
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % \thispagestyle{empty}
 % \tableofcontents
 \newpage
-\setcounter{page}{1}
 \restoregeometry
+\thispagestyle{empty}
 \tableofcontents
 \newpage
+\setcounter{page}{1}
 \input{Abstract}
 \input{Introduction}
 \input{Background}
