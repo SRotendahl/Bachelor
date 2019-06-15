@@ -94,7 +94,7 @@ To get an intuition for incremental flattening, lets go back to the matrix-matri
 \begin{itemize}
 \item[CV0] The body of the map will be executed sequentially. This means that there will be assigned one GPU thread to each element of the array being mapped over, each thread executing the map body sequentially.
 \item[CV1] The body of the map is partially executed in parallel. This means that there will be assigned one GPU group/block to each element of the array being mapped over. This is partial since it does not exploit the parallelism fully, due to, most likely, not having enough threads to fully parallelise the entire construct within the \texttt{map} body.
-\item[CV2] Continues to flatten the \texttt{map} function, since we still have further parallel capacity to exploit.  
+\item[$\cdots$] Continues to flatten the \texttt{map} function, since we still have further parallel capacity to exploit.  
 \end{itemize}
 \begin{center}
 	\centering 
@@ -108,7 +108,7 @@ In matrix-matrix multiplication, there are three levels of nested parallelism to
 	\item[V1)] The outer \texttt{map} is executed in parallel, and the inner \texttt{map} of \texttt{main} is executed partially in parallel. More specifically one GPU group/block calculates one row in the resulting matrix. This is CV1 for \texttt{map}. 
 	\item[V2)] The two outer maps of \texttt{main}, are extracted as kernels and the kernel of the outer \texttt{map} will invoke the inner \texttt{map} kernel saturating the GPU, and the body of the two \texttt{map}s (\texttt{dotprod}) is executed sequentially. More specifically each GPU thread is calculating one element in the resulting matrix. This is CV0 for \texttt{map}.
 	\item[V3)] The two outer \texttt{maps}, does not saturate the GPU, but the \texttt{dotprod} function would oversaturate it, therefore, \texttt{dotprod} is partially executed in parallel. More specifically each element of the result matrix is executed by a GPU group/block. This is CV1
-	\item[V4)] If the entire parallel nest does not oversaturate the GPU, the entire nest is executed in parallel. This is CV2
+	\item[V4)] If the entire parallel nest does not oversaturate the GPU, the entire nest is executed in parallel.
 \end{itemize} 
 We have to choose between these different, but semantically equivalent, ways of execution. The optimal choice will depend on the hardware, and the data being worked on. To visualize the choices, we will look at them as a tree. In Figure \ref{MatMultTree} there are four choices, we have to consider, and these choices are dependent on each other
 \begin{center}
