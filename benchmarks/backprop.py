@@ -22,6 +22,8 @@ old = (std[0]/(np.sum(avgOld[0])/5.0),
 
 n_groups = 2
 
+labels = [our[0], old[0], our[1], old[1]]
+
 # create plot
 fig, ax = plt.subplots()
 index = np.arange(n_groups)
@@ -40,10 +42,12 @@ label='Exsisting tuner')
 
 plt.xlabel('Dataset')
 plt.ylabel('Speedup')
-plt.title('Runtime for a dataset, after being autotuned')
 plt.xticks(index+bar_width/2, ('D1', 'D2'))
 plt.legend()
-
+for i, v in enumerate(our):
+    ax.text(i, v+v/50, str(round(v,2)), color='black', va='center', fontweight='bold')
+for i, v in enumerate(old):
+    ax.text(i+bar_width, v+v/50, str(round(v,2)), color='black', va='center', fontweight='bold')
 plt.tight_layout()
 plt.savefig("backprop.png")
 plt.show()
