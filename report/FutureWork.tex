@@ -4,11 +4,27 @@ Our autotuner does what it's supposed to, performs and exhaustive search of all
 possible combinations of code versions in the given datasets and returns the
 one that performs the best. This means that in most cases the results it gives
 are better than the current autotuner. The problem it has is that to perform an
-exhaustive search the number of combinations that needs to be checked increases
+exhaustive search and the number of combinations that needs to be checked increases
 very quickly as you add more datasets. In the \texttt{LocVolCalib} program the
 number of combinations that needs to be checked for one dataset is 13, while
-the number of combinations that needs to be checked if you want to tune for all
+the number of combinations that needs to be checked when tune for all
 three datasets is 5463. 
+
+\subsection{Synthetic data}
+It's clear that our autotuner is fast if the number of datasets are low, so a
+possible solution is to not use very many. The problem with not using many
+datasets is that the parameters that are achieved from tuning might not
+generalize well to new datasets, as their sizes might be totally different. So
+instead of just leaving out datasets. The possible solution we propose is that
+it might be possible to create 'synthetic' datasets that, when tuned on,
+results in threshold values that achieves a good performance on all datasets of
+interest. 
+This idea can be somewhat seen in our results on \texttt{LocVolCalib} (See \ref{ALLDATALVC})
+where training only on the \textit{medium} training  dataset resulted in good
+performances on \textit{medium} and \textit{small} test datasets. This training
+did not result in a good performance for the \textit{large} test dataset, but
+this says more about the \textit{medium} training dataset is not a good
+synthetic dataset, and less that the whole idea wouldn't work.
 
 \begin{itemize}
 	\item \textbf{Further filtration} should be performed. There are heuristics
@@ -21,10 +37,5 @@ three datasets is 5463.
     but if heuristics such as these are implemented, the number of thresholds
     for \texttt{map-map} would be reduced exponentially with the number of
     datasets.
-	\item \textbf{Synthetic data} is currently being considered, instead of the
-    training data we have been using now. The aim is to create data, that can
-    emulated the actual data being used, more efficiently. If such synthetic
-    data could reduce the number of datasets needed, the number of executions
-    that needs to be tested, would be reduced exponentially.	
 \end{itemize}
 
