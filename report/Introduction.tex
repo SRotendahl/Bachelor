@@ -36,35 +36,35 @@ A Futhark program for matrix-matrix multiplication can be seen in listing
 \ref{IntromatmultFuthark}. The syntax is similar to languages such as ML and
 Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we
 would have included an example of CUDA, but it was too long, it can be found in Appendix
-\ref{cuda-matmult}). It should be clear why, if Futhark has the possibility to achieve speeds similar to those of CUDA and OpenCL Futhark would be very preferable.
+\ref{cuda-matmult}). It should be clear why, if Futhark has the possibility to
+achieve speeds similar to those of CUDA and OpenCL Futhark would be very
+preferable.
 
-
-To achieve the shift in burden from programmer to compiler, the Futhark compiler creates multiple semantically
-equivalent versions of the code in a program, where each code version will
-exploit a different amount of parallelism. These code versions can represent the entire program, while some versions needs to be combined with others in order to represent the entire program. The code versions are then to be
-discriminated at runtime and to do so, Futhark assesses
-the amount of parallelism contained in each function of the program, based on the
-data being worked on. Put simply, if you have a matrix (\texttt{A}) of size $m
-\times n$, and you execute a function (\texttt{inc}) incrementing each element,
-then the parallel amount of \texttt{inc A} would be $m \times n$. Along with
-these code versions, Futhark generates predicates that guard the code versions.
-The aim is then to give a Futhark program parameters at runtime, and using the
-guards, the knowledge of the hardware being execute on, along with the data
-being worked on, it will select the best execution.
+To achieve the shift in burden from programmer to compiler, the Futhark
+compiler creates multiple semantically equivalent parallelisations, called code
+versions, for each parallel construct. The code versions are combined into
+a single program where the semantically equivalent code versions are guarded
+by a run-time comparison, so that only a single one of them are executed and the
+semantics of the new program is equivalent to the original Futhark program. 
+The comparisons are between a user defined parameters and values that are
+a reflection of the input size.
 
 Adjusting these parameters to select the execution that will minimize the
 running time is called tuning. The aim of this project is to automatize this
-process, so that it does not have to be done by hand. This process is what we
-call autotuning.
+process, so that it does not have to be done by hand. This is what we
+call autotuning. To find the optimal set of values for the parameters our
+autotuner is going to perform an exhaustive search, that means trying out every
+meaningful set of values and select the best one.  
 
-An analogy to tuning Futhark, is being a kid in a candy store. We have a bag
-(parallel hardware, which will most commonly be a GPU), that is to be filled
+Tuning Futhark, is like being a kid in a candy store. We have a bag
+(parallel hardware, usually be a GPU), that is to be filled
 with candy (parallelism in a program). We do not have a favorite type of candy
-(the code versions being semantically equivalent), so we want to want to
+(the code versions being semantically equivalent), so we want to
 efficiently pack the bag in order to get as much candy as possible. If we
-overpack the bag, it will get to heavy (introducing overhead larger than gain)
-and it will take longer to get the bag home, and if we underfill it, we will
-obviously get less candy. Therefore we need to put a piece of candy in the bag
-(a parallel function in the program), and then asses the next candy pieces
+overpack the bag, it will get too heavy (introducing overhead larger than gain)
+and it will take longer to get the bag home. If we underfill we will
+obviously get less candy. 
+Therefore we need to put a piece of candy in the bag
+(a parallel construct in the program), and then asses the next candy pieces
 size, and the remaining capacity of the bag, and if the candy fits we put it in
 (tuning the parameters). 
