@@ -1,5 +1,5 @@
 \section{Reflections \& Future work (Very unfinished)}
-
+\label{synData}
 Our autotuner does what it's supposed to, performs an exhaustive search of all
 possible combinations of code versions in the given datasets and returns the
 one that performs the best. This means that in most cases the results it gives
@@ -10,10 +10,6 @@ number of combinations that needs to be checked for one dataset is 13, while
 the number of combinations that needs to be checked when tune for all
 three datasets is 5463. 
 
-An oversight we made in our implementation was to not stop an execution, if it was slower than a previous one, so if we had a path $e_0$ which had a running time of $10$ seconds, and we were actively checking path $e_1$, then we should stop the execution of $e_1$ if it exceeds $10$ seconds. This is a fairly easy optimization to make and could give a big speedup. 
-%vi kunne skrive videre på dette med noget execution order og worst og best case.   
-
-\subsection{Synthetic data}
 It's clear that our autotuner is fast if the number of datasets are low, so a
 possible solution is to not use very many. The problem with not using many
 datasets is that the parameters that are achieved from tuning might not
@@ -29,16 +25,5 @@ did not result in a good performance for the \textit{large} test dataset, but
 this says more about the \textit{medium} training dataset is not a good
 synthetic dataset, and less that the whole idea wouldn't work.
 
-\begin{itemize}
-	\item \textbf{Further filtration} should be performed. There are heuristics
-    about Futhark programs, that can be used to reduces the number, a specific
-    one is nest of two \texttt{map}s. It is often that we want to work on
-    nested data, like a matrix, and mapping over its columns and rows. For this
-    we would use two \texttt{map}s, and very rarely is only the outer
-    \texttt{map} executed in parallel. However our autotuner does not take such
-    heuristics into account (otherwise it would not be an exhaustive search),
-    but if heuristics such as these are implemented, the number of thresholds
-    for \texttt{map-map} would be reduced exponentially with the number of
-    datasets.
-\end{itemize}
-
+An oversight we made in our implementation was to not stop an execution, if it was slower than a previous one, so if we had a path $e_0$ which had a running time of $10$ seconds, and we were actively checking path $e_1$, then we should stop the execution of $e_1$ if it exceeds $10$ seconds. This is a fairly easy optimization to make and could give a speedup, however the speedup would be dependent on the execution order. 
+%vi kunne skrive videre på dette med noget execution order og worst og best case.   

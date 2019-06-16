@@ -1,2 +1,8 @@
 \section{Conclusion}
-Our autotuner works, it finds all the possible combinations of paths for a program, with some amount of datasets, and returns the best one for all datasets. With an exhaustive search comes an exponential amount of paths in the worst case, this means that our autotuner is slow on multiple datasts. We have put forth two ideas for future work, and a optimization to the current implementation.
+Our autotuner works as intended, it finds all the possible combinations of paths for a program, with some amount of datasets, returning the best one for all datasets. The autotuner achieves this with an with an exhaustive search through all these combinations. An exhaustive search guarantees that we will always find the optimal path, which was not the case with the existing autotuner, therefore making our autotuner more reliable.
+
+With an exhaustive search comes an exponential amount of paths in the worst case, therefore our autotuner gets exponentially slower when tuning for multiple dataset. We saw this in the benchmark for \texttt{LocVolCalib} as seen in Figure \ref{LocVolCalib-SmallMediumLarge}. For that program it took about 23 hours to autotune with all three datasets, due to the number of paths being 5463. 
+
+We have put forth an idea for future work that can be done on the autotuner, and a optimization to the current implementation. If using synthetic datasets, as suggested in section \ref{synData}, is feasible to represent the workload of a program in a single dataset, then the \texttt{LocVolCalib} program will result in 13 paths and therefore a much faster tuning, which could be even faster with the optimization of having slower executions time out during autotuning.
+
+While the GPU tested on is not state-of-the-art and the program might be considered large for a Futhark program, we will suggest that the notion of Futhark programs being small enough to comfortably autotune exhaustively, should be reconsidered. 
