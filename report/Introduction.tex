@@ -57,14 +57,14 @@ autotuner is going to perform an exhaustive search, that means trying out every
 meaningful set of values and select the best one.  
 
 Tuning Futhark, is like being a kid in a candy store. We have a bag
-(parallel hardware, usually be a GPU), that is to be filled
-with candy (parallelism in a program). We do not have a favorite type of candy
-(the code versions being semantically equivalent), so we want to
+(parallel hardware, usually a GPU), that is to be filled
+with candy (parallelism in a program). We have a priority of the candy we want, 
+for example we only want the licorice, if we also get the gummy (guards). We want to 
 efficiently pack the bag in order to get as much candy as possible. If we
 overpack the bag, it will get too heavy (introducing overhead larger than gain)
 and it will take longer to get the bag home. If we underfill we will
-obviously get less candy. 
-Therefore we need to put a piece of candy in the bag
-(a parallel construct in the program), and then asses the next candy pieces
-size, and the remaining capacity of the bag, and if the candy fits we put it in
+obviously get less candy. So the only way to know how much candy we can get is to check,
+for each bag that we use, how much candy will fit in it, for some bags we will only have 
+room for a piece of gummy, while others will have room for the gummy and licorice. Therefore
+we try every combination of candy, while still respecting the priority 
 (tuning the parameters). 
