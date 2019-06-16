@@ -1,9 +1,9 @@
 \section{Introduction}
-GPGPU (General-purpose computing on graphics processing units) has been on the
-rise, due to limitations for CPU's, such as power consumption, and the fact
-that the computational potential of GPU's (Graphical processing unit) is vastly
-greater than CPU's, see Figure \ref{potential}. There are technical/physical
-issue in reaching this potential, for example memory bandwidth, but there is
+GPGPU (General-purpose computing on graphics processing units) have been on the
+rise, due to limitations on CPUs, such as power consumption, and the fact
+that the computational potential of GPUs (Graphical processing unit) is vastly
+superior to CPUs, as seen in Figure \ref{potential}. There are technical and physical
+issue in reaching this potential, for example memory bandwidth bottle-necking computation, but there is
 also the conceptual issue of how to map parallelism to parallel hardware.
 \begin{figure}[h]
 	\centering
@@ -15,11 +15,9 @@ also the conceptual issue of how to map parallelism to parallel hardware.
 In this project we will implement an autotuner for the programming language
 Futhark \cite{futhark-home}. Futhark is a statically typed, data-parallel, and
 purely functional array language. The aim of Futhark is to shift the burden of
-writing efficient parallel code, from the programmer, to the compiler. The
-burden referred to is that to write efficient GPU code, a deep understanding of
-the hardware architecture, and the compiler is required. Not only does common GPU languages such as CUDA and OpenCL require this, but even when this knowledge is
-held it will result in non-portable code, since a lot of the optimizations made
-will be specific to a certain GPU, or at least to a certain GPU architecture. 
+writing efficient parallel code from the programmer to the compiler. The
+burden referred to is the requirement for a deep understanding of GPU hardware architecture and compiler knowledge for the language used, which is necessary to write efficient GPU code. Even when this requirements is met, using common GPU languages such as CUDA and OpenCL will still result in non-portable code as a lot of the optimizations made
+are specific to a certain GPU, or at least to a certain GPU architecture. 
 
 \begin{figure}
 \centering
@@ -35,18 +33,17 @@ map (\xs -> map (dotprod xs) (transpose yss)) xss
 \label{IntromatmultFuthark}
 \end{figure}
 A Futhark program for matrix-matrix multiplication can be seen in listing
-\ref{IntromatmultFuthark}, the syntax is similar to languages such as ML, and
+\ref{IntromatmultFuthark}. The syntax is similar to languages such as ML and
 Haskell. It is a good example of how Futhark differs from CUDA or OpenCL (we
-would have liked to include an example of CUDA, but it was to long, so see
-\ref{cuda-matmult}). It is clear that if it is possible to achieve similar speeds 
-with Futhark it would be very preferable over languages like CUDA.
+would have included an example of CUDA, but it was too long, it can be found in Appendix
+\ref{cuda-matmult}). It should be clear why, if Futhark has the possibility to achieve speeds similar to those of CUDA and OpenCL Futhark would be very preferable.
 
 
-To achieve the shift from programmer to compiler, the Futhark compiler creates multiple semantically
+To achieve the shift in burden from programmer to compiler, the Futhark compiler creates multiple semantically
 equivalent versions of the code in a program, where each code version will
-exploit a different amount of parallelism. These code versions are then to be
-discriminated at runtime. To discriminate these code versions, Futhark asses
-the amount of parallelism each function in the program contains, based on the
+exploit a different amount of parallelism. These code versions can represent the entire program, while some versions needs to be combined with others in order to represent the entire program. The code versions are then to be
+discriminated at runtime and to do so, Futhark assesses
+the amount of parallelism contained in each function of the program, based on the
 data being worked on. Put simply, if you have a matrix (\texttt{A}) of size $m
 \times n$, and you execute a function (\texttt{inc}) incrementing each element,
 then the parallel amount of \texttt{inc A} would be $m \times n$. Along with
