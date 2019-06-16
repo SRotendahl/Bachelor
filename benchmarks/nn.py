@@ -40,7 +40,6 @@ label='Exsisting tuner')
 
 plt.xlabel('Dataset')
 plt.ylabel('Speedup')
-plt.title('Runtime for a dataset, after being autotuned')
 plt.xticks(index+bar_width/2, ('D1', 'D2'))
 plt.legend()
 for i, v in enumerate(our):

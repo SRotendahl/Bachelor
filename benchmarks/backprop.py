@@ -42,7 +42,7 @@ label='Exsisting tuner')
 
 plt.xlabel('Dataset')
 plt.ylabel('Speedup')
-plt.xticks(index+bar_width/2, ('D1', 'D2'))
+plt.xticks(index+bar_width/2, ('H1', 'H2'))
 plt.legend()
 for i, v in enumerate(our):
     ax.text(i, v+v/50, str(round(v,2)), color='black', va='center', fontweight='bold')
