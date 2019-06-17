@@ -78,7 +78,8 @@ for i, v in enumerate(smlCalib):
   ax.text(i+bar_width*3-0.1, v+0.05, str(round(v,2)), color='black', va='center', fontweight='bold')
 
 plt.xticks(index + bar_width*1.5, ('Small', 'Medium', 'Large'))
-plt.legend()
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), shadow=True, ncol    =2)
+
 
 plt.tight_layout()
 plt.savefig("LocVolCalibAll.png")

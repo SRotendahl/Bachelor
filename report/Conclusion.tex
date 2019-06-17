@@ -8,4 +8,4 @@ With an exhaustive search comes an exponential amount of paths in the worst case
 
 We have put forth an idea for future work that can be done on the autotuner, and a optimization to the current implementation. If using synthetic datasets, as suggested in section \ref{synData}, is feasible to represent the workload of a program in a single dataset, then the \texttt{LocVolCalib} program will result in 13 paths and therefore a much faster tuning, which could be even faster with the optimization of having slower executions time out during autotuning.
 
-While the GPU tested on is not state-of-the-art and the program might be considered large for a Futhark program, we will suggest that the notion of Futhark programs being small enough to comfortably autotune exhaustively, should be reconsidered. 
+While the GPU tested on is not state-of-the-art and \texttt{LocVolCalib} might be considered large for a Futhark program, we will suggest that the notion of Futhark programs being small enough to comfortably autotune exhaustively, should be reconsidered, if it is not possible to create synthetic datasets that minimizes the amount of datasets needed. 

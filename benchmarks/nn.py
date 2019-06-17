@@ -14,18 +14,16 @@ avgOld = [ [7844, 8698, 7762, 8970, 7761],
 std = [np.sum(avgStd[0])/5.0, 
        np.sum(avgStd[1])/5.0]
 
-our = (std[0]/(np.sum(avgOur[0])/5.0),
-       std[1]/(np.sum(avgOur[1])/5.0)) 
-old = (std[0]/(np.sum(avgOld[0])/5.0),
-       std[1]/(np.sum(avgOld[1])/5.0))
+our = std[1]/(np.sum(avgOur[1])/5.0) 
+old = std[1]/(np.sum(avgOld[1])/5.0)
 # data to plot
 
-n_groups = 2
+n_groups = 1
 
 # create plot
 fig, ax = plt.subplots()
 index = np.arange(n_groups)
-bar_width = 0.4
+bar_width = 0.1
 opacity = 0.8
 
 rects1 = plt.bar(index, our, bar_width,
@@ -40,13 +38,12 @@ label='Exsisting tuner')
 
 plt.xlabel('Dataset')
 plt.ylabel('Speedup')
-plt.xticks(index+bar_width/2, ('D1', 'D2'))
-plt.legend()
-for i, v in enumerate(our):
-  ax.text(i, v+0.8, str(round(v,2)), color='black', va='center', fontweight='bold')
-for i, v in enumerate(old):
-  ax.text(i+bar_width, v+0.8, str(round(v,2)), color='black', va='center', fontweight='bold')
-
+plt.xticks(index+bar_width/2, ('D2'))
+ax.text(0, our+0.8, str(round(our,2)), color='black', va='center', 
+        fontweight='bold')
+ax.text(bar_width, old+0.8, str(round(old,2)), color='black', 
+        va='center', fontweight='bold')
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), shadow=True, ncol=2)
 plt.tight_layout()
 plt.savefig("nn.png")
 plt.show()
