@@ -1,7 +1,7 @@
 \section{User Guide}
 We have implemented the autotuner as a module to the Futhark compiler.
-The module can be found in the github repository on the fount at the bottom of the
-coverpage\footnote{And here for convenience \url{https://github.com/SRotendahl/Bachelor.git}}.
+The modified Futhark compiler can be found in the github repository found at the bottom of the
+coverpage, as well as here for convenience \url{https://github.com/SRotendahl/Bachelor.git}. Inside the repository is a fork of Futhark, this fork is the modified compiler. To install it, clone the forked repository and follow the instructions from the Futhark documentation \url{https://futhark.readthedocs.io/en/latest/installation.html}.
 
 The options available in the module can be viewed with the command 
 \texttt{futhark autotune -h}. Here is an example of the usage:
@@ -16,11 +16,6 @@ You can also add the \texttt{--tree} flag when executing the autotuner, this wil
 tree structure of the thresholds to \texttt{stdout} before starting the autotuning. 
 \texttt{--ouput} and \texttt{--tree} are shortened to \texttt{-o} and \texttt{-t} respectively.
 You can also specify the backend that Futhark uses, with the autotuner defaulting to OpenCL.
-
-To test the autotuner, Futhark needs to be installed on the system\footnote{An installation
-guide for Futhark can be found here 
-\url{https://futhark.readthedocs.io/en/latest/installation.html}}. 
-The latest, and only version, we have tested on is version 0.12.0.  
 
 Here are the specific steps you can perform to try the autotuner:
 \begin{enumerate}
