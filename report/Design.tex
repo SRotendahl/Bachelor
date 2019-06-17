@@ -14,7 +14,7 @@ datasets, except to try them all out. This is called an exhaustive search, and
 it is the way we will find the optimal set of values for the threshold
 parameters. 
 
-As we saw in section \ref{BabyGotBack}, the threshold parameters within a program exhibit a tree structure (for example Figure \ref{LocVolCalibTree}), of dependencies. Therefore we will build a structure analogous to these 
+As we saw in section \ref{BabyGotBack}, the threshold parameters within a program exhibit a tree structure (for example Figure \ref{LocVolCalibTree}), of dependencies. Therefore we will build a structure analogous to these.
 %
 \subsection{Building the Tree}
 Every, compiled, Futhark program can be given a flag so the thresholds, and their structure, is printed out. The syntax of the string representing each threshold parameter
@@ -25,7 +25,7 @@ can be seen in Figure \ref{thresholdSyntax}.
 	\label{thresholdSyntax}
 \end{figure}
 We translate the list of these strings into a tree structure similar to the
-trees we have see in Section \ref{BabyGotBack}. 
+trees we have seen in Section \ref{BabyGotBack}. 
 We start by finding the thresholds that does not depend on any other thresholds, 
 %being true or false, in order for them to be evaluated, 
 %this will make them root nodes in their respective trees. 
