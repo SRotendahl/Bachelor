@@ -3,4 +3,13 @@ This report describes the implementation of an autotuner for the programming lan
 
 The autotuner is shown to work, always picking the best execution, achieving executions up to 26.97 times faster, while in some cases giving the same result compared to not tuning, as well as slightly outperforming Futharks existing autotuner. 
 
-However the exhaustive autotuner is slow at autotuning. We see that the amount of datasets and the variance in them, is crucial for the amount of time spend autotuning. For large programs with multiple dataset it took 23 hours to autotune. While we present an optimization for the implementation, and present a way to possibly midigate the variance and amount of datasets, we conclude that, currently, exhaustively autotuning Futhark is not comfortable due to the long time required to do so.
+However the exhaustive autotuner is slow at autotuning. We see that the amount of datasets and the variance in them, is crucial for the amount of time spend autotuning. For large programs with multiple dataset it took 23 hours to autotune. 
+
+We conclude that an exhaustive autotuner is not suitable, if the underlying concept for tuning
+is to add a multitude of fairly random datasets and tune the parameters from that. 
+However if this approach is instead changed to tuning on few datasets of better representation,
+then an exhaustive autotuner is feasible. 
+
+\begin{comment}
+While we present an optimization for the implementation, and present a way to possibly mitigate the variance and amount of datasets, we conclude that, currently, exhaustively autotuning Futhark is not comfortable due to the long time required to do so.
+\end{comment}
