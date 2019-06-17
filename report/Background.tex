@@ -1,8 +1,12 @@
 \section{Background}
 \label{BabyGotBack}
 \begin{comment}
-A common way to increase computer performance, is to increase the capacity for parallelism. For practical usage, however, this is difficult to implement, due to low-level GPU-specific languages requiring domain specific knowledge to make full use of that capacity. A vast amount of work has gone into transforming high-level hardware-agnostic code into these low-level GPU-specific languages \cite{inc-flat}. 
-\end{comment}
+A common way to increase computer performance, is to increase the capacity for 
+parallelism. For practical usage, however, this is difficult to implement, due 
+to low-level GPU-specific languages requiring domain specific knowledge to make 
+full use of that capacity. A vast amount of work has gone into transforming 
+high-level hardware-agnostic code into these low-level GPU-specific languages 
+\cite{inc-flat}.  \end{comment}
 In this section, we want to present the theory and concepts necessary, to
 understand how to autotune Futhark programs. In order to grasp these concepts,
 a simplified explanation of the hardware we execute parallel code on,
@@ -12,11 +16,16 @@ The idea of a GPU is to devote more transistors to compute, than a CPU, with
 the consequence of less transistors for data caching and flow control. More
 specifically, a GPU contains a high number of \textit{streaming
 processors (SPs)}. SPs are general purpose, but have significant
-limitations, like not supporting branch prediction, however this is made up for by
-instruction-level parallelism. A thread is an abstraction of a single execution of
-some function. An SP is capable of executing a large number of threads at once while being
-able to efficiently switch context. We say that on an SP, there can fit one workgroup,
-so if an SP can execute 128 threads, we say that SP (and therefore that GPU) has a
+limitations, like not supporting branch prediction, however this is made up for 
+by
+instruction-level parallelism. A thread is an abstraction of a single execution 
+of
+some function. An SP is capable of executing a large number of threads at once 
+while being
+able to efficiently switch context. We say that on an SP, there can fit one 
+workgroup,
+so if an SP can execute 128 threads, we say that SP (and therefore that GPU) 
+has a
 maximum workgroup size of 128. Since all the threads in a workgroup are running
 on the same SP they are able to communicate through the SPs
 internal memory, called \textit{shared memory}, which is much faster than
@@ -25,14 +34,15 @@ Because using the shared memory is fast, while using the global memory is
 slow, splitting work across SPs (workgroups) and handle their intermediate
 results can be expensive.
 
-\subsection{Parallelism} 
-In the real world there are limitations to parallel hardware. We
+\subsection{Parallelism} In the real world there are limitations to parallel 
+hardware. We
 commonly execute parallel work on GPUs, due to its high number of threads. The
 limitation on GPUs, most essential to this report, is that a thread, may not
-spawn additional threads. \footnote{While this is not strictly true, in practice it remains
+spawn additional threads. \footnote{While this is not strictly true, in 
+practice it remains
 so.} We say that since a GPU thread cannot spawn additional threads, it only
-supports \textit{flat} parallelism. In the following sections 
-approaches to work within this limitation are explored.
+supports \textit{flat} parallelism. In the following sections approaches to 
+work within this limitation are explored.
 
 
 \subsection{Flat parallelism}
@@ -48,15 +58,17 @@ to draw multiple lines in parallel.
 Therefore we need to map nested parallelism to a flat structure. This problem
 has already been conceptually solved by \textit{flattening}, and implemented in
 the language NESL \cite{nesl}. The basic idea is to flatten the nested data
-that is to be worked on, and performing operations on that data in parallel. 
+that is to be worked on, and performing operations on that data in parallel.  
 \textbf{IKKE SIKKER}
 
 When flattening a datastructure, we want to keep the information regarding the
-original nest. In the original work presenting flattening \cite{flat} this is done
-with a structure called \textit{field}. A \textit{field} has the form of \texttt{(nest
+original nest. In the original work presenting flattening \cite{flat} this is 
+done
+with a structure called \textit{field}. A \textit{field} has the form of 
+\texttt{(nest
 information, value)}, where a value can be an additional field, allowing for
 arbitrary depth. For a multidimensional array the field would be
-\texttt{(segment lengths, values/fields)}, below here is a concrete example. 
+\texttt{(segment lengths, values/fields)}, below here is a concrete example.  
 \begin{center}
   \texttt{[([1,2,3], [4,5], [5,7,8,9])] $\to$ ([3], ([3,2,4],
 [1,2,3,4,5,6,7,8,9]))}
@@ -66,21 +78,26 @@ that is the only lenght we save. In the inner \textit{field} we need to save
 the length of all three of the segments, and all the values of the original
 subarrays.\\
 
-Flattening allows for a completely flat array that can be mapped directly to the
+Flattening allows for a completely flat array that can be mapped directly to 
+the
 GPU. But, as we saw in the example, flattening increases the memory cost and
-it does not take communication cost into account. This is a problem as GPUs are not
+it does not take communication cost into account. This is a problem as GPUs are 
+not
 infinitely parallel, they have some maximum physical capacity for parallelism.
 Going beyond that capacity will not result in futher computational gain and the
-flattening has made certain optimizations, like exploiting locality of reference,
+flattening has made certain optimizations, like exploiting locality of 
+reference,
 impossible.
 
 \subsection{Moderate flattening}
 To determine the amount of parallelism to exploit, we need a closer loke at
 GPUs. \textit{compute kernel}s, simply refered to as \textit{kernel}s in this
-report, are the routines that are run on parallel hardware such as GPUs.  
-In low level languages such as \texttt{OpenCl C} a kernel is a function the
-programmer defines. The function is then executed \textit{N $\times$ M} times in parallel by
-\textit{N} different \textit{workgroups} each with \textit{M} threads \textit{threads}.
+report, are the routines that are run on parallel hardware such as GPUs.  In 
+low level languages such as \texttt{OpenCl C} a kernel is a function the
+programmer defines. The function is then executed \textit{N $\times$ M} times 
+in parallel by
+\textit{N} different \textit{workgroups} each with \textit{M} threads 
+\textit{threads}.
 The matrix-matrix multiplication in appendix \ref{cuda-matmult} is an example
 of a kernel in the \texttt{CUDA} language.
 
@@ -90,42 +107,50 @@ is at the innermost level. Some contrived examples of perfect and imperfect
 nests can be seen in Figure \ref{nests}.
 
 \begin{figure}[h]
-	\centering
-	\subfloat[][A perfect \texttt{map} nest in Haskell, multiplying every element of a two dimensional array by 2.]{
-	\centering
-	\input{codeSnippet/perMap}
-	\label{perMapNest}}\hspace{2cm}
-	\subfloat[][An imperfect \texttt{map} nest in Haskell, prepending 2 to every array $x$, and multiplying every element of each $x$ by 2.]{
-	\centering
-	\input{codeSnippet/impMap}
-	\label{impMapNest}}\\
-	\subfloat[][A perfect \texttt{map-scan} nest in Haskell, left-scanning every element of a two dimensional array.]{
-	\centering
-	\input{codeSnippet/perScan}	
-	\label{perScanNest}}\hspace{2cm}
-	\subfloat[][A imperfect \texttt{map-scan} nest in Haskell, which only scans an element of the array, if the first element of the nested array is over 3.]{
-	\centering
-	\input{codeSnippet/impScan}
-	\label{impScanNest}}
-	\caption{Two examples of perfect and imperfect code. In \ref{perMapNest} and \ref{impMapNest} we see two \texttt{map} nests, where \ref{impMapNest} is not perfectly nested due to the concatenation being performed in between. In the two \texttt{map-scan} nests of \ref{perScanNest} and \ref{impScanNest} we see that one is perfectly nested, while the other has a conditional expression in between making it imperfectly nested.}
-	\label{nests}
+  \centering
+  \subfloat[][A perfect \texttt{map} nest in Haskell, multiplying every element 
+  of a two dimensional array by 2.]{
+  \centering
+  \input{codeSnippet/perMap}
+  \label{perMapNest}}\hspace{2cm}
+  \subfloat[][An imperfect \texttt{map} nest in Haskell, prepending 2 to every 
+  array $x$, and multiplying every element of each $x$ by 2.]{
+  \centering
+  \input{codeSnippet/impMap}
+  \label{impMapNest}}\\
+  \subfloat[][A perfect \texttt{map-scan} nest in Haskell, left-scanning every 
+  element of a two dimensional array.]{
+  \centering
+  \input{codeSnippet/perScan}	\label{perScanNest}}\hspace{2cm}
+  \subfloat[][A imperfect \texttt{map-scan} nest in Haskell, which only scans 
+  an element of the array, if the first element of the nested array is over 
+3.]{
+  \centering
+  \input{codeSnippet/impScan}
+  \label{impScanNest}}
+  \caption{Two examples of perfect and imperfect code. In \ref{perMapNest} and 
+  \ref{impMapNest} we see two \texttt{map} nests, where \ref{impMapNest} is not 
+perfectly nested due to the concatenation being performed in between. In the 
+two \texttt{map-scan} nests of \ref{perScanNest} and \ref{impScanNest} we see 
+that one is perfectly nested, while the other has a conditional expression in 
+between making it imperfectly nested.}
+  \label{nests}
 \end{figure}
 \begin{figure}[H]
 \centering
-	\subfloat[][Code fragment before distribution.]
-	{
-	\centering
-	\input{beforeDist}	
-	\label{beforeDist} 
-	}\hspace{2cm}
-	\subfloat[][Code fragment after distribution.]
-	{
-	\centering
-	\input{afterDist}
-	\label{afterDist}
-	}
-	\caption{Two version of a fragment of code, showing the distribution of SOACs (\textit{second-order array combinators}) \cite{futhark-moderate-blog}.}
-	\label{loopDist}
+  \subfloat[][Code fragment before distribution.]
+  {
+  \centering
+  \input{beforeDist}	\label{beforeDist} }\hspace{2cm}
+  \subfloat[][Code fragment after distribution.]
+  {
+  \centering
+  \input{afterDist}
+  \label{afterDist}
+  }
+  \caption{Two version of a fragment of code, showing the distribution of SOACs 
+  (\textit{second-order array combinators}) \cite{futhark-moderate-blog}.}
+  \label{loopDist}
 \end{figure}
 
 \noindent Futhark transforms nested data-parallelism into flat structures from
@@ -139,38 +164,38 @@ this is not possible, since the outer \texttt{map} would be parallelised and
 the inner sequentialized to one GPU kernel. Instead we can transform it to
 figure \ref{afterDist}. Here the the parallel constructs in the \texttt{map}s
 body are distributed out into their own \texttt{map} nests, giving two perfect
-\texttt{map} nests. These \texttt{map}s can then be translated into two GPU
-kernels, the code of line 1 becoming the first kernel and the code of line 2
-becoming the second, where the result of the first is passed to the second,
-allowing for exploitation of the nested parallelism.
+\texttt{map} nests. Each line in \ref{afterDist} can then be translated into a
+GPU kernel, the result from the first being used in the second.
 
 This transformation is dubbed \textit{moderate flattening}
-\cite{futhark-nested-para}, due to its conceptual resemblance to the flattening
+\cite{futhark-nested-para} due to its conceptual resemblance to the flattening
 algorithm put forth by \citeauthor{flat} \cite{flat}. However it is moderate in
-its approach, due to it flattening the parallel construct until the parallelism
-saturates the hardware, after which it efficiently sequentialize the remaining
-parallelism. As we saw in Figure \ref{loopDist}, Futhark flattens nested
-parallel construct by extracting kernels, based on rewrite/flattening rules. At
-the time of implementing moderate flattening, the algorithm used to apply these
-rules where based on heuristics about the structure of \texttt{map} nest
-contexts. These where decent approximations but due to the nature of GPU's
-(having different capacities for parallelism) there is no one size fits all.
-
-It is important to note that Futhark does not currently support irregular data
-structures. This means that we cannot have a multidimensional array, where the
-elements have different shapes. The reason for this, is that to quantify an
-amount of parallelism, executed on a core efficiently, Futhark needs it to be
-regular. Irregular structures could be suspect to dynamic dependencies, and
-require more overhead because of the irregular memory access.  
+its approach only flattening the parallel construct as long as the parallelism
+does not saturate the hardware, efficiently sequentializing the remaining
+parallelism. As we saw in Figure \ref{loopDist} Futhark flattens nested
+parallel construct by extracting kernels based on certain rewrite/flattening
+rules\cite{futhark-nested-para}. At the time of the implementation of moderate
+flattening the algorithm that applied these rules was based on heuristics about
+the structure of \texttt{map} nest contexts. These where decent approximations
+but because of the nature of GPU's (having different capacities for
+parallelism) there is no one size fits all.
+ 
+It is important to note that Futhark does not at the time of this project 
+support irregular data structures. This means that we cannot have a 
+multidimensional array where the elements have different shapes. The reason for 
+this limitation is that allowing irregular data structures introduces a time, 
+and memory, overhead that can be hard for the programmer to understand or 
+reason about. Making the programmer to flatten their datastructure by hand 
+forces them to consider, and understand, this overhead.\cite{expansion} 
 
 \subsection{Incremental flattening}
-While moderate flattening was a good start it lacks the ability to dynamically
-flatten appropriately to the hardware capabilities, and the size of the data
-being worked on. This is where incremental flattening comes in. In short
-incremental flattening statically generates multiple different, semantically
-equivalent, piecewise code versions of the same program, based on the rules of
-moderate flattening (along with some additional ones) \cite{inc-flat}, and then
-dynamically chooses whether or not to further exploit parallelism or not.
+While moderate flattening was a good start it differentiate between different
+hardware capabilities and size of the data being worked on. This is where 
+incremental flattening comes in. In short incremental flattening statically 
+generates multiple different, semantically equivalent, piecewise code versions 
+of the same program based on the rules of moderate flattening (along with some 
+additional ones) \cite{inc-flat}. It's then dynamically decided at run-time 
+whether to further exploit the parallelism or not.
 \begin{figure}[h]
 \centering
 \lstset{language=haskell}
@@ -184,77 +209,129 @@ map (\xs -> map (dotprod xs) (transpose yss)) xss
 \caption{Matrix-matrix multiplication in Futhark \cite{ppopp}}
 \label{matmultFuthark}
 \end{figure}
-To get an intuition for incremental flattening, lets go back to the example of
-matrix-matrix multiplication as seen in Figure \ref{matmultFuthark}. Due to
-matrix-matrix multiplication containing a lot of \texttt{map}s (as many GPU
-programs do), we will briefly explain the code versions generated by the
-flattening rule, when a \texttt{map} containing additional parallelism, is
-encountered (CV is short for code version);
+To get an intuition for incremental flattening lets go back to the example of
+matrix-matrix multiplication, which can be seen in Figure \ref{matmultFuthark}.
+As matrix-matrix multiplication containing a lot of \texttt{map}s (as is common 
+in GPU programs do) we will briefly explain the code versions generated by the 
+flattening rule when a \texttt{map} containing additional parallelism, is 
+encountered (CV is short for code version).
 \begin{itemize}
-\item[CV0] The body of the map will be executed sequentially. This means that there will be assigned one GPU thread to each element of the array being mapped over, each thread executing the map body sequentially.
-\item[CV1] The body of the map is partially executed in parallel. This means that there will be assigned one GPU group/block to each element of the array being mapped over. This is partial since it does not exploit the parallelism fully, due to, most likely, not having enough threads to fully parallelise the entire construct within the \texttt{map} body.
-\item[$\cdots$] Continues to flatten the \texttt{map} function, since we still have further parallel capacity to exploit.  
+\item[CV0] The body of the map will be executed sequentially. This means that 
+there will be assigned one GPU thread to each element of the array being mapped 
+over, each thread executing the map body sequentially.
+\item[CV1] The body of the map is partially executed in parallel. This means 
+that there will be assigned one GPU workgroup to each element of the 
+array being mapped over. This is partial since it does not exploit the 
+parallelism fully as there will most likely not be enough threads to fully 
+parallelise the entire construct within the \texttt{map} body.
+\item[$\cdots$] Continues to flatten the \texttt{map} function, since we still 
+have further parallel capacity to exploit.  \end{itemize}
+\begin{center}
+  \centering \input{maptree}
+  \captionof{figure}{A tree showing the structure of the three different code 
+  versions generate by flattening a \texttt{map} nest}
+  \label{maptree}
+\end{center}
+In matrix-matrix multiplication, there are three levels of nested parallelism 
+to exploit: the outer \texttt{map}, the inner \texttt{map} and the 
+\texttt{dotprod} function. Lets look at the different code versions Futhark 
+generates, each code version denoted by a V \cite{inc-flat}.
+\begin{itemize}
+  \item[V0)] The outer \texttt{map} is distributed out across the parallel 
+  construct executing its body sequentially. More specifically one thread 
+  calculates one row in the resulting matrix each. This is CV0 for 
+  \texttt{map}.
+  \item[V1)] The outer \texttt{map} is executed in parallel, and the inner 
+  \texttt{map} of \texttt{main} is executed partially in parallel. More 
+specifically one workgroup calculates one row in the resulting matrix. This is 
+CV1 for \texttt{map}.
+  \item[V2)] The two outer maps of \texttt{main} are executed in parallel and 
+their body (\texttt{dotprod}) is executed sequentially. More specifically each 
+thread is calculating one element in the resulting matrix. This is CV0 for 
+\texttt{map}.
+  \item[V3)] The two outer \texttt{maps}, does not saturate the GPU, but the 
+  \texttt{dotprod} function would oversaturate it, therefore, \texttt{dotprod} 
+  is partially executed in parallel. More specifically each element of the 
+  result matrix is executed by a workgroup. This is CV1
+  \item[V4)] If the entire parallel nest does not oversaturate the GPU, the 
+entire nest is executed in parallel. This means there is a thread for each 
+multiplication in the \texttt{dotprod} functions.
 \end{itemize}
+
+the optimal choice for  which of these semantically equivalent versions gets 
+executed depends on hardware and the input data. So each version is guarded by 
+a choice that depends on these factors. To visualize the choices, we will look 
+at them as a tree. In Figure \ref{MatMultTree}, we see that the matrix 
+multiplication program has four choices choices that  are dependent on each 
+other.
 \begin{center}
-	\centering 
-	\input{maptree}
-	\captionof{figure}{A tree showing the structure of the three different code versions generate by flattening a \texttt{map} nest}
-	\label{maptree}
+  \centering \input{MatMultTree}
+  \captionof{figure}{The structure of choices found in the futhark program for 
+  matrix-matrix multiplication (see listing \ref{matmultFuthark}). (V) 
+represents the resulting code version of a choice}
+  \label{MatMultTree}
 \end{center}
-In matrix-matrix multiplication, there are three levels of nested parallelism to exploit; the outer and inner \texttt{map} on line 5, and the \texttt{dotprod} function. Lets look at the different ways we can execute the function, there are at least 5 different ways to execute the code, generating 5 different code versions (denoted by a V) \cite{inc-flat};
-\begin{itemize}
-	\item[V0)] The outer \texttt{map} is distributed out across the parallel construct, executing the body of the function sequentially. More specifically one GPU thread calculates one row in the resulting matrix each. This is CV0 for \texttt{map}.
-	\item[V1)] The outer \texttt{map} is executed in parallel, and the inner \texttt{map} of \texttt{main} is executed partially in parallel. More specifically one GPU group/block calculates one row in the resulting matrix. This is CV1 for \texttt{map}. 
-	\item[V2)] The two outer maps of \texttt{main}, are extracted as kernels and the kernel of the outer \texttt{map} will invoke the inner \texttt{map} kernel saturating the GPU, and the body of the two \texttt{map}s (\texttt{dotprod}) is executed sequentially. More specifically each GPU thread is calculating one element in the resulting matrix. This is CV0 for \texttt{map}.
-	\item[V3)] The two outer \texttt{maps}, does not saturate the GPU, but the \texttt{dotprod} function would oversaturate it, therefore, \texttt{dotprod} is partially executed in parallel. More specifically each element of the result matrix is executed by a GPU group/block. This is CV1
-	\item[V4)] If the entire parallel nest does not oversaturate the GPU, the entire nest is executed in parallel.
-\end{itemize} 
-We have to choose between these different, but semantically equivalent, ways of execution. The optimal choice will depend on the hardware, and the data being worked on. To visualize the choices, we will look at them as a tree. In Figure \ref{MatMultTree} there are four choices, we have to consider, and these choices are dependent on each other
-\begin{center}
-	\centering 
-	\input{MatMultTree}
-	\captionof{figure}{The structure of choices found in the futhark program for matrix-matrix multiplication (see listing \ref{matmultFuthark}). (V) represents the resulting code version of a choice}
-	\label{MatMultTree}
-\end{center}
-With these dependent choices, the idea of incremental flattening becomes increasingly clear. We step through the code, and decided whether we should flatten the parallelism available (for example a \texttt{map} nest), or whether we should sequentialize it, and exploit locality-of-reference optimizations. Due to the dependency of the choices, we end up iterating through the parallel nest, and flattening until we reach the full capacity of the hardware, hence the name \textit{incremental flattening}. The choices will not always be in form of a unbalanced tree (although they are for the most part), they can also be balanced, and/or form a forest, we will give an example of a are more complicated tree later.
+With these dependent choices, the idea of incremental flattening becomes 
+increasingly clear. We step through the code, and decided whether we should 
+flatten the parallelism available, or whether we should sequentialize it and 
+exploit locality-of-reference optimizations. Due to the dependency of the 
+choices, we end up iterating through the parallel nest, and flattening until we 
+reach the full capacity of the hardware, hence the name \textit{incremental 
+flattening}. The choices will not always be in form of a unbalanced tree 
+(although they are for the most part), they can also be balanced, and/or form a 
+forest, we will give an example of a more complicated tree later.
 
 \subsection{Structure of the code versions}
 %Bad section name
-To further understand how we will choose the correct code version, we have filled out the matrix-matrix multiplication tree, with more detail, which can be seen in Figure \ref{MatMultTreeFilled}. In the tree, at the parent nodes, we see the statically generated predicates (the choice), hence forth known as \textit{threshold comparisons}, or just \textit{comparisons}, which guard the different code versions. The comparisons, have a \textit{threshold parameter} on the left $t_i$, which is a symbolic representation of the parallel capacity of the hardware. On the right of the comparison, we have a value, based upon the dataset given, and as seen in the figure, these will reflect the shape and size of the data.
-\begin{comment}
-The process of autotuning a Futhark program is, to automatically pick the fastest combination (or single) code versions, based on the hardware the program is executed on, and some representative data. In the process of selecting the appropriate code version we have three important terms we, that we be central to this report, and therefore we wish to clearly define them in the context of this report;	
-\paragraph{Threshold parameter} or just \textit{threshold} is a value that symbolizes the capacity for parallelism (memory, thread count etc.), of the hardware the program is executed on.
-\paragraph{Dataset value} is a value that represent some of the dataset given. For example for the outer \texttt{map} in matrix-matrix multiplication, the dataset value would (primarily) be constructed by the number of rows.
-\paragraph{Predicate} threshold comparison, or just comparison, is a comparison between a threshold and a dataset value that guard which code version to use. \\
-To pick the best version, we need to tune the threshold parameters, to values that will result en the combination of code versions that gives the fastest runtime. This process is called tuning. The guarding predicates are of the form $threshod \; \leq \; dataset\; value$. By default the threshold parameter is set to a value off $2^{15}$, as an estimate, but is likely sub-optimal. With these terms, we can now fill out the example in Figure \ref{MatMultTree}, getting Figure \ref{MatMultTreeFilled}. 
-\end{comment}
+To further understand how we will choose the correct code version, we have 
+filled out the matrix-matrix multiplication tree, with more detail, which can 
+be seen in Figure \ref{MatMultTreeFilled}. In the tree the non-leaf nodes are 
+the statically generated predicates (the choice), hence forth known as 
+\textit{threshold comparisons} or just \textit{comparisons}. the comparisons  
+guard the different code versions, ensuring the sematics of the program deos 
+not change. The comparisons have a \textit{threshold parameter} on the left 
+$t_i$, which is a symbolic representation of the parallel capacity of the 
+hardware. On the right we have a value that reflects the shape and size of the 
+data, as seen in the figure.
 
-\begin{center}
-	\centering 
-	\input{MatMultTreeFilled}
-	\captionof{figure}{The tree generated by matrix-matrix multiplication. ($t_i$) is a threshold, ($n$, $p$, and $m$) are the sizes of the matricies show in the code (see \ref{matmultFuthark}), and (T) and (F) are indicative of the path we take, based on the threshold comparison.}
-	\label{MatMultTreeFilled}
-\end{center}
-To inspect the structure of these predicates and thresholds parameters further, lets look at a more complex Futhark program, from Futhark bench, called \textit{LocVolCalib};
-\begin{center}
-	\centering
-	\input{LocValCalibTree}
-	\captionof{figure}{The dependencies between thresholds, of the test program \texttt{LocVolCalib.fut}. (Th) is a threshold comparison, (V) is a code version, and (T) and (F) are indicative of the path we take, based on the threshold comparison}
-	\label{LocVolCalibTree}
-\end{center}
-\noindent It is important not to get an end node (code version) confused with a complete program. While this can be the case, we will give two examples of paths, and corresponding code versions, through the tree in Figure \ref{LocVolCalibTree}, to illustrate this;
+\begin{figure}
+  \centering \input{MatMultTreeFilled}
+  \caption{The tree generated by matrix-matrix multiplication.  ($t_i$) is a 
+  threshold, ($n$, $p$, and $m$) are the sizes of the matricies show in the 
+code (see \ref{matmultFuthark}), and (T) and (F) are indicative of the path we 
+take, based on the threshold comparison.}
+  \label{MatMultTreeFilled}
+\end{figure}
+
+To inspect the structure of these predicates and thresholds parameters further, 
+lets look at a more complex Futhark program, from the Futhark benchmarks, 
+called \textit{LocVolCalib}.
+\begin{figure}
+  \centering
+  \input{LocValCalibTree}
+  \caption{The dependencies between thresholds, of the test program 
+  \texttt{LocVolCalib.fut}. (Th) is a threshold comparison, (V) is a code 
+version, and (T) and (F) are indicative of the path we take, based on the 
+threshold comparison}
+  \label{LocVolCalibTree}
+\end{figure}
+\noindent It is important not to get an end node (code version) confused with a 
+complete program. While this can be the case, we will give two examples of 
+paths, and corresponding code versions, through the tree in Figure 
+\ref{LocVolCalibTree}, to illustrate this;
 \begin{itemize}
-	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, True)\} $\to$ V4}
-	\item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, False), (Th8, False), (Th16, False), (Th9, True), (Th17, True)\} $\to$ (V6, V9)}
-\end{itemize}  
-The first path is simple, the code represented by \texttt{T4, T5, T6} is
-executed in parallel, where everything after it, is executed sequentially. The
-second path is more interesting, \texttt{T7} has two child nodes, that are
-reached with a false comparison. Here it is clear that two end nodes are
-reached, namely \texttt{(V6, V9)}, and these two code versions are both run,
-and together they are semantically equivalent to the original program. This is
-also important to note, because we could have a forest, instead of a single
-tree, and this would leave multiple code versions, that are to be combined.
+  \item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, True)\} $\to$ 
+    V4}
+  \item \texttt{\{(Th4, False), (Th5, False), (Th6, False), (Th7, False), (Th8, 
+    False), (Th16, False), (Th9, True), (Th17, True)\} $\to$ \{V6, V9\}}
+\end{itemize} 
 
-
-
+The first path is simple and ends in a single code version, \texttt{V4}, that 
+is semantically equivalent to the original program. The second path is more 
+interesting, \texttt{T7} has two child nodes, that are reached when the 
+comparison being false. Here it is clear that two end nodes are reached, namely 
+\texttt{(V6, V9)}, and these two code versions are both run, and together they 
+are semantically equivalent to the original program.  This is also important to 
+note, because we could have a forest, instead of a single tree and this would 
+lead to multiple code versions that are all run, together being symantically 
+equivalent to the original Futhark program. 
