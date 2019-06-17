@@ -1,17 +1,17 @@
 [0] Config.pm:302> INFO - This is Biber 2.9
 [0] Config.pm:305> INFO - Logfile is 'main.blg'
-[18] biber:313> INFO - === Mon Jun 10, 2019, 12:47:07
-[32] Biber.pm:371> INFO - Reading 'main.bcf'
-[75] Biber.pm:857> INFO - Found 12 citekeys in bib section 0
-[84] Biber.pm:3981> INFO - Processing section 0
-[91] Biber.pm:4154> INFO - Looking for bibtex format file 'References.bib' for section 0
+[17] biber:313> INFO - === Mon Jun 17, 2019, 17:52:08
+[31] Biber.pm:371> INFO - Reading 'main.bcf'
+[74] Biber.pm:857> INFO - Found 12 citekeys in bib section 0
+[83] Biber.pm:3981> INFO - Processing section 0
+[90] Biber.pm:4154> INFO - Looking for bibtex format file 'References.bib' for section 0
 [91] bibtex.pm:1468> INFO - LaTeX decoding ...
-[106] bibtex.pm:1294> INFO - Found BibTeX data source 'References.bib'
-[168] Utils.pm:169> WARN - I didn't find a database entry for crossref 'DBLP:conf/IEEEpact/2014' in entry 'opentunner' - ignoring (section 0)
-[180] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[180] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[180] Biber.pm:3809> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[180] Biber.pm:3815> INFO - No sort tailoring available for locale 'en-US'
-[191] bbl.pm:617> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[195] bbl.pm:720> INFO - Output to main.bbl
-[195] Biber.pm:110> INFO - WARNINGS: 1
+[105] bibtex.pm:1294> INFO - Found BibTeX data source 'References.bib'
+[166] Utils.pm:169> WARN - I didn't find a database entry for crossref 'DBLP:conf/IEEEpact/2014' in entry 'opentunner' - ignoring (section 0)
+[179] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[179] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[179] Biber.pm:3809> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[179] Biber.pm:3815> INFO - No sort tailoring available for locale 'en-US'
+[190] bbl.pm:617> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[194] bbl.pm:720> INFO - Output to main.bbl
+[194] Biber.pm:110> INFO - WARNINGS: 1

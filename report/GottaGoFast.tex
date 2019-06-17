@@ -1,4 +1,5 @@
 \section{Gotta Go Fast!}
+\label{GottaGoFast}
 In this section we will run benchmarks to test our autotunner. There was an
 existing autotunner for Futhark \cite{oldtune}, which was based on OpenTunner
 \cite{opentunner}. The existing autotunner uses hill-climbing techniques, on a
@@ -8,8 +9,8 @@ with executing without tuning being the baseline. We benchmark on four programs 
 
 We have benchmarked on a Ubuntu 18.04 system with a \textbf{GeForce GTX 1050 4 GB} gpu, and with the NVIDIA driver version: 396.54.  
 
-\paragraph{nn and backprop}
-For the \texttt{nn} and \texttt{backprop} program we have two datasets for each \texttt{D1, D2} and \texttt{H1, H2} respectively, with corresponding training sets. 
+\paragraph{nn, backprop and matmul}
+For the \texttt{nn}, \texttt{backprop}, and \texttt{matmul} program we have two datasets for each \texttt{D1, D2}, \texttt{H1, H2}, and \texttt{F1, F2} respectively, with corresponding training sets. 
 \begin{figure}[h]
 	\centering
 	\subfloat[The result for autotuning the \textit{nn} program, with no tuning being the baseline.]{
@@ -21,12 +22,21 @@ For the \texttt{nn} and \texttt{backprop} program we have two datasets for each 
 	\centering
 	\includegraphics[width=.45\textwidth]{../benchmarks/backprop.png}
 	\label{backprop}}
-	\caption{Benchmark for \texttt{nn} and \texttt{backprod}}
+	\hspace{5mm}
+	\subfloat[The result for autotuning the \textit{matmul} program, with no tuning being the baseline.]{
+	\centering
+	\includegraphics[width=.45\textwidth]{../benchmarks/matmul.png}
+	\label{matmul}}
+	\caption{Benchmark for \texttt{nn}, \texttt{backprod}, and \texttt{matmul}}
 	\label{NNandBackprop}
 \end{figure}
 In Figure \ref{nn} we clearly see that our autotuner produced a set of thresholds that improved \texttt{D2} massively. However \texttt{D1} slowed down a tiny bit. We did see that both our and the existing autotuner, both were as fast as no tuning, on the training data 
 %maybe the following does not belong here
-so the training data for \texttt{D1} might not be representative of \texttt{D1}. In Figure \ref{backprop} we see that the neither dataset was affected by our tuning, this would lead us to believe that the default values for the thresholds is a good choice for this program with the datasets \texttt{H1, H2}.
+so the training data for \texttt{D1} might not be representative of \texttt{D1}. 
+
+In Figure \ref{backprop} we see that the neither dataset was affected by our tuning, this would lead us to believe that the default values for the thresholds is a good choice for this program with the datasets \texttt{H1, H2}.
+
+And finally in Figure \ref{matmul} we see that matrix multiplication experience an approximately 30\% speedup for \texttt{F1} but is equal in \texttt{F2}. Matrix multiplication runs well on large threshold parameters, which explain the relatively small speedup, since the thresholds, by default, are quite large.
 
 \paragraph{LocVolCalib}
 There are three datasets for the \texttt{LocVolCalib} program, \textit{small,
@@ -53,11 +63,10 @@ auto-tuner it took around 17 minutes, whereas for our auto-tuner it took a
 little under 23 hours, which is obviously far to slow to be of use in almost
 all cases. 
 
+Since \texttt{LocVolCalib} is so slow when autotuning, we also tested how well it performed when trained on other combinations of datasets, and the result of this can be seen in Figure \ref{LocVolCalibAll}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.7\textwidth]{../benchmarks/LocVolCalibAll.png}
   \caption{The result for autotuning the \textit{LocVolCalib} program, for different combinations of datasets, with no tuning being the baseline.}
 	\label{LocVolCalibAll}
 \end{figure}
-
-%It is important to note, that \textit{large} is about XXX larger than \textit{medium}, while \textit{medium} is only XXX larger than \textit{small}

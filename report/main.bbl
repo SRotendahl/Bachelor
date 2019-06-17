@@ -281,6 +281,43 @@
       \verb https://futhark-lang.org/
       \endverb
     \endentry
+    \entry{expansion}{article}{}
+      \name{author}{3}{}{%
+        {{hash=877d0c9dfa523172d9e414d7847d3fea}{%
+           family={Henriksen},
+           familyi={H\bibinitperiod},
+           given={Troels},
+           giveni={T\bibinitperiod}}}%
+        {{hash=6f9908e5ad2889b9db1d9fa39c150abe}{%
+           family={Elsman},
+           familyi={E\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=c69cf55f1423b197d53ac17a4ab30dcb}{%
+           family={Serup},
+           familyi={S\bibinitperiod},
+           given={Niels\bibnamedelimb G.\bibnamedelimi W.},
+           giveni={N\bibinitperiod\bibinitdelim G\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \strng{fullhash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \strng{bibnamehash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \strng{authorbibnamehash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \strng{authornamehash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \strng{authorfullhash}{44ed3d96bb024bbbd86fe193a7bdeb41}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Data-Parallel Flattening by Expansion}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://futhark-lang.org/publications/array19.pdf
+      \endverb
+      \verb{url}
+      \verb https://futhark-lang.org/publications/array19.pdf
+      \endverb
+    \endentry
     \entry{ppopp}{online}{}
       \name{author}{4}{}{%
         {{hash=877d0c9dfa523172d9e414d7847d3fea}{%
@@ -445,53 +482,6 @@
       \verb http://doi.acm.org/10.1145/3293883.3295707
       \endverb
       \keyw{GPGPU,compilers,functional language,parallel}
-    \endentry
-    \entry{segred}{inproceedings}{}
-      \name{author}{2}{}{%
-        {{hash=36796ed02b626e79b4da8687ba657cb4}{%
-           family={Larsen},
-           familyi={L\bibinitperiod},
-           given={Rasmus\bibnamedelima Wriedt},
-           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
-        {{hash=877d0c9dfa523172d9e414d7847d3fea}{%
-           family={Henriksen},
-           familyi={H\bibinitperiod},
-           given={Troels},
-           giveni={T\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Oxford, UK}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \strng{fullhash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \strng{bibnamehash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \strng{authorbibnamehash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \strng{authornamehash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \strng{authorfullhash}{d9b530a6117755e5878dcf8fc1a4a1b5}
-      \field{sortinit}{L}
-      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 6th ACM SIGPLAN International Workshop on Functional High-Performance Computing}
-      \field{isbn}{978-1-4503-5181-2}
-      \field{series}{FHPC 2017}
-      \field{title}{Strategies for Regular Segmented Reductions on GPU}
-      \field{year}{2017}
-      \field{pages}{42\bibrangedash 52}
-      \range{pages}{11}
-      \verb{doi}
-      \verb 10.1145/3122948.3122952
-      \endverb
-      \verb{urlraw}
-      \verb http://doi.acm.org/10.1145/3122948.3122952
-      \endverb
-      \verb{url}
-      \verb http://doi.acm.org/10.1145/3122948.3122952
-      \endverb
-      \keyw{GPGPU,functional programming,parallelism}
     \endentry
     \entry{prog-guide-cuda}{article}{}
       \name{author}{1}{}{%

@@ -54,8 +54,24 @@ running time is called tuning. The aim of this project is to automatize this
 process, so that it does not have to be done by hand. This is what we
 call autotuning. To find the optimal set of values for the parameters our
 autotuner is going to perform an exhaustive search, that means trying out every
-meaningful set of values and select the best one.  
+meaningful set of values and select the best one. 
+%this is added
+We perform an exhaustive search
+due to the suspicion that Futhark programs are relatively small, and therefore 
+an exhaustive search might be a feasible solution.
 
+The remainder of this report is structured as follows. In section \ref{BabyGotBack} 
+we present what parallelism is and the concepts behind how Futhark transforms functional 
+code into efficient parallel code, 
+% denne sæting er svær
+as well as presenting the structure of what in Futhark that is to be autotune. 
+In section \ref{imp} we explore how we have implemented the exhaustive autotuner along
+with thoughts about future concerns the autotuner may face, due to Futhark being an
+ongoing project. We evaluate the autotuner in section \ref{GottaGoFast} in order to see the
+feasibility of the exhaustive autotuner. We have then reflected
+on the results achieve, and suggested improvements in section \ref{synData}. 
+
+\begin{comment}
 Tuning Futhark, is like being a kid in a candy store. We have a bag
 (parallel hardware, usually a GPU), that is to be filled
 with candy (parallelism in a program). We have a priority of the candy we want, 
@@ -68,3 +84,6 @@ for each bag that we use, how much candy will fit in it, for some bags we will o
 room for a piece of gummy, while others will have room for the gummy and licorice. Therefore
 we try every combination of candy, while still respecting the priority 
 (tuning the parameters). 
+\end{comment}
+
+
