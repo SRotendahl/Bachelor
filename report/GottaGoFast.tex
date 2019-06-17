@@ -63,7 +63,13 @@ auto-tuner it took around 17 minutes, whereas for our auto-tuner it took a
 little under 23 hours, which is obviously far to slow to be of use in almost
 all cases. 
 
-Since \texttt{LocVolCalib} is so slow when autotuning, we also tested how well it performed when trained on other combinations of datasets, and the result of this can be seen in Figure \ref{LocVolCalibAll}.
+Since \texttt{LocVolCalib} is so slow when autotuning, we also tested how well
+it performed when trained on only a subset of datasets, and the result of this
+can be seen in Figure \ref{LocVolCalibAll}. The motivation behind this
+experiment was that the number of possible combinations dropped drastically as
+the number of datasets were reduced. So if near equal results could be gotten
+without less datasets the tuning time would be more bearable.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.7\textwidth]{../benchmarks/LocVolCalibAll.png}

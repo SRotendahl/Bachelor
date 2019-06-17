@@ -57,18 +57,17 @@ autotuner is going to perform an exhaustive search, that means trying out every
 meaningful set of values and select the best one. 
 %this is added
 We perform an exhaustive search
-due to the suspicion that Futhark programs are relatively small, and therefore 
+motivated by the suspicion that Futhark programs are relatively small and therefore 
 an exhaustive search might be a feasible solution.
 
 The remainder of this report is structured as follows. In section \ref{BabyGotBack} 
 we present what parallelism is and the concepts behind how Futhark transforms functional 
-code into efficient parallel code, 
-% denne sæting er svær
-as well as presenting the structure of what in Futhark that is to be autotune. 
+code into efficient parallel code. We also  present what it means to autotune a
+Futhark program. 
 In section \ref{imp} we explore how we have implemented the exhaustive autotuner along
-with thoughts about future concerns the autotuner may face, due to Futhark being an
-ongoing project. We evaluate the autotuner in section \ref{GottaGoFast} in order to see the
-feasibility of the exhaustive autotuner. We have then reflected
+with thoughts about future concerns the autotuner may face due to Futhark being an
+ongoing project. We evaluate the autotuner in section \ref{GottaGoFast}
+exploring the feasibility of the exhaustive autotuner. We have then reflected
 on the results achieve, and suggested improvements in section \ref{synData}. 
 
 \begin{comment}
