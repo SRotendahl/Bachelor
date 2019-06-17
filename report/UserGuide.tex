@@ -1,2 +1,19 @@
 \section{User Guide}
+We have implemented the autotuner as a module in the Futhark compiler
+so the autotuner works in a similar fashion as \texttt{futhark bench} etc.
 
+The options available in the module can be viewed with the command 
+\texttt{futhark autotune -h}. Here is an example of the usage:
+$$\text{\texttt{futhark }}\underbrace{\texttt{autotune}}_\text{\texttt{the module}}\;
+\text{\texttt{program.fut }} \underbrace{\texttt{--output=program.fut.tuning}}_\text{\texttt{output file containing the thresholds}}$$
+\texttt{--ouput} creates a file containing the thresholds in the format Futhark needs. When executing \texttt{futhark bench} it will automatically look for a tuning file, with the same name as the program executed, but with the added \texttt{.tuning} extension, we allow for any extension you want to use, since \texttt{futhark bench} also allows for this. You can also add the \texttt{--tree} flag when executing the autotuner, this will print the tree structure of the thresholds to \texttt{stdout} before starting the autotuning.  \texttt{--ouput} and \texttt{--tree} are shortened \texttt{-o} and \texttt{-t} respectively. You can also specify the backend that Futhark uses, with the autotuner defaulting to OpenCL
+
+SKRIV STACK STUFF
+
+To test the autotuner you can follow these steps:
+\begin{itemize}
+\item Run \texttt{futhark autotune program.fut -o program.fut.tuning}
+\item Run \texttt{futhark bench program.fut --backend=opencl}. With this you will get the 
+running time of the program using the autotuned parameters, due note that \texttt{futhark bench} searches for the \texttt{.tuning} file in the current working directory so if it is not in there a path to it should be specified. We specify the backend here due to \texttt{futhark bench} defaulting to \texttt{futhark-c}.
+\item To compare the results without tuning run \texttt{futhark bench program.fut --backend=opencl --no-tuning}
+\end{itemize}
