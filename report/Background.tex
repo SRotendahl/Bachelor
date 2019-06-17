@@ -51,15 +51,13 @@ effectively requires. Imagine a function (\texttt{drawline}) that, given two
 endpoints, will determine all the pixel that lie in a straight line in between.
 This function will have a flat structure, and can therefore be executed
 in parallel. The function cannot itself be drawn in parallel as this would be
-nested parallelism, which is not supported. So a user would be able to draw a
+nested parallelism, which is not supported. So while a user would be able to draw a
 single line in parallel with this function, it would not be possible to use it
 to draw multiple lines in parallel.
 
 Therefore we need to map nested parallelism to a flat structure. This problem
 has already been conceptually solved by \textit{flattening}, and implemented in
-the language NESL \cite{nesl}. The basic idea is to flatten the nested data
-that is to be worked on, and performing operations on that data in parallel.  
-\textbf{IKKE SIKKER}
+the language NESL \cite{nesl}. 
 
 When flattening a datastructure, we want to keep the information regarding the
 original nest. In the original work presenting flattening \cite{flat} this is 
@@ -78,14 +76,14 @@ that is the only lenght we save. In the inner \textit{field} we need to save
 the length of all three of the segments, and all the values of the original
 subarrays.\\
 
-Flattening allows for a completely flat array that can be mapped directly to 
+Flattening allows for completely flat data that can be mapped directly to 
 the
-GPU. But, as we saw in the example, flattening increases the memory cost and
+GPU. But, as we saw in the example above, flattening increases the memory cost and
 it does not take communication cost into account. This is a problem as GPUs are 
 not
 infinitely parallel, they have some maximum physical capacity for parallelism.
 Going beyond that capacity will not result in futher computational gain and the
-flattening has made certain optimizations, like exploiting locality of 
+flattening has rendered certain optimizations, like exploiting locality of 
 reference,
 impossible.
 
@@ -96,7 +94,7 @@ report, are the routines that are run on parallel hardware such as GPUs.  In
 low level languages such as \texttt{OpenCl C} a kernel is a function the
 programmer defines. The function is then executed \textit{N $\times$ M} times 
 in parallel by
-\textit{N} different \textit{workgroups} each with \textit{M} threads 
+\textit{N} different \textit{workgroups} each with \textit{M}  
 \textit{threads}.
 The matrix-matrix multiplication in appendix \ref{cuda-matmult} is an example
 of a kernel in the \texttt{CUDA} language.
@@ -162,7 +160,7 @@ outer \texttt{map} does not saturate the GPU's capacity by itself we want to
 exploit the parallelism of the \texttt{map}s body. With figure \ref{beforeDist}
 this is not possible, since the outer \texttt{map} would be parallelised and
 the inner sequentialized to one GPU kernel. Instead we can transform it to
-figure \ref{afterDist}. Here the the parallel constructs in the \texttt{map}s
+figure \ref{afterDist}. Here the parallel constructs in the \texttt{map}s
 body are distributed out into their own \texttt{map} nests, giving two perfect
 \texttt{map} nests. Each line in \ref{afterDist} can then be translated into a
 GPU kernel, the result from the first being used in the second.
@@ -171,7 +169,7 @@ This transformation is dubbed \textit{moderate flattening}
 \cite{futhark-nested-para} due to its conceptual resemblance to the flattening
 algorithm put forth by \citeauthor{flat} \cite{flat}. However it is moderate in
 its approach only flattening the parallel construct as long as the parallelism
-does not saturate the hardware, efficiently sequentializing the remaining
+does not oversaturate the hardware, otherwise it efficiently sequentialize the remaining
 parallelism. As we saw in Figure \ref{loopDist} Futhark flattens nested
 parallel construct by extracting kernels based on certain rewrite/flattening
 rules\cite{futhark-nested-para}. At the time of the implementation of moderate
@@ -189,7 +187,7 @@ reason about. Making the programmer to flatten their datastructure by hand
 forces them to consider, and understand, this overhead.\cite{expansion} 
 
 \subsection{Incremental flattening}
-While moderate flattening was a good start it differentiate between different
+While moderate flattening was a good start it does not differentiate between different
 hardware capabilities and size of the data being worked on. This is where 
 incremental flattening comes in. In short incremental flattening statically 
 generates multiple different, semantically equivalent, piecewise code versions 
@@ -211,7 +209,7 @@ map (\xs -> map (dotprod xs) (transpose yss)) xss
 \end{figure}
 To get an intuition for incremental flattening lets go back to the example of
 matrix-matrix multiplication, which can be seen in Figure \ref{matmultFuthark}.
-As matrix-matrix multiplication containing a lot of \texttt{map}s (as is common 
+As matrix-matrix multiplication contains a lot of \texttt{map}s (as is common 
 in GPU programs do) we will briefly explain the code versions generated by the 
 flattening rule when a \texttt{map} containing additional parallelism, is 
 encountered (CV is short for code version).
@@ -258,11 +256,11 @@ entire nest is executed in parallel. This means there is a thread for each
 multiplication in the \texttt{dotprod} functions.
 \end{itemize}
 
-the optimal choice for  which of these semantically equivalent versions gets 
+The optimal choice for  which of these semantically equivalent versions gets 
 executed depends on hardware and the input data. So each version is guarded by 
 a choice that depends on these factors. To visualize the choices, we will look 
 at them as a tree. In Figure \ref{MatMultTree}, we see that the matrix 
-multiplication program has four choices choices that  are dependent on each 
+multiplication program has four choices that  are dependent on each 
 other.
 \begin{center}
   \centering \input{MatMultTree}
@@ -288,7 +286,7 @@ filled out the matrix-matrix multiplication tree, with more detail, which can
 be seen in Figure \ref{MatMultTreeFilled}. In the tree the non-leaf nodes are 
 the statically generated predicates (the choice), hence forth known as 
 \textit{threshold comparisons} or just \textit{comparisons}. the comparisons  
-guard the different code versions, ensuring the sematics of the program deos 
+guard the different code versions, ensuring the sematics of the program does 
 not change. The comparisons have a \textit{threshold parameter} on the left 
 $t_i$, which is a symbolic representation of the parallel capacity of the 
 hardware. On the right we have a value that reflects the shape and size of the 
@@ -329,9 +327,9 @@ paths, and corresponding code versions, through the tree in Figure
 The first path is simple and ends in a single code version, \texttt{V4}, that 
 is semantically equivalent to the original program. The second path is more 
 interesting, \texttt{T7} has two child nodes, that are reached when the 
-comparison being false. Here it is clear that two end nodes are reached, namely 
-\texttt{(V6, V9)}, and these two code versions are both run, and together they 
+comparison is false. Here it is clear that two end nodes are reached, namely 
+\texttt{(V6, V9)}, and these two code versions are both executed, and together they 
 are semantically equivalent to the original program.  This is also important to 
 note, because we could have a forest, instead of a single tree and this would 
-lead to multiple code versions that are all run, together being symantically 
+lead to multiple code versions that are all executed, together being semantically 
 equivalent to the original Futhark program. 
